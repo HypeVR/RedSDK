@@ -1,6 +1,6 @@
 /********************************************************************************
- * This file is part of the RCP SDK Release 6.50.23
- * Copyright (C) 2009-2017 Red.com, Inc.  All rights reserved.
+ * This file is part of the RCP SDK Release 6.51.2
+ * Copyright (C) 2009-2018 RED.COM, LLC.  All rights reserved.
  *
  * For technical support please email rcpsdk@red.com.
  *
@@ -11,19 +11,19 @@
  * "Binary Code" means machine-readable Source Code in binary form.
  * 
  * "Approved Recipients" means only those recipients of the Source Code who have
- * entered into the RCP SDK License Agreement with Red.com, Inc. All
+ * entered into the RCP SDK License Agreement with RED.COM, LLC. All
  * other recipients are not authorized to possess, modify, use, or distribute the
  * Source Code.
  *
- * Red.com, Inc. hereby grants Approved Recipients the rights to modify this
+ * RED.COM, LLC hereby grants Approved Recipients the rights to modify this
  * Source Code, create derivative works based on this Source Code, and distribute
  * the modified/derivative works only as Binary Code in its binary form. Approved
  * Recipients may not distribute the Source Code or any modification or derivative
  * work of the Source Code. Redistributions of Binary Code must reproduce this
  * copyright notice, this list of conditions, and the following disclaimer in the
- * documentation or other materials provided with the distribution. Red.com, Inc.
+ * documentation or other materials provided with the distribution. RED.COM, LLC
  * may not be used to endorse or promote Binary Code redistributions without
- * specific prior written consent from Red.com, Inc. 
+ * specific prior written consent from RED.COM, LLC. 
  *
  * The only exception to the above licensing requirements is any recipient may use,
  * copy, modify, and distribute in any format the strlcat.c and strlcpy.c software
@@ -34,7 +34,7 @@
  * THE ACCOMPANYING SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
- * IN NO EVENT SHALL THE RED.COM, INC., ANY OTHER COPYRIGHT HOLDERS, OR ANYONE
+ * IN NO EVENT SHALL THE RED.COM, LLC, ANY OTHER COPYRIGHT HOLDERS, OR ANYONE
  * DISTRIBUTING THE SOFTWARE BE LIABLE FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER
  * IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -72,6 +72,11 @@
 #define ALLOWED_WPA_PW_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -=[];',./!@#$%^&*()_+{}:<>?\"\\`|"
 #define ALLOWED_LENS_NAME_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -=[];',./!@#$%^&*()_+{}:<>?"
 #define ALLOWED_LENS_SERIAL_CHARS "0123456789"
+
+#define BATTERY_INVALID_VALUE           (-1)
+#define BATTERY_RUNTIME_WARNING_MINUTES (10)
+#define BATTERY_RUNTIME_LOW_MINUTES     (5)
+#define BATTERY_RUNTIME_MAX_MINUTES     (600)
 
 /* RCP: CSPACE */
 typedef enum {
@@ -585,7 +590,9 @@ typedef enum
     KEY_ACTION_EVF3_CYCLE_MODE = 196,
     KEY_ACTION_TOGGLE_OVERLAYS_EVF3 = 197,
     KEY_ACTION_APERTURE_FINE_ADJUSTMENT_OPEN = 198,
-    KEY_ACTION_APERTURE_FINE_ADJUSTMENT_CLOSE = 199
+    KEY_ACTION_APERTURE_FINE_ADJUSTMENT_CLOSE = 199,
+    KEY_ACTION_SENSOR_SENSITIVITY_TOGGLE = 200,
+    KEY_ACTION_COUNT
 } key_action_t;
 
 typedef enum
@@ -1183,113 +1190,112 @@ typedef enum {
      * table in hw_cap_if.cpp
      * */
 
-    HW_CAP_COLOR_SENSOR,
-    HW_CAP_WIFI,
-    HW_CAP_FIZ,
-    HW_CAP_GIG_ETHERNET,
-    HW_CAP_TETHERING,
-    HW_CAP_SIDE_UI,
-    HW_CAP_ND_CONTROL,
-    HW_CAP_3D_LUT,
-    HW_CAP_MON_BRAIN_LCD_EVF,
-    HW_CAP_SW,
-    HW_CAP_MON_BRAIN_HDMI,
-    HW_CAP_MON_BRAIN_HDSDI,
-    HW_CAP_MON_REAR_LCD_EVF,
-    HW_CAP_WIRELESS_HAND_CONTROLLER,
-    HW_CAP_MON_REAR_HDSDI_1,
-    HW_CAP_MON_REAR_HDSDI_2,
-    HW_CAP_CONTROL_UART,
-    HW_CAP_REDMOTE_COMM,
-    HW_CAP_PRORES,
-    HW_CAP_HEADPHONE,
-    HW_CAP_AUDIO_OUT,
-    HW_CAP_MONITOR_WITH_AUDIO,
-    HW_CAP_AUDIO_PHANTOM_POWER,
-    HW_CAP_AUDIO_LIMITER,
-    HW_CAP_TIMECODE_IN,
-    HW_CAP_TIMECODE_OUT,
-    HW_CAP_GENLOCK,
-    HW_CAP_GPI,
-    HW_CAP_GPO,
-    HW_CAP_SYNC_IN,
-    HW_CAP_SYNC_OUT,
-    HW_CAP_GPI_SYNC_IN_MUXED,
-    HW_CAP_GPO_SYNC_OUT_MUXED,
-    HW_CAP_PRO_IO_GPI_A,
-    HW_CAP_PRO_IO_GPI_B,
-    HW_CAP_PRO_IO_SW_1,
-    HW_CAP_PRO_IO_SW_2,
-    HW_CAP_LCD_EVF_2_HDMI_MUX,
-    HW_CAP_SIDE_HANDLE,
-    HW_CAP_POWER_OUT_PRO_IO_GPIO,
-    HW_CAP_POWER_OUT_PRO_IO_PWR,
-    HW_CAP_POWER_OUT_PRO_IO_AUX,
-    HW_CAP_POWER_OUT_PLUS_ONE_PWR,
-    HW_CAP_POWER_OUT_BAT_AUX,
-    HW_CAP_POWER_OUT_BAT_AUX_WITH_ENABLE,
-    HW_CAP_POWER_OUT_JETPACK_USB,
-    HW_CAP_MULTI_MONITOR_FEEDS,
-    HW_CAP_MON_BRAIN_LCD_EVF_MULTI_FEEDS,
-    HW_CAP_MON_BRAIN_HDMI_MULTI_FEEDS,
-    HW_CAP_MON_BRAIN_HDSDI_MULTI_FEEDS,
-    HW_CAP_MON_REAR_LCD_EVF_MULTI_FEEDS,
-    HW_CAP_MON_REAR_HDSDI_1_MULTI_FEEDS,
-    HW_CAP_MON_REAR_HDSDI_2_MULTI_FEEDS,
-    HW_CAP_SSD_TALLY_LIGHT,
-    HW_CAP_STROBE,
-    HW_CAP_MULTI_MONITOR_FEED_0,
-    HW_CAP_MULTI_MONITOR_FEED_1,
-    HW_CAP_MULTI_MONITOR_FEED_1_AND_3D_LUT,
-    HW_CAP_POWER_OUT_REAR_PTAP,
-    HW_CAP_CONTROL_UART_2,
-    HW_CAP_POWER_OUT_REAR_AUX,
-    HW_CAP_POWER_OUT_TIMECODE,
-    HW_CAP_SW_2,
-    HW_CAP_AUDIO_MODE_NO_UI_CONTROL_12,
-    HW_CAP_AUDIO_MODE_UI_CONTROL_12,
-    HW_CAP_AUDIO_MODE_UI_CONTROL_34,
-    HW_CAP_WEAPON_SIDE_HANDLE,
-    HW_CAP_MON_LCD3_EVF3,
-    HW_CAP_MON_LCD3_EVF3_MULTI_FEEDS,
-    HW_CAP_AUDIO_CAM_MIC_12,
-    HW_CAP_AUDIO_REAR_ANALOG_12,
-    HW_CAP_AUDIO_REAR_DIGITAL_12,
-    HW_CAP_AUDIO_REAR_DIGITAL_34,
-    HW_CAP_THIRD_PARTY_OLPFS,
-    HW_CAP_PL_POWER,
-    HW_CAP_PL_DETECT,
-    HW_CAP_GENLOCK_MUXED,
-    HW_CAP_AUDIO_MODE_NO_UI_CONTROL_34,
-    HW_CAP_TOP_MODULE_RECORD_BUTTON,
-    HW_CAP_SIDE_MODULE_FOCUS_WHEEL,
-    HW_CAP_SIDE_MODULE_KEYS,
-    HW_CAP_SIDE_MODULE_RECORD,
-    HW_CAP_SIDE_MODULE_NAVIGATION,
-    HW_CAP_INTERNAL_AMBIENT,
-    HW_CAP_COLOR_SCIENCE_IPP2,
-    HW_CAP_PRESTON_FIZ,
-    HW_CAP_SIDE_UI_LEFT,
-    HW_CAP_SIDE_UI_RIGHT,
-    HW_CAP_MON_REAR_UHDSDI_1,
-    HW_CAP_MON_REAR_UHDSDI_2,
-    HW_CAP_RETURN_FEED,
-    HW_CAP_MON_BRAIN_LCD_EVF_RETURN_FEED,
-    HW_CAP_MON_BRAIN_HDMI_RETURN_FEED,
-    HW_CAP_MON_BRAIN_HDSDI_RETURN_FEED,
-    HW_CAP_MON_REAR_LCD_EVF_RETURN_FEED,
-    HW_CAP_MON_REAR_HDSDI_1_RETURN_FEED,
-    HW_CAP_MON_REAR_HDSDI_2_RETURN_FEED,
-    HW_CAP_MON_LCD3_EVF3_RETURN_FEED,
-    HW_CAP_MON_REAR_UHDSDI_1_2_SHARED,
-    HW_CAP_FRAME_PROCESSING,
-    HW_CAP_ANAMORPHIC,
-    HW_CAP_LOOKAROUND,
-    HW_CAP_ALLOW_ISO_CALIBRATION1,
-    HW_CAP_DROP_FRAME_TIMECODE,
-    HW_CAP_PRIVATE_0,
-    HW_CAP_SENSOR_FLIP,
-    HW_CAP_PRIVATE_1,
+    HW_CAP_COLOR_SENSOR = 0,
+    HW_CAP_WIFI = 1,
+    HW_CAP_FIZ = 2,
+    HW_CAP_GIG_ETHERNET = 3,
+    HW_CAP_TETHERING = 4,
+    HW_CAP_SIDE_UI = 5,
+    HW_CAP_ND_CONTROL = 6,
+    HW_CAP_3D_LUT = 7,
+    HW_CAP_MON_BRAIN_LCD_EVF = 8,
+    HW_CAP_SW = 9,
+    HW_CAP_MON_BRAIN_HDMI = 10,
+    HW_CAP_MON_BRAIN_HDSDI = 11,
+    HW_CAP_MON_REAR_LCD_EVF = 12,
+    HW_CAP_WIRELESS_HAND_CONTROLLER = 13,
+    HW_CAP_MON_REAR_HDSDI_1 = 14,
+    HW_CAP_MON_REAR_HDSDI_2 = 15,
+    HW_CAP_CONTROL_UART = 16,
+    HW_CAP_REDMOTE_COMM = 17,
+    HW_CAP_PRORES = 18,
+    HW_CAP_HEADPHONE = 19,
+    HW_CAP_AUDIO_OUT = 20,
+    HW_CAP_MONITOR_WITH_AUDIO = 21,
+    HW_CAP_AUDIO_PHANTOM_POWER = 22,
+    HW_CAP_AUDIO_LIMITER = 23,
+    HW_CAP_TIMECODE_IN = 24,
+    HW_CAP_TIMECODE_OUT = 25,
+    HW_CAP_GENLOCK = 26,
+    HW_CAP_GPI = 27,
+    HW_CAP_GPO = 28,
+    HW_CAP_SYNC_IN = 29,
+    HW_CAP_SYNC_OUT = 30,
+    HW_CAP_GPI_SYNC_IN_MUXED = 31,
+    HW_CAP_GPO_SYNC_OUT_MUXED = 32,
+    HW_CAP_PRO_IO_GPI_A = 33,
+    HW_CAP_PRO_IO_GPI_B = 34,
+    HW_CAP_PRO_IO_SW_1 = 35,
+    HW_CAP_PRO_IO_SW_2 = 36,
+    HW_CAP_LCD_EVF_2_HDMI_MUX = 37,
+    HW_CAP_SIDE_HANDLE = 38,
+    HW_CAP_POWER_OUT_PRO_IO_GPIO = 39,
+    HW_CAP_POWER_OUT_PRO_IO_PWR = 40,
+    HW_CAP_POWER_OUT_PRO_IO_AUX = 41,
+    HW_CAP_POWER_OUT_PLUS_ONE_PWR = 42,
+    HW_CAP_POWER_OUT_BAT_AUX = 43,
+    HW_CAP_POWER_OUT_BAT_AUX_WITH_ENABLE = 44,
+    HW_CAP_POWER_OUT_JETPACK_USB = 45,
+    HW_CAP_MULTI_MONITOR_FEEDS = 46,
+    HW_CAP_MON_BRAIN_LCD_EVF_MULTI_FEEDS = 47,
+    HW_CAP_MON_BRAIN_HDMI_MULTI_FEEDS = 48,
+    HW_CAP_MON_BRAIN_HDSDI_MULTI_FEEDS = 49,
+    HW_CAP_MON_REAR_LCD_EVF_MULTI_FEEDS = 50,
+    HW_CAP_MON_REAR_HDSDI_1_MULTI_FEEDS = 51,
+    HW_CAP_MON_REAR_HDSDI_2_MULTI_FEEDS = 52,
+    HW_CAP_SSD_TALLY_LIGHT = 53,
+    HW_CAP_STROBE = 54,
+    HW_CAP_MULTI_MONITOR_FEED_0 = 55,
+    HW_CAP_MULTI_MONITOR_FEED_1 = 56,
+    HW_CAP_MULTI_MONITOR_FEED_1_AND_3D_LUT = 57,
+    HW_CAP_POWER_OUT_REAR_PTAP = 58,
+    HW_CAP_CONTROL_UART_2 = 59,
+    HW_CAP_POWER_OUT_REAR_AUX = 60,
+    HW_CAP_POWER_OUT_TIMECODE = 61,
+    HW_CAP_SW_2 = 62,
+    HW_CAP_AUDIO_MODE_NO_UI_CONTROL_12 = 63,
+    HW_CAP_AUDIO_MODE_UI_CONTROL_12 = 64,
+    HW_CAP_AUDIO_MODE_UI_CONTROL_34 = 65,
+    HW_CAP_WEAPON_SIDE_HANDLE = 66,
+    HW_CAP_MON_LCD3_EVF3 = 67,
+    HW_CAP_MON_LCD3_EVF3_MULTI_FEEDS = 68,
+    HW_CAP_AUDIO_CAM_MIC_12 = 69,
+    HW_CAP_AUDIO_REAR_ANALOG_12 = 70,
+    HW_CAP_AUDIO_REAR_DIGITAL_12 = 71,
+    HW_CAP_AUDIO_REAR_DIGITAL_34 = 72,
+    HW_CAP_THIRD_PARTY_OLPFS = 73,
+    HW_CAP_PL_POWER = 74,
+    HW_CAP_PL_DETECT = 75,
+    HW_CAP_GENLOCK_MUXED = 76,
+    HW_CAP_AUDIO_MODE_NO_UI_CONTROL_34 = 77,
+    HW_CAP_TOP_MODULE_RECORD_BUTTON = 78,
+    HW_CAP_SIDE_MODULE_FOCUS_WHEEL = 79,
+    HW_CAP_SIDE_MODULE_KEYS = 80,
+    HW_CAP_SIDE_MODULE_RECORD = 81,
+    HW_CAP_SIDE_MODULE_NAVIGATION = 82,
+    HW_CAP_INTERNAL_AMBIENT = 83,
+    HW_CAP_COLOR_SCIENCE_IPP2 = 84,
+    HW_CAP_PRESTON_FIZ = 85,
+    HW_CAP_SIDE_UI_LEFT = 86,
+    HW_CAP_SIDE_UI_RIGHT = 87,
+    HW_CAP_MON_REAR_UHDSDI_1 = 88,
+    HW_CAP_MON_REAR_UHDSDI_2 = 89,
+    HW_CAP_RETURN_FEED = 90,
+    HW_CAP_MON_BRAIN_LCD_EVF_RETURN_FEED = 91,
+    HW_CAP_MON_BRAIN_HDMI_RETURN_FEED = 92,
+    HW_CAP_MON_BRAIN_HDSDI_RETURN_FEED = 93,
+    HW_CAP_MON_REAR_LCD_EVF_RETURN_FEED = 94,
+    HW_CAP_MON_REAR_HDSDI_1_RETURN_FEED = 95,
+    HW_CAP_MON_REAR_HDSDI_2_RETURN_FEED = 96,
+    HW_CAP_MON_LCD3_EVF3_RETURN_FEED = 97,
+    HW_CAP_MON_REAR_UHDSDI_1_2_SHARED = 98,
+    HW_CAP_FRAME_PROCESSING = 99,
+    HW_CAP_ANAMORPHIC = 100,
+    HW_CAP_LOOKAROUND = 101,
+    HW_CAP_ALLOW_ISO_CALIBRATION1 = 102,
+    HW_CAP_DROP_FRAME_TIMECODE = 103,
+    HW_CAP_SENSOR_FLIP = 105,
+    HW_CAP_SENSOR_SENSITIVITY = 107,
     HW_CAP_COUNT
 } hw_cap_t;
 
@@ -1348,7 +1354,8 @@ typedef enum
     RFTP_ERROR_NOT_ENOUGH_SPACE,                /* File receiver doesn't have enough space */
     RFTP_ERROR_UNABLE_TO_CREATE_FILE,           /* Other file creation errors */
     RFTP_ERROR_TETHERED_TRANSFER_IN_PROGRESS,   /* A tethered transfer is already in progress (when retrieving another file using tethering) */
-    RFTP_ERROR_INTERNAL                         /* Internal error  */
+    RFTP_ERROR_INTERNAL,                        /* Internal error  */
+    RFTP_ERROR_TRANSFERS_PAUSED                 /* A tethered transfer is requested while transfers are paused */
 } rftp_error_t;
 
 typedef enum
@@ -1680,6 +1687,12 @@ typedef enum
     ROLL_OFF_COUNT
 } roll_off_t;
 
+typedef enum
+{
+    SENSOR_SENSITIVITY_LOW_LIGHT,
+    SENSOR_SENSITIVITY_STANDARD
+} sensor_sensitivity_t;
+
 #endif
 /********** End file: rcp_types_public.h ****************************************/
 
@@ -1755,14 +1768,10 @@ typedef int32_t c_list_num_t;
 typedef void * (* c_list_malloc_t) (size_t);
 typedef void (* c_list_free_t) (void *);
 
-#define C_LIST_NUM_STRINGS_TO_COMPRESS 33
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-extern const char * c_list_strings_to_compress[C_LIST_NUM_STRINGS_TO_COMPRESS];
 
 typedef enum {
     C_LIST_SUCCESS,                    /**< No error */
@@ -2429,8 +2438,22 @@ int c_list_compare(const c_list_t * c_list_1, const c_list_t * c_list_2);
  *
  * @page CHANGELOG Changelog
  *
+ * @section VERSION_6_51_2 Version 6.51.2
+ * - Added parameters:
+ *   - @ref RCP_PARAM_SENSOR_SENSITIVITY
+ *
+ * @section VERSION_6_51_0 Version 6.51.0
+ * - Added parameters:
+ *   - @ref RCP_PARAM_QT_DROPPED_FRAMES
+ *   - @ref RCP_PARAM_MXF_DROPPED_FRAMES
+ *   - @ref RCP_PARAM_R3D_DROPPED_FRAMES
+ *
+ * @section VERSION_6_50_24 Version 6.50.24
+ * - Added is_paused field to rcp_cur_rftp_status_cb_data_t
+ *
+ *
  * @section VERSION_6_50_23 Version 6.50.23
- * - Added paramters:
+ * - Added parameters:
  *   - @ref RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS
  *   - @ref RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS
  *
@@ -2487,7 +2510,6 @@ int c_list_compare(const c_list_t * c_list_1, const c_list_t * c_list_2);
  *   - @ref RCP_PARAM_MONITOR_CURVE_REAR_EVF
  *   - @ref RCP_PARAM_MONITOR_CURVE_LCD3
  *   - @ref RCP_PARAM_MONITOR_CURVE_EVF3
- *   - @ref RCP_PARAM_RECORD_R3D_METADATA_CURVE
  *   - @ref RCP_PARAM_FLIP_MIRROR_FEED_0
  *   - @ref RCP_PARAM_FLIP_MIRROR_FEED_1
  *
@@ -3399,7 +3421,7 @@ typedef enum
     RCP_PARAM_AUDIO_CH2_VOL,                          /**< CH2VOL: added in Parameter Set Version 5.0 */
     RCP_PARAM_AUDIO_CH3_VOL,                          /**< CH3VOL: added in Parameter Set Version 5.0 */
     RCP_PARAM_AUDIO_CH4_VOL,                          /**< CH4VOL: added in Parameter Set Version 5.0 */
-    RCP_PARAM_DROPPED_FRAMES,                         /**< DRPFRMS: added in Parameter Set Version 5.0 */
+    RCP_PARAM_R3D_DROPPED_FRAMES,                     /**< DRPFRMS: added in Parameter Set Version 5.0 */
     RCP_PARAM_MONITOR_MODE_LCD,                       /**< LCDM: added in Parameter Set Version 5.0 */
     RCP_PARAM_MONITOR_MODE_HDMI,                      /**< HDMIM: added in Parameter Set Version 5.0 */
     RCP_PARAM_MONITOR_MODE_HDSDI,                     /**< HDSDIM: added in Parameter Set Version 5.0 */
@@ -4367,6 +4389,10 @@ typedef enum
     RCP_PARAM_RECORD_PROXY_BAKED_IN_SETTINGS,         /**< VCBAKED: added in Parameter Set Version 6.50 */
     RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS,     /**< VCBAKMIN: added in Parameter Set Version 6.50 */
     RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS,     /**< VCBAKMAX: added in Parameter Set Version 6.50 */
+    RCP_PARAM_SENSOR_SENSITIVITY,                     /**< SENSTVTY: added in Parameter Set Version 6.50 */ 
+    RCP_PARAM_QT_DROPPED_FRAMES,                      /**< QTDRPFRM: added in Parameter Set Version 6.51 */
+    RCP_PARAM_MXF_DROPPED_FRAMES,                     /**< MXFDRPFM: added in Parameter Set Version 6.51 */
+    RCP_PARAM_DROPPED_FRAMES,                         /**< Composite of @ref RCP_PARAM_R3D_DROPPED_FRAMES, @ref RCP_PARAM_QT_DROPPED_FRAMES and @ref RCP_PARAM_MXF_DROPPED_FRAMES, added in Parameter Set Version 6.51 */
 
     RCP_PARAM_COUNT
 } rcp_param_t;
@@ -4773,6 +4799,7 @@ typedef struct
     int32_t percent_complete;                   /**< Transfer completion percentage. */
     const char * directory_list_string;         /**< Raw string representation of the directory listing for a specific directory (needs to be converted to a cList or equivalent). */
     const char * md5sum;                        /**< MD5 hex string of file being retrieved from the camera. Only applicable on tethered retrieve transfers. */
+    int is_paused;                              /**< If true, data flow is paused for this transfer. */
 } rcp_cur_rftp_status_cb_data_t;
 
 typedef struct
@@ -6063,7 +6090,7 @@ uint32_t rcp_timestamp(void);
 
 /* Current RCP Parameter Set Version supported */
 #define RCP_PARAMETER_SET_VERSION_MAJOR 6
-#define RCP_PARAMETER_SET_VERSION_MINOR 50
+#define RCP_PARAMETER_SET_VERSION_MINOR 51
 
 /* Some platforms, like windows phone, reportedly don't support a plain
  * C compiler.  For better cross platform support we need to cast the
@@ -6752,6 +6779,7 @@ typedef struct rcp_rftp_transfer
     int rftp_data_is_compressed;
     int rftp_last_percent_sent;
     uint32_t rftp_start_timestamp;
+    int is_paused;
 
     /* store properties */
     int64_t rftp_last_ack;
@@ -6775,6 +6803,7 @@ RCP_API_PRIVATE void _rcp_rftp_handle_list(rcp_camera_connection_t * con, const 
 RCP_API_PRIVATE void _rcp_rftp_handle_data(rcp_camera_connection_t * con, const tRCPParsedPacket2 * packet);
 RCP_API_PRIVATE void _rcp_rftp_handle_abort(rcp_camera_connection_t * con, const tRCPParsedPacket2 * packet);
 RCP_API_PRIVATE void _rcp_rftp_handle_delete(rcp_camera_connection_t * con, const tRCPParsedPacket2 * packet);
+RCP_API_PRIVATE void _rcp_rftp_handle_pause(rcp_camera_connection_t * con, const tRCPParsedPacket2 * packet);
 RCP_API_PRIVATE void _rcp_rftp_free_all_data(rcp_camera_connection_t * con);
 
 #endif
@@ -7027,7 +7056,7 @@ void decorated_string_create_red_color(char * dest, size_t dest_size, decorated_
 void decorated_string_create_main_output_preset(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value);
 void decorated_string_create_display_preset(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value);
 void decorated_string_create_output_transform(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value);
-void decorated_string_create_iso(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value, int32_t iso_pull, int32_t nd_val);
+void decorated_string_create_iso(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value, int32_t iso_pull, int32_t nd_val, int32_t sensor_gain_supported, int32_t sensor_gain_mode);
 void decorated_string_create_redcode(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value);
 void decorated_string_create_file_format(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value);
 void decorated_string_create_aperture(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value, int32_t ae_control);
@@ -8423,6 +8452,7 @@ RCP_API_PRIVATE void _rcp_create_set_str_message(rcp_camera_connection_t * con, 
 #define RCP_MTMST0_MSG_INT "MTMST0"
 #define RCP_MTMST1_MSG_INT "MTMST1"
 #define RCP_MTMST2_MSG_INT "MTMST2"
+#define RCP_MXFDRPFM_MSG_INT "MXFDRPFM"
 #define RCP_MXFST_MSG_INT "MXFST"
 #define RCP_MXFSTD_MSG_STR_PTR "MXFSTD"
 #define RCP_NOTIFY_MSG_NOTIFICATION_PTR "NOTIFY"
@@ -8479,6 +8509,7 @@ RCP_API_PRIVATE void _rcp_create_set_str_message(rcp_camera_connection_t * con, 
 #define RCP_PWRBATL_MSG_INT "PWRBATL"
 #define RCP_PWRSRC_MSG_INT "PWRSRC"
 #define RCP_PWRSRC_MSG_LIST_PTR "PWRSRC"
+#define RCP_QTDRPFRM_MSG_INT "QTDRPFRM"
 #define RCP_QTST_MSG_INT "QTST"
 #define RCP_QTSTD_MSG_STR_PTR "QTSTD"
 #define RCP_R3DST_MSG_INT "R3DST"
@@ -8498,6 +8529,7 @@ RCP_API_PRIVATE void _rcp_create_set_str_message(rcp_camera_connection_t * con, 
 #define RCP_RFTPDATA_MSG_RFTP_DATA "RFTPDATA"
 #define RCP_RFTPDELE_MSG_RFTP_DELETE "RFTPDELE"
 #define RCP_RFTPLIST_MSG_RFTP_LIST "RFTPLIST"
+#define RCP_RFTPPAUS_MSG_RFTP_PAUSE_STATE "RFTPPAUS"
 #define RCP_RFTPRETR_MSG_RFTP_RETRIEVE "RFTPRETR"
 #define RCP_RFTPSTOR_MSG_RFTP_STORE "RFTPSTOR"
 #define RCP_RIGSTATE_MSG_INT "RIGSTATE"
@@ -8514,6 +8546,8 @@ RCP_API_PRIVATE void _rcp_create_set_str_message(rcp_camera_connection_t * con, 
 #define RCP_RMUNPAIR_MSG_STR_PTR "RMUNPAIR"
 #define RCP_RMUPG "RMUPG"
 #define RCP_SAVELOG "SAVELOG"
+#define RCP_SENSTVTY_MSG_INT "SENSTVTY"
+#define RCP_SENSTVTY_MSG_LIST_PTR "SENSTVTY"
 #define RCP_SERPROT2_MSG_INT "SERPROT2"
 #define RCP_SERPROT2_MSG_LIST_PTR "SERPROT2"
 #define RCP_SERPROTO_MSG_INT "SERPROTO"
@@ -8857,7 +8891,7 @@ RCP_API_PRIVATE rcp_error_t _rcp_get_current_entry_from_list(const rcp_camera_co
 /********** Begin file: rcp_sdk_version.h ***************************************/
 #ifndef RCP_SDK_VERSION_H 
 #define RCP_SDK_VERSION_H 
-#define RCP_SDK_VERSION "6.50.23" 
+#define RCP_SDK_VERSION "6.51.2" 
 #endif 
 /********** End file: rcp_sdk_version.h *****************************************/
 
@@ -11467,7 +11501,7 @@ static void _rcp_set_hw_cap(rcp_camera_connection_t * con, hw_cap_t hw_cap, int 
     {
         const uint8_t idx = (uint8_t) hw_cap / 32;
         const uint8_t bit = (uint8_t) hw_cap % 32;
-        const uint32_t mask = (1 << bit);
+        const uint32_t mask = (1U << bit);
 
         if (value)
         {
@@ -11486,7 +11520,7 @@ RCP_API_PRIVATE int _rcp_get_hw_cap(const rcp_camera_connection_t * con, hw_cap_
     {
         const uint8_t idx = (uint8_t) hw_cap / 32;
         const uint8_t bit = (uint8_t) hw_cap % 32;
-        const uint32_t mask = (1 << bit);
+        const uint32_t mask = (1U << bit);
 
         if (con->hw_cap_data[idx] & mask)
         {
@@ -14521,6 +14555,7 @@ static void _rcp_create_min_record_codec_int(rcp_camera_connection_t * con, rcp_
 static void _rcp_create_min_record_mxf_codec_int(rcp_camera_connection_t * con, rcp_param_t id);
 static void _rcp_create_format_phy_width_int(rcp_camera_connection_t * con, rcp_param_t id);
 static void _rcp_create_format_phy_height_int(rcp_camera_connection_t * con, rcp_param_t id);
+static void _rcp_create_dropped_frames_int(rcp_camera_connection_t * con, rcp_param_t id);
 
 static void _rcp_create_edit_info_pw(rcp_camera_connection_t * con, rcp_param_t id);
 
@@ -14672,8 +14707,6 @@ static const rcp_cur_str_edit_info_t _rcp_edit_olpf_third_party_name =      {PS_
 #define RCP_LCD3CV_MSG_LIST_PTR "LCD3CV"                /* RCP_PARAM_MONITOR_CURVE_LCD3 was removed in parameter set version 6.50 */
 #define RCP_EVF3CV_MSG_INT "EVF3CV"                     /* RCP_PARAM_MONITOR_CURVE_EVF3 was removed in parameter set version 6.50 */
 #define RCP_EVF3CV_MSG_LIST_PTR "EVF3CV"                /* RCP_PARAM_MONITOR_CURVE_EVF3 was removed in parameter set version 6.50 */
-#define RCP_METACV_MSG_INT "METACV"                     /* RCP_PARAM_RECORD_R3D_METADATA_CURVE was removed in parameter set version 6.50 */
-#define RCP_METACV_MSG_LIST_PTR "METACV"                /* RCP_PARAM_RECORD_R3D_METADATA_CURVE was removed in parameter set version 6.50 */
 #define RCP_PORXAE_MSG_INT "PORXAE"                     /* RCP_PARAM_POWER_OUT_REAR_AUX_ENABLE was removed in parameter set version 6.50 */
 #define RCP_PORXAS_MSG_INT "PORXAS"                     /* RCP_PARAM_POWER_OUT_REAR_AUX_STATUS was removed in parameter set version 6.50 */
 #define RCP_PORXAR "PORXAR"                             /* RCP_PARAM_POWER_OUT_REAR_AUX_RESET was removed in parameter set version 6.50 */
@@ -14776,7 +14809,7 @@ const rcp_param_def_t _rcp_param_def[RCP_PARAM_COUNT] =
     {PARAM_NOR(RCP_PARAM_AUDIO_CH2_VOL),                                                                MIN_VER(5, 0),       LABEL("Audio: CH2 Volume"),                            RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL_LIST, RCP_SGC(RCP_CH2VOL_MSG_INT),                            RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_CH2VOL_MSG_LIST_PTR),          RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          _rcp_create_status_ch2_vol,                   EDIT_INFO(_rcp_edit_info_audio_vol_db),      UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(HEADPHONE)},
     {PARAM_NOR(RCP_PARAM_AUDIO_CH3_VOL),                                                                MIN_VER(5, 0),       LABEL("Audio: CH3 Volume"),                            RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL_LIST, RCP_SGC(RCP_CH3VOL_MSG_INT),                            RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_CH3VOL_MSG_LIST_PTR),          RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO(_rcp_edit_info_audio_vol_db),      UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_AUDIO_CH4_VOL),                                                                MIN_VER(5, 0),       LABEL("Audio: CH4 Volume"),                            RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL_LIST, RCP_SGC(RCP_CH4VOL_MSG_INT),                            RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_CH4VOL_MSG_LIST_PTR),          RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO(_rcp_edit_info_audio_vol_db),      UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
-    {PARAM_NOR(RCP_PARAM_DROPPED_FRAMES),                                                               MIN_VER(5, 0),       LABEL("Dropped Frames"),                               RCP_TYPE_NULL, RCP_TYPE_INT,           CACHE_VAL,      RCP_GC(RCP_DRPFRMS_MSG_INT),                            RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
+    {PARAM_NOR(RCP_PARAM_R3D_DROPPED_FRAMES),                                                           MIN_VER(5, 0),       LABEL("R3D Dropped Frames"),                           RCP_TYPE_NULL, RCP_TYPE_INT,           CACHE_VAL,      RCP_GC(RCP_DRPFRMS_MSG_INT),                            RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_MONITOR_MODE_LCD),                                                             MIN_VER(5, 0),       LABEL_FP(_rcp_create_label_monitor),                   RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL,      RCP_SGC(RCP_LCDM_MSG_INT),                              RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_LCDM_MSG_LIST_PTR),            RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CLOSE,  DISABLED_IN_REC_PAT_PB,             COLOR_SCIENCE(_),    HW_CAP(MON_BRAIN_LCD_EVF)},
     {PARAM_NOR(RCP_PARAM_MONITOR_MODE_HDMI),                                                            MIN_VER(5, 0),       LABEL_FP(_rcp_create_label_monitor),                   RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL,      RCP_SGC(RCP_HDMIM_MSG_INT),                             RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_HDMIM_MSG_LIST_PTR),           RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          _rcp_create_status_monitor_enable,            EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CLOSE,  DISABLED_IN_REC_PAT_PB,             COLOR_SCIENCE(_),    HW_CAP(MON_BRAIN_HDMI)},
     {PARAM_NOR(RCP_PARAM_MONITOR_MODE_HDSDI),                                                           MIN_VER(5, 0),       LABEL_FP(_rcp_create_label_monitor),                   RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL,      RCP_SGC(RCP_HDSDIM_MSG_INT),                            RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_HDSDIM_MSG_LIST_PTR),          RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          _rcp_create_status_monitor_enable,            EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CLOSE,  DISABLED_IN_REC_PAT_PB,             COLOR_SCIENCE(_),    HW_CAP(MON_BRAIN_HDSDI)},
@@ -15435,7 +15468,7 @@ const rcp_param_def_t _rcp_param_def[RCP_PARAM_COUNT] =
     {PARAM_NOR(RCP_PARAM_SSD_TALLY_LIGHT),                                                              MIN_VER(6, 20),      LABEL("SSD Tally Light"),                              RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL,      RCP_SGC(RCP_SSDTALLY_MSG_INT),                          RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, DISABLED_IN_REC,                    COLOR_SCIENCE(_),    HW_CAP(SSD_TALLY_LIGHT)},
     {PARAM_NOR(RCP_PARAM_OVERDRIVE_FRAME_RATE),                                                         MIN_VER(6, 20),      LABEL("Overdrive Frame Rate"),                         RCP_TYPE_UINT, RCP_TYPE_UINT,          CACHE_VAL,      RCP_SGC(RCP_PORECFPS_MSG_UINT),                         RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO(_rcp_edit_info_overdrive_fps),     UPDATE_LIST_ON_CHANGE, DISABLED_IN_REC_PAT_MAG_PB,         COLOR_SCIENCE(_),    HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_PRE_RECORD),                                                                   MIN_VER(6, 20),      LABEL("Trigger Pre-Record"),                           RCP_TYPE_NULL, RCP_TYPE_NULL,          CACHE_NONE,     RCP_S(RCP_PREREC),                                      RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          _rcp_create_status_pre_record,                EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, DISABLED_IN_REC_PAT_MAG_PB,         COLOR_SCIENCE(_),    HW_CAP(_)},
-    {PARAM_NOR(RCP_PARAM_CALIBRATION_ENTRY),                                                            VER_CAL_ENTRY,       LABEL("Calibration Entry"),                            RCP_TYPE_STR,  RCP_TYPE_STR,           CACHE_VAL,      RCP_SGC(RCP_CALENTRY_MSG_STR_PTR),                      RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, DISABLED_IN_REC,                    COLOR_SCIENCE(_),    HW_CAP(_)},
+    {PARAM_NOR(RCP_PARAM_CALIBRATION_ENTRY),                                                            VER_CAL_ENTRY,       LABEL("Current Calibration Map"),                      RCP_TYPE_STR,  RCP_TYPE_STR,           CACHE_VAL,      RCP_SGC(RCP_CALENTRY_MSG_STR_PTR),                      RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, DISABLED_IN_REC,                    COLOR_SCIENCE(_),    HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_RECORD_VIDEO_CODEC_FEED),                                                      MIN_VER(6, 20),      LABEL("Video Codec: Look"),                            RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_NONE,     RCP_SGC(RCP_VCODECG_MSG_INT),                           RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_VCODECG_MSG_LIST_PTR),         RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          _rcp_create_status_video_codec,               EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CLOSE,  DISABLED_IN_REC,                    COLOR_SCIENCE(_),    HW_CAP(PRORES)},
     {PARAM_NOR(RCP_PARAM_RECORD_REDCODE_RAW_STATE),                                                     MIN_VER(6, 20),      LABEL("REDCODE RAW Record State"),                     RCP_TYPE_NULL, RCP_TYPE_INT,           CACHE_VAL,      RCP_GC(RCP_R3DST_MSG_INT),                              RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(PRORES)},
     {PARAM_NOR(RCP_PARAM_RECORD_REDCODE_RAW_STATE_DETAILED),                                            MIN_VER(6, 30),      LABEL("REDCODE RAW Record Status"),                    RCP_TYPE_NULL, RCP_TYPE_STR,           CACHE_VAL,      RCP_GC(RCP_R3DSTD_MSG_STR_PTR),                         RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(PRORES)},
@@ -15708,7 +15741,7 @@ const rcp_param_def_t _rcp_param_def[RCP_PARAM_COUNT] =
     {PARAM_NOR(RCP_PARAM_LOG_VIEW_MODE),                                                                MIN_VER(6, 50),      LABEL("Log View"),                                     RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL,      RCP_SGC(RCP_LOGVWMDE_MSG_INT),                          RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, DISABLED_IN_REC_PAT,                COLOR_SCIENCE(IPP2), HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_AUTO_FOCUS_PEAK),                                                              MIN_VER(6, 50),      LABEL("Lens: Auto Focus Peaking"),                     RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL,      RCP_SGC(RCP_AUTOPEAK_MSG_INT),                          RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_AUTOPEAK_MSG_LIST_PTR),        RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CLOSE,  ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_TIMECODE_DROP_FRAME_DISPLAY_MODE),                                             MIN_VER(6, 50),      LABEL("Timecode: Drop Frame Display Mode"),            RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL_LIST, RCP_SGC(RCP_TCDFMODE_MSG_INT),                          RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_TCDFMODE_MSG_LIST_PTR),        RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          _rcp_create_status_drop_frame_display_mode,   EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, DISABLED_IN_REC,                    COLOR_SCIENCE(_),    HW_CAP(DROP_FRAME_TIMECODE)},
-    {PARAM_NOR(RCP_PARAM_ISO_CAL2_ENABLED),                                                             MIN_VER(6, 50),      LABEL("Image: Use new ISO calibration for HELIUM sensor"), RCP_TYPE_INT, RCP_TYPE_INT,        CACHE_VAL,      RCP_SGC(RCP_ISOCAL2_MSG_INT),                           RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, DISABLED_IN_PB,                     COLOR_SCIENCE(_),    HW_CAP(ALLOW_ISO_CALIBRATION1)},
+    {PARAM_NOR(RCP_PARAM_ISO_CAL2_ENABLED),                                                             MIN_VER(6, 50),      LABEL("Image: Use updated ISO calibration"),           RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL,      RCP_SGC(RCP_ISOCAL2_MSG_INT),                           RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, DISABLED_IN_PB,                     COLOR_SCIENCE(_),    HW_CAP(ALLOW_ISO_CALIBRATION1)},
     {PARAM_NOR(RCP_PARAM_MONITOR_LUT_LCD),                                                              MIN_VER(6, 50),      LABEL_FP(_rcp_create_label_monitor),                   RCP_TYPE_NULL, RCP_TYPE_STR,           CACHE_NONE,     RCP_GC(RCP_BLCDLUT_MSG_STR_PTR),                        RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_MONITOR_LUT_EVF),                                                              MIN_VER(6, 50),      LABEL_FP(_rcp_create_label_monitor),                   RCP_TYPE_NULL, RCP_TYPE_STR,           CACHE_NONE,     RCP_GC(RCP_BEVFLUT_MSG_STR_PTR),                        RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_MONITOR_LUT_HDMI),                                                             MIN_VER(6, 50),      LABEL_FP(_rcp_create_label_monitor),                   RCP_TYPE_NULL, RCP_TYPE_STR,           CACHE_NONE,     RCP_GC(RCP_BHDMILUT_MSG_STR_PTR),                       RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
@@ -15722,6 +15755,11 @@ const rcp_param_def_t _rcp_param_def[RCP_PARAM_COUNT] =
     {PARAM_NOR(RCP_PARAM_RECORD_PROXY_BAKED_IN_SETTINGS),                                               MIN_VER(6, 50),      LABEL("Proxy: Baked-in Settings"),                     RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL,      RCP_GC(RCP_VCBAKED_MSG_INT),                            RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_SGC(RCP_VCBAKEDT_MSG_INT, 6, 50),  RCP_LIST_GC(RCP_VCBAKED_MSG_LIST_PTR),         RCP_MIN(RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS), RCP_MAX(RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS), _rcp_create_list_string,                       NULL,                               NULL,                                 NULL,                          _rcp_create_status_video_codec_any,           EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CLOSE,  DISABLED_IN_REC_PB,                 COLOR_SCIENCE(IPP2), HW_CAP(PRORES)},
     {PARAM_NOR(RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS),                                           MIN_VER(6, 50),      LABEL("Proxy: Min Baked-in Settings"),                 RCP_TYPE_NULL, RCP_TYPE_INT,           CACHE_VAL,      RCP_GC(RCP_VCBAKMIN_MSG_INT),                           RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
     {PARAM_NOR(RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS),                                           MIN_VER(6, 50),      LABEL("Proxy: Max Baked-in Settings"),                 RCP_TYPE_NULL, RCP_TYPE_INT,           CACHE_VAL,      RCP_GC(RCP_VCBAKMAX_MSG_INT),                           RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
+    {PARAM_NOR(RCP_PARAM_SENSOR_SENSITIVITY),                             MIN_VER(6, 50),      LABEL("Sensor Sensitivity"),                           RCP_TYPE_INT,  RCP_TYPE_INT,           CACHE_VAL_LIST, RCP_SGC(RCP_SENSTVTY_MSG_INT),                          RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_GC(RCP_SENSTVTY_MSG_LIST_PTR),        RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CLOSE,  DISABLED_IN_REC_PB,                 COLOR_SCIENCE(_),    HW_CAP(SENSOR_SENSITIVITY)},     
+    {PARAM_NOR(RCP_PARAM_QT_DROPPED_FRAMES),                                                            MIN_VER(6, 51),      LABEL("QT Dropped Frames"),                            RCP_TYPE_NULL, RCP_TYPE_INT,           CACHE_VAL,      RCP_GC(RCP_QTDRPFRM_MSG_INT),                           RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
+    {PARAM_NOR(RCP_PARAM_MXF_DROPPED_FRAMES),                                                           MIN_VER(6, 51),      LABEL("MXF Dropped Frames"),                           RCP_TYPE_NULL, RCP_TYPE_INT,           CACHE_VAL,      RCP_GC(RCP_MXFDRPFM_MSG_INT),                           RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              NULL,                               NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
+    {PARAM_NOR(RCP_PARAM_DROPPED_FRAMES),                                                               MIN_VER(5, 0),       LABEL("Dropped Frames"),                               RCP_TYPE_NULL, RCP_TYPE_NULL,          CACHE_NONE,     RCP_NONE(),                                             RCP_REL_NONE(),                       RCP_LIST_REL_NONE(),                           RCP_TGT_NONE(),                            RCP_LIST_NONE(),                               RCP_MIN_NONE(),                                      RCP_MAX_NONE(),                                      NULL,                                              _rcp_create_dropped_frames_int,     NULL,                                 NULL,                          NULL,                                         EDIT_INFO_NONE(),                            UPDATE_LIST_ON_CHANGE, ALWAYS_ENABLED,                     COLOR_SCIENCE(_),    HW_CAP(_)},
+
     };
 
 static const rcp_dependency_t rcp_dependency_table[] =
@@ -15803,6 +15841,8 @@ static const rcp_dependency_t rcp_dependency_table[] =
     {RCP_PARAM_CLIP_NAME_STATUS,                  RCP_PARAM_CLIP_NAME                           },
     {RCP_PARAM_MM_ISO_PULL,                       RCP_PARAM_ISO                                 },
     {RCP_PARAM_ND_VAL,                            RCP_PARAM_ISO                                 },
+    {RCP_PARAM_SENSOR_SENSITIVITY,                RCP_PARAM_ISO                                 },
+    {RCP_PARAM_SENSOR_SENSITIVITY,                RCP_PARAM_PLAYBACK_METADATA_ISO               },
     {RCP_PARAM_PROJECT_FRAME_RATE,                RCP_PARAM_SENSOR_FRAME_RATE                   },
     {RCP_PARAM_RECORD_FORMAT_NAME,                RCP_PARAM_RECORD_FORMAT                       },
     {RCP_PARAM_AE_MODE,                           RCP_PARAM_APERTURE                            },
@@ -15881,6 +15921,11 @@ static const rcp_dependency_t rcp_dependency_table[] =
     {RCP_PARAM_GIGABIT_ETHERNET_DHCP_ENABLE,      RCP_PARAM_GIGE_STATE_DETAILED                 },
     {RCP_PARAM_GIGABIT_ETHERNET_IP_ADDRESS,       RCP_PARAM_GIGE_STATE_DETAILED                 },
     {RCP_PARAM_TIMECODE_SOURCE,                   RCP_PARAM_TIMECODE_STATE_DETAILED             },
+    {RCP_PARAM_RECORD_FILE_FORMAT,                RCP_PARAM_DROPPED_FRAMES                      },
+    {RCP_PARAM_R3D_DROPPED_FRAMES,                RCP_PARAM_DROPPED_FRAMES                      },
+    {RCP_PARAM_QT_DROPPED_FRAMES,                 RCP_PARAM_DROPPED_FRAMES                      },
+    {RCP_PARAM_MXF_DROPPED_FRAMES,                RCP_PARAM_DROPPED_FRAMES                      },
+
 
 };
 
@@ -16700,6 +16745,7 @@ static void _rcp_create_iso_string(rcp_camera_connection_t * con, rcp_param_t id
             const rcp_param_state_t * const iso_state = &con->param_state[RCP_PARAM_ISO];
             const rcp_param_state_t * const iso_pull_state = &con->param_state[RCP_PARAM_MM_ISO_PULL];
             const rcp_param_state_t * const nd_state = &con->param_state[RCP_PARAM_ND_VAL];
+            const rcp_param_state_t * const sensor_gain_state = &con->param_state[RCP_PARAM_SENSOR_SENSITIVITY];
             int mm_iso_pull;
             int nd;
 
@@ -16721,8 +16767,8 @@ static void _rcp_create_iso_string(rcp_camera_connection_t * con, rcp_param_t id
                 nd = 0;
             }
 
-            decorated_string_create_iso(buf, buf_size, DECORATED_STRING_LEN_NORMAL, iso_state->val.int_val, mm_iso_pull, nd);
-            decorated_string_create_iso(buf_abbr, buf_abbr_size, DECORATED_STRING_LEN_ABBREVIATED, iso_state->val.int_val, mm_iso_pull, nd);
+            decorated_string_create_iso(buf, buf_size, DECORATED_STRING_LEN_NORMAL, iso_state->val.int_val, mm_iso_pull, nd, _rcp_get_hw_cap(con, HW_CAP_SENSOR_SENSITIVITY), sensor_gain_state->val.int_val);
+            decorated_string_create_iso(buf_abbr, buf_abbr_size, DECORATED_STRING_LEN_ABBREVIATED, iso_state->val.int_val, mm_iso_pull, nd, _rcp_get_hw_cap(con, HW_CAP_SENSOR_SENSITIVITY), sensor_gain_state->val.int_val);
 
             if (iso_pull_state->val.int_val)
             {
@@ -16742,9 +16788,10 @@ static void _rcp_create_playback_metadata_iso_string(rcp_camera_connection_t * c
         if (_rcp_check_parameter_dependencies(con, id))
         {
             const rcp_param_state_t * const iso_state = &con->param_state[RCP_PARAM_PLAYBACK_METADATA_ISO];
+            const rcp_param_state_t * const sensor_gain_state = &con->param_state[RCP_PARAM_SENSOR_SENSITIVITY];
 
-            decorated_string_create_iso(buf, buf_size, DECORATED_STRING_LEN_NORMAL, iso_state->val.int_val, 0, 0);
-            decorated_string_create_iso(buf_abbr, buf_abbr_size, DECORATED_STRING_LEN_ABBREVIATED, iso_state->val.int_val, 0, 0);
+            decorated_string_create_iso(buf, buf_size, DECORATED_STRING_LEN_NORMAL, iso_state->val.int_val, 0, 0, _rcp_get_hw_cap(con, HW_CAP_SENSOR_SENSITIVITY), sensor_gain_state->val.int_val);
+            decorated_string_create_iso(buf_abbr, buf_abbr_size, DECORATED_STRING_LEN_ABBREVIATED, iso_state->val.int_val, 0, 0, _rcp_get_hw_cap(con, HW_CAP_SENSOR_SENSITIVITY), sensor_gain_state->val.int_val);
         }
     }
 }
@@ -19446,6 +19493,61 @@ static void _rcp_create_quality_string(rcp_camera_connection_t * con, rcp_param_
                     *status = RCP_PARAM_DISPLAY_STATUS_WARNING;
                 }
             }
+        }
+    }
+}
+
+static void _rcp_create_dropped_frames_int(rcp_camera_connection_t * con, rcp_param_t id)
+{
+    if (con)
+    {
+        if (_rcp_check_parameter_dependencies(con, id))
+        {
+            const rcp_param_state_t * const r3d_dropped_frames_state = &con->param_state[RCP_PARAM_R3D_DROPPED_FRAMES];
+            const rcp_param_state_t * const file_format_state = &con->param_state[RCP_PARAM_RECORD_FILE_FORMAT];
+            const rcp_param_state_t * const qt_dropped_frames_state = &con->param_state[RCP_PARAM_QT_DROPPED_FRAMES];
+            const rcp_param_state_t * const mxf_dropped_frames_state = &con->param_state[RCP_PARAM_MXF_DROPPED_FRAMES];
+            rcp_param_state_t * const state = &con->param_state[RCP_PARAM_DROPPED_FRAMES];
+
+            int total_dropped_frames = 0;
+
+            if (rcp_get_is_supported(con, RCP_PARAM_RECORD_FILE_FORMAT, NULL) &&
+                rcp_get_is_supported(con, RCP_PARAM_QT_DROPPED_FRAMES, NULL) &&
+                rcp_get_is_supported(con, RCP_PARAM_MXF_DROPPED_FRAMES, NULL))
+            {
+                switch ((file_format_t) file_format_state->val.int_val)
+                {
+                    case FILE_FORMAT_REDCODE_RAW:
+                        total_dropped_frames = r3d_dropped_frames_state->val.int_val;
+                        break;
+
+                    case FILE_FORMAT_QUICKTIME:
+                        total_dropped_frames = qt_dropped_frames_state->val.int_val;
+                        break;
+
+                    case FILE_FORMAT_MXF:
+                        total_dropped_frames = mxf_dropped_frames_state->val.int_val;
+                        break;
+
+                    case FILE_FORMAT_REDCODE_RAW_PLUS_QUICKTIME:
+                        total_dropped_frames = r3d_dropped_frames_state->val.int_val + qt_dropped_frames_state->val.int_val;
+                        break;
+
+                    case FILE_FORMAT_REDCODE_RAW_PLUS_MXF:
+                        total_dropped_frames = r3d_dropped_frames_state->val.int_val + mxf_dropped_frames_state->val.int_val;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                total_dropped_frames = r3d_dropped_frames_state->val.int_val;
+            }
+
+            state->val.int_val = total_dropped_frames;
+            state->val_valid = 1;
         }
     }
 }
@@ -25909,6 +26011,12 @@ static void _rcp_process_packet(rcp_camera_connection_t * con, const tRCPParsedP
                 _rcp_rftp_handle_delete(con, packet);
                 return;
             }
+
+            if (strcmp(packet->pParam, RCP_RFTPPAUS_MSG_RFTP_PAUSE_STATE) == 0)
+            {
+                _rcp_rftp_handle_pause(con, packet);
+                return;
+            }
 #endif
 
             if (strcmp(packet->pParam, RCP_USER_MSG_USER_DATA) == 0)
@@ -26391,6 +26499,7 @@ static rcp_error_t _rcp_rftp_stor(rcp_camera_connection_t * con, const char * pa
             rcp_rftp_transfer->rftp_data_cur = data;
             rcp_rftp_transfer->rftp_data_is_compressed = file_is_compressed;
             rcp_rftp_transfer->rftp_last_percent_sent = -1;
+            rcp_rftp_transfer->is_paused = 0;
 
             rcp_rftp_transfer->rftp_last_ack = -1;
             rcp_rftp_transfer->rftp_num_fragments = -1;
@@ -26823,6 +26932,7 @@ RCP_API_PRIVATE void _rcp_rftp_handle_list(rcp_camera_connection_t * con, const 
                         data.is_compressed = 0;
                         data.percent_complete = 0;
                         data.directory_list_string = packet->argv[2];
+                        data.is_paused = 0;
 
                         con->rftp_status_cb(&data, con->rftp_status_cb_user_data);
                     }
@@ -27065,6 +27175,7 @@ RCP_API_PRIVATE void _rcp_rftp_handle_delete(rcp_camera_connection_t * con, cons
                         data.is_compressed = 0;
                         data.percent_complete = 0;
                         data.directory_list_string = NULL;
+                        data.is_paused = rcp_rftp_transfer->is_paused;
 
                         con->rftp_status_cb(&data, con->rftp_status_cb_user_data);
                     }
@@ -27076,6 +27187,57 @@ RCP_API_PRIVATE void _rcp_rftp_handle_delete(rcp_camera_connection_t * con, cons
             {
                 /* not for our transfer; ignore */
                 _rcp_log_error(con, "DELETE: uuid \"%s\" is not valid a transfer\n", uuid);
+            }
+        }
+        else
+        {
+            _rcp_log_error(con, "incorrect number of arguments\n");
+        }
+    }
+#endif
+}
+
+RCP_API_PRIVATE void _rcp_rftp_handle_pause(rcp_camera_connection_t * con, const tRCPParsedPacket2 * packet)
+{
+#ifdef RCP_API_ENABLE_FILE_TRANSFER
+    if (con && packet)
+    {
+        /* RFTPPAUS CURRENT Message:
+        * #$SOURCE:C:RFTPPAUS:[BASE_64_ENCODED_UUID]:[IS_PAUSED]: */
+        if (packet->argc == 2)
+        {
+            const char * const uuid = packet->argv[0];
+            const int is_paused = atoi(packet->argv[1]);
+
+            rcp_rftp_transfer_t * const rcp_rftp_transfer = _rcp_rftp_get_transfer_request(con, uuid);
+
+            if (rcp_rftp_transfer)
+            {
+                rcp_rftp_transfer->is_paused = is_paused;
+
+                if (con->rftp_status_cb)
+                {
+                    rcp_cur_rftp_status_cb_data_t data = {0};
+
+                    data.con = con;
+                    data.uuid = rcp_rftp_transfer->rftp_uuid;
+                    data.error = RFTP_SUCCESS;
+                    data.rftp_type = rcp_rftp_transfer->rftp_type;
+                    data.data = NULL;
+                    data.data_size = 0;
+                    data.is_compressed = 0;
+                    data.percent_complete = 0;
+                    data.directory_list_string = NULL;
+                    data.md5sum = NULL;
+                    data.is_paused = rcp_rftp_transfer->is_paused = is_paused;
+
+                    con->rftp_status_cb(&data, con->rftp_status_cb_user_data);
+                }
+            }
+            else
+            {
+                /* not for our transfer; ignore */
+                _rcp_log_error(con, "%s: uuid \"%s\" is not valid a transfer\n", is_paused ? "PAUSE" : "RESUME", uuid);
             }
         }
         else
@@ -27421,6 +27583,7 @@ static void _rcp_rftp_error(rcp_camera_connection_t * con, rcp_rftp_transfer_t *
             data.percent_complete = 0;
             data.directory_list_string = NULL;
             data.is_compressed = rcp_rftp_transfer->rftp_data_is_compressed;
+            data.is_paused = rcp_rftp_transfer->is_paused;
 
             if (data.rftp_type == RFTP_TYPE_STORE || data.rftp_type == RFTP_TYPE_ABORT_STORE)
             {
@@ -27522,6 +27685,7 @@ static void _rcp_rftp_update_status(rcp_camera_connection_t * con, rcp_rftp_tran
             data.directory_list_string = NULL;
             data.is_compressed = rcp_rftp_transfer->rftp_data_is_compressed;
             data.md5sum = rcp_rftp_transfer->rftp_md5sum;
+            data.is_paused = rcp_rftp_transfer->is_paused;
 
             if (
                 (rcp_rftp_transfer->rftp_type == RFTP_TYPE_STORE) ||
@@ -27586,6 +27750,7 @@ static rcp_rftp_transfer_t * _rcp_rftp_create_transfer_request(rcp_camera_connec
         rcp_rftp_transfer->rftp_data_is_compressed = 0;
         rcp_rftp_transfer->rftp_last_percent_sent = -1;
         rcp_rftp_transfer->rftp_start_timestamp = 0;
+        rcp_rftp_transfer->is_paused = 0;
         rcp_rftp_transfer->rftp_last_ack = -1;
         rcp_rftp_transfer->rftp_cur_fragment = 0;
         rcp_rftp_transfer->rftp_max_fragment_size = 0;
@@ -30352,7 +30517,7 @@ static int m_block_pool_initialized = 0;
 
 /* Note - Make sure the table below is from longest to shortest to
  * gurantee unique matches */
-const char * c_list_strings_to_compress[C_LIST_NUM_STRINGS_TO_COMPRESS] =
+const char * c_list_strings_to_compress[] =
 {
     "&redformatk; ",
     "&redformatk;",
@@ -30369,6 +30534,7 @@ const char * c_list_strings_to_compress[C_LIST_NUM_STRINGS_TO_COMPRESS] =
     "&redsec;",
     "&redae;",
     "&redav;",
+    "&redll;",
     "&trade;",
     "&copy;",
     "&amp;",
@@ -30388,6 +30554,11 @@ const char * c_list_strings_to_compress[C_LIST_NUM_STRINGS_TO_COMPRESS] =
     "HD",
     "WS"
 };
+
+size_t c_list_strings_to_compress_size(void)
+{
+    return sizeof(c_list_strings_to_compress) / sizeof(c_list_strings_to_compress[0]);
+}
 
 #define MAX_COMPRESSED_STRINGS 25
 #define MAX_UNCOMPRESSED_STRING_LENGTH 20
@@ -33880,6 +34051,7 @@ static int _RCP_get_and_parse_packet_ext(tRCPParsedPacketState * packetState, ch
 #include <math.h>
 #include <string.h>
 #include <ctype.h>
+/* #include "types/rcp_types_public.h" */
 
 #if defined(_MSC_VER) || defined(_CVI_)
 #if defined(_MSC_VER) && (_MSC_VER < 1900)
@@ -33977,6 +34149,10 @@ full_abbr_pair_t full_abbr_pairs[] =
     {"calibration", "cal"},
     {"Dimensions", "Dims"},
     {"dimensions", "dims"},
+    {"Standard", "Std"},
+    {"standard", "std"},
+    {"Low Light", "LL"},
+    {"low light", "ll"},
 };
 
 static const char * special_char_lut_2(const char * sym, size_t len, int32_t builtin)
@@ -34000,6 +34176,7 @@ static const char * special_char_lut_2(const char * sym, size_t len, int32_t bui
      *   redav          Av icon
      *   redcheck       check mark
      *   redsub2        subscript "2"
+     *   redll          LL icon
      * Global:
      *   amp, deg, reg, copy, trade
      *
@@ -34031,6 +34208,8 @@ static const char * special_char_lut_2(const char * sym, size_t len, int32_t bui
                 return builtin ? "\x0c" : " Av";
             else if (strncmp(sym, "trade", len) == 0)
                 return builtin ? "\x0f" : "(TM)";
+            else if (strncmp(sym, "redll", len) == 0)
+                return builtin ? "\x12" : "LL";
             break;
 
         case 6:
@@ -34578,6 +34757,7 @@ void decorated_string_create_red_color(char * dest, size_t dest_size, decorated_
                     break;
 
                 case COLORSPACE_ACES:
+                case COLORSPACE_ACES_AP1:
                     strlcpy(dest, "ACES", dest_size);
                     break;
 
@@ -34623,6 +34803,7 @@ void decorated_string_create_red_color(char * dest, size_t dest_size, decorated_
                     break;
 
                 case COLORSPACE_ACES:
+                case COLORSPACE_ACES_AP1:
                     strlcpy(dest, "ACES", dest_size);
                     break;
 
@@ -34788,7 +34969,7 @@ void decorated_string_create_output_transform(char * dest, size_t dest_size, dec
     }
 }
 
-void decorated_string_create_iso(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value, int32_t iso_pull, int32_t nd_val)
+void decorated_string_create_iso(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value, int32_t iso_pull, int32_t nd_val, int32_t sensor_gain_supported, int32_t sensor_gain_mode)
 {
     if (iso_pull)
     {
@@ -34799,11 +34980,25 @@ void decorated_string_create_iso(char * dest, size_t dest_size, decorated_string
     {
         default:
         case DECORATED_STRING_LEN_NORMAL:
-            decorated_string_create(dest, dest_size, value, 1, 0, "&rediso;", "");
+            if (sensor_gain_supported && sensor_gain_mode == SENSOR_SENSITIVITY_LOW_LIGHT)
+            {
+                decorated_string_create(dest, dest_size, value, 1, 0, "&rediso;", " &redll;");
+            }
+            else
+            {
+                decorated_string_create(dest, dest_size, value, 1, 0, "&rediso;", "");
+            }
             break;
 
         case DECORATED_STRING_LEN_ABBREVIATED:
-            decorated_string_create(dest, dest_size, value, 1, 0, "", "");
+            if (sensor_gain_supported && sensor_gain_mode == SENSOR_SENSITIVITY_LOW_LIGHT)
+            {
+                decorated_string_create(dest, dest_size, value, 1, 0, "", " &redll;");
+            }
+            else
+            {
+                decorated_string_create(dest, dest_size, value, 1, 0, "", "");
+            }
             break;
     }
 }
@@ -34845,32 +35040,34 @@ void decorated_string_create_file_format(char * dest, size_t dest_size, decorate
 
 void decorated_string_create_aperture(char * dest, size_t dest_size, decorated_string_len_t len, int32_t value, int32_t ae_control)
 {
-    if (value >= 99)
+    const int base = value / 10;
+    const int decimal = value % 10;
+
+    if (value <= 0)
     {
-        const int32_t tempvalue = (int) roundf(value / 10.0);
-        if (ae_control)
-        {
-            decorated_string_create(dest, dest_size, tempvalue, 1, 0, "&redae; &redfover;", "");
-        }
-        else
-        {
-            decorated_string_create(dest, dest_size, tempvalue, 1, 0, "&redfover;", "");
-        }
+        strlcpy(dest, "N/A", dest_size);
     }
-    else if (value > 0)
+    else if (decimal == 0)
     {
         if (ae_control)
         {
-            decorated_string_create(dest, dest_size, value, 10, 1, "&redae; &redfover;", "");
+            snprintf(dest, dest_size, "&redae; &redfover;%d", base);
         }
         else
         {
-            decorated_string_create(dest, dest_size, value, 10, 1, "&redfover;", "");
+            snprintf(dest, dest_size, "&redfover;%d", base);
         }
     }
     else
     {
-        strlcpy(dest, "N/A", dest_size);
+        if (ae_control)
+        {
+            snprintf(dest, dest_size, "&redae; &redfover;%d.%d", base, decimal);
+        }
+        else
+        {
+            snprintf(dest, dest_size, "&redfover;%d.%d", base, decimal);
+        }
     }
 }
 
@@ -34949,15 +35146,15 @@ void decorated_string_create_power_percent(char * dest, size_t dest_size, decora
 void decorated_string_create_power_runtime(char * dest, size_t dest_size, decorated_string_len_t len, decorated_string_color_t * color, int32_t runtime)
 {
     /*  Show batteries with capacity larger then 10 hours as Unknown. */
-    if (runtime < 600 && runtime > 0)
+    if ((runtime < BATTERY_RUNTIME_MAX_MINUTES) && (runtime > 0))
     {
         if (color)
         {
-            if (runtime > 10)
+            if (runtime > BATTERY_RUNTIME_WARNING_MINUTES)
             {
                 *color = DECORATED_STRING_COLOR_OK;
             }
-            else if (runtime > 5 || runtime < 0)
+            else if (runtime > BATTERY_RUNTIME_LOW_MINUTES)
             {
                 *color = DECORATED_STRING_COLOR_WARNING;
             }
@@ -35759,7 +35956,7 @@ strlcat(char * dst, const char * src, size_t siz)
 /********** Begin file: rcp_api_parameters_hash_table.c *************************/
 #ifndef _lint
 /* ANSI-C code produced by gperf version 3.0.4 */
-/* Command-line: /usr/bin/gperf -Kmsg -t -T -N_rcp_get_id_from_cur_msg -LANSI-C -C -G -m 3 -S 1 rcp_api_parameters_hash_table.gperf  */
+/* Command-line: /usr/bin/gperf -Kmsg -t -T -N_rcp_get_id_from_cur_msg -LANSI-C -C -G -m 3 -S 1 /cygdrive/c/jenkins/workspace/rcp_sdk_6_5x/common/rcp_api/amalgamation_sans_hash/rcp_api_parameters_hash_table.gperf  */
 /* Computed positions: -k'1-8' */
 
 #if !((' ' == 32) && ('!' == 33) && ('"' == 34) && ('#' == 35) \
@@ -35789,19 +35986,18 @@ strlcat(char * dst, const char * src, size_t siz)
 #error "gperf generated tables don't work with this execution character set. Please report a bug to <bug-gnu-gperf@gnu.org>."
 #endif
 
-#line 1 "rcp_api_parameters_hash_table.gperf"
 
 /* #include "rcp_api.h" */
 /* #include "rcp_api_config.h" */
 /* #include "rcp_api_parameters_hash_table.h" */
 #include <string.h>
 
-#define TOTAL_KEYWORDS 854
+#define TOTAL_KEYWORDS 857
 #define MIN_WORD_LENGTH 3
 #define MAX_WORD_LENGTH 8
-#define MIN_HASH_VALUE 20
-#define MAX_HASH_VALUE 6250
-/* maximum key range = 6231, duplicates = 0 */
+#define MIN_HASH_VALUE 22
+#define MAX_HASH_VALUE 4915
+/* maximum key range = 4894, duplicates = 0 */
 
 #ifdef __GNUC__
 __inline
@@ -35815,32 +36011,32 @@ hash (register const char *str, register unsigned int len)
 {
   static const unsigned short asso_values[] =
     {
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,  176,  291,
-      1315, 1047, 1538,    2, 6251,    1,    1,    1, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251,   47,  353,    6,   87,    1,
-         2,  239,  791,  580,  963,   46,   30,    1,  101,  171,
-        16, 1380,    3,    2,    7,   21,  559, 1268, 1172, 1169,
-      1214,    5, 6251, 6251, 6251, 6251,    1, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251, 6251,
-      6251, 6251, 6251, 6251, 6251, 6251, 6251
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,  211,  777,
+      1016,   85, 1130,    4, 4916,    2,    2,    2, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916,   65,  400,    6,  100,    2,
+         3,  292,  699,  684, 1153,   70,   20,    2,  107,  157,
+        20, 1332,    4,    3,    7,   23,  485,  907, 1452, 1619,
+      1078,    8, 4916, 4916, 4916, 4916,    2, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916, 4916,
+      4916, 4916, 4916, 4916, 4916, 4916, 4916
     };
   register int hval = len;
 
@@ -35876,1714 +36072,863 @@ hash (register const char *str, register unsigned int len)
 
 static const struct rcp_current_table wordlist[] =
   {
-#line 794 "rcp_api_parameters_hash_table.gperf"
     {"CSCR", RCP_PARAM_CAMERA_SCRIPT_LIST},
-#line 528 "rcp_api_parameters_hash_table.gperf"
     {"MPRE", RCP_PARAM_MEDIA_PRESET_LIST},
-#line 103 "rcp_api_parameters_hash_table.gperf"
     {"MMMODE", RCP_PARAM_MM_MODE},
-#line 81 "rcp_api_parameters_hash_table.gperf"
-    {"FSMODE", RCP_PARAM_FAN_MODE},
-#line 527 "rcp_api_parameters_hash_table.gperf"
     {"CPRE", RCP_PARAM_CAMERA_PRESET_LIST},
-#line 784 "rcp_api_parameters_hash_table.gperf"
+    {"FSMODE", RCP_PARAM_FAN_MODE},
     {"FRMTRES", RCP_PARAM_RECORD_FORMAT_RESOLUTION},
-#line 406 "rcp_api_parameters_hash_table.gperf"
     {"RECTLFR", RCP_PARAM_RECORD_TIMELAPSE_FRAMES},
-#line 422 "rcp_api_parameters_hash_table.gperf"
     {"FMTETCS", RCP_PARAM_MEDIA_FORMAT_EDGE_TC_START},
-#line 699 "rcp_api_parameters_hash_table.gperf"
-    {"MCAL", RCP_PARAM_MEDIA_CAL_LIST},
-#line 251 "rcp_api_parameters_hash_table.gperf"
     {"PLCDDM", RCP_PARAM_MONITOR_DOCK_MENUS_REAR_LCD},
-#line 821 "rcp_api_parameters_hash_table.gperf"
     {"PLCDRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_REAR_LCD},
-#line 698 "rcp_api_parameters_hash_table.gperf"
-    {"CCAL", RCP_PARAM_CAMERA_CAL_LIST},
-#line 318 "rcp_api_parameters_hash_table.gperf"
-    {"ACES", RCP_PARAM_ACES_PROXY},
-#line 257 "rcp_api_parameters_hash_table.gperf"
     {"PLCDBR", RCP_PARAM_MONITOR_BRIGHTNESS_REAR_LCD},
-#line 120 "rcp_api_parameters_hash_table.gperf"
-    {"CAMSER", RCP_PARAM_CAMERA_PIN},
-#line 183 "rcp_api_parameters_hash_table.gperf"
-    {"AEMODE", RCP_PARAM_AE_MODE},
-#line 58 "rcp_api_parameters_hash_table.gperf"
-    {"AFMODE", RCP_PARAM_AF_MODE},
-#line 187 "rcp_api_parameters_hash_table.gperf"
-    {"AESELECT", RCP_PARAM_AE_SELECTION},
-#line 853 "rcp_api_parameters_hash_table.gperf"
     {"RLCDLUT", RCP_PARAM_MONITOR_LUT_REAR_LCD},
-#line 563 "rcp_api_parameters_hash_table.gperf"
     {"MLUT", RCP_PARAM_MEDIA_LUT_LIST},
-#line 46 "rcp_api_parameters_hash_table.gperf"
     {"FLUT", RCP_PARAM_FLUT},
-#line 17 "rcp_api_parameters_hash_table.gperf"
-    {"CURRTEMP", RCP_PARAM_CORE_TEMP},
-#line 787 "rcp_api_parameters_hash_table.gperf"
-    {"FRMTLA", RCP_PARAM_RECORD_FORMAT_LOOKAROUND},
-#line 562 "rcp_api_parameters_hash_table.gperf"
     {"CLUT", RCP_PARAM_CAMERA_LUT_LIST},
-#line 122 "rcp_api_parameters_hash_table.gperf"
-    {"CAMLOC", RCP_PARAM_SLATE_LOCATION},
-#line 185 "rcp_api_parameters_hash_table.gperf"
-    {"AEMETERM", RCP_PARAM_AE_METERING_MODE},
-#line 442 "rcp_api_parameters_hash_table.gperf"
-    {"CMATRR", RCP_PARAM_USER_MATRIX_RR},
-#line 662 "rcp_api_parameters_hash_table.gperf"
-    {"MASTRRC", RCP_PARAM_MASTER_REDCODE},
-#line 448 "rcp_api_parameters_hash_table.gperf"
-    {"CMATBR", RCP_PARAM_USER_MATRIX_BR},
-#line 654 "rcp_api_parameters_hash_table.gperf"
-    {"MASTRFMT", RCP_PARAM_MASTER_RECORD_FORMAT},
-#line 844 "rcp_api_parameters_hash_table.gperf"
-    {"FRMTLAST", RCP_PARAM_LOOKAROUND_AVAILABLE},
-#line 28 "rcp_api_parameters_hash_table.gperf"
-    {"APRTR", RCP_PARAM_APERTURE},
-#line 165 "rcp_api_parameters_hash_table.gperf"
-    {"PAUSE", RCP_PARAM_PLAYBACK_PAUSE},
-#line 799 "rcp_api_parameters_hash_table.gperf"
-    {"MCDL", RCP_PARAM_MEDIA_CDL_LIST},
-#line 73 "rcp_api_parameters_hash_table.gperf"
-    {"FALSEC", RCP_PARAM_FALSE_COLOR_MODE},
-#line 652 "rcp_api_parameters_hash_table.gperf"
-    {"MASTRFPS", RCP_PARAM_MASTER_SENSOR_FRAME_RATE},
-#line 29 "rcp_api_parameters_hash_table.gperf"
-    {"APRTRT", RCP_PARAM_APERTURE},
-#line 798 "rcp_api_parameters_hash_table.gperf"
-    {"CCDL", RCP_PARAM_CAMERA_CDL_LIST},
-#line 219 "rcp_api_parameters_hash_table.gperf"
+    {"MCAL", RCP_PARAM_MEDIA_CAL_LIST},
+    {"CCAL", RCP_PARAM_CAMERA_CAL_LIST},
+    {"ACES", RCP_PARAM_ACES_PROXY},
+    {"CURRTEMP", RCP_PARAM_CORE_TEMP},
+    {"CAMSER", RCP_PARAM_CAMERA_PIN},
     {"PLCDTL", RCP_PARAM_MONITOR_TOOLS_REAR_LCD},
-#line 37 "rcp_api_parameters_hash_table.gperf"
-    {"RECORD", RCP_PARAM_RECORD_STATE_BASE},
-#line 108 "rcp_api_parameters_hash_table.gperf"
+    {"AESELECT", RCP_PARAM_AE_SELECTION},
+    {"AEMODE", RCP_PARAM_AE_MODE},
+    {"AFMODE", RCP_PARAM_AF_MODE},
+    {"FRMTLA", RCP_PARAM_RECORD_FORMAT_LOOKAROUND},
+    {"CAMLOC", RCP_PARAM_SLATE_LOCATION},
+    {"CMATRR", RCP_PARAM_USER_MATRIX_RR},
+    {"FALSEC", RCP_PARAM_FALSE_COLOR_MODE},
+    {"AEMETERM", RCP_PARAM_AE_METERING_MODE},
+    {"CMATBR", RCP_PARAM_USER_MATRIX_BR},
+    {"MASTRRC", RCP_PARAM_MASTER_REDCODE},
+    {"MCDL", RCP_PARAM_MEDIA_CDL_LIST},
+    {"MASTRFMT", RCP_PARAM_MASTER_RECORD_FORMAT},
+    {"FRMTLAST", RCP_PARAM_LOOKAROUND_AVAILABLE},
+    {"CCDL", RCP_PARAM_CAMERA_CDL_LIST},
+    {"APRTR", RCP_PARAM_APERTURE},
     {"MLABEL", RCP_PARAM_MEDIA_LABEL},
-#line 339 "rcp_api_parameters_hash_table.gperf"
-    {"PRERECDR", RCP_PARAM_PRE_RECORD_DURATION},
-#line 535 "rcp_api_parameters_hash_table.gperf"
-    {"CALTEMP", RCP_PARAM_CURRENT_CALIBRATION_TEMPERATURE},
-#line 106 "rcp_api_parameters_hash_table.gperf"
+    {"PAUSE", RCP_PARAM_PLAYBACK_PAUSE},
+    {"APRTRT", RCP_PARAM_APERTURE},
+    {"MASTRFPS", RCP_PARAM_MASTER_SENSOR_FRAME_RATE},
     {"PLABEL", RCP_PARAM_POWER_LABEL},
-#line 755 "rcp_api_parameters_hash_table.gperf"
+    {"RECORD", RCP_PARAM_RECORD_STATE_BASE},
+    {"CALTEMP", RCP_PARAM_CURRENT_CALIBRATION_TEMPERATURE},
+    {"PRERECDR", RCP_PARAM_PRE_RECORD_DURATION},
     {"CTRLSCRN", RCP_PARAM_MONITOR_CONTROL_SCREEN},
-#line 756 "rcp_api_parameters_hash_table.gperf"
-    {"RCPCLL", RCP_PARAM_RCP_CLIENT_LIST},
-#line 419 "rcp_api_parameters_hash_table.gperf"
     {"FMTREELN", RCP_PARAM_MEDIA_FORMAT_REEL_NO},
-#line 670 "rcp_api_parameters_hash_table.gperf"
-    {"USECRCL", RCP_PARAM_USE_CUSTOM_REDCODE},
-#line 18 "rcp_api_parameters_hash_table.gperf"
-    {"CURSENST", RCP_PARAM_SENSOR_TEMP},
-#line 99 "rcp_api_parameters_hash_table.gperf"
+    {"RCPCLL", RCP_PARAM_RCP_CLIENT_LIST},
     {"PLCDM", RCP_PARAM_MONITOR_MODE_REAR_LCD},
-#line 661 "rcp_api_parameters_hash_table.gperf"
-    {"CUSTMRC", RCP_PARAM_CUSTOM_REDCODE},
-#line 761 "rcp_api_parameters_hash_table.gperf"
+    {"USECRCL", RCP_PARAM_USE_CUSTOM_REDCODE},
     {"SMLCKREC", RCP_PARAM_SIDE_MODULE_RECORD_KEY_LOCKABLE},
-#line 653 "rcp_api_parameters_hash_table.gperf"
-    {"CUSTMFMT", RCP_PARAM_CUSTOM_RECORD_FORMAT},
-#line 190 "rcp_api_parameters_hash_table.gperf"
-    {"CALSTAT", RCP_PARAM_CALIBRATION_STATUS},
-#line 557 "rcp_api_parameters_hash_table.gperf"
-    {"PLDETECT", RCP_PARAM_PL_DETECT},
-#line 651 "rcp_api_parameters_hash_table.gperf"
-    {"CUSTMFPS", RCP_PARAM_CUSTOM_SENSOR_FRAME_RATE},
-#line 537 "rcp_api_parameters_hash_table.gperf"
+    {"CURSENST", RCP_PARAM_SENSOR_TEMP},
     {"RMEN", RCP_PARAM_REDMOTE_WIRELESS_ENABLE},
-#line 12 "rcp_api_parameters_hash_table.gperf"
     {"MROLL", RCP_PARAM_CAMERA_ROLL},
-#line 145 "rcp_api_parameters_hash_table.gperf"
-    {"APERCTRL", RCP_PARAM_APERTURE_CONTROL},
-#line 740 "rcp_api_parameters_hash_table.gperf"
+    {"CUSTMRC", RCP_PARAM_CUSTOM_REDCODE},
+    {"CUSTMFMT", RCP_PARAM_CUSTOM_RECORD_FORMAT},
+    {"PLDETECT", RCP_PARAM_PL_DETECT},
     {"LNMTSERL", RCP_PARAM_LENS_META_SERIAL},
-#line 271 "rcp_api_parameters_hash_table.gperf"
-    {"F0MODE", RCP_PARAM_FRAME_GUIDE_MODE},
-#line 435 "rcp_api_parameters_hash_table.gperf"
-    {"MTMST0", RCP_PARAM_FOCUS_STATE},
-#line 105 "rcp_api_parameters_hash_table.gperf"
-    {"RECMODE", RCP_PARAM_RECORD_MODE},
-#line 54 "rcp_api_parameters_hash_table.gperf"
-    {"FRPRNUM", RCP_PARAM_FRAME_PROCESSING_NUM},
-#line 149 "rcp_api_parameters_hash_table.gperf"
-    {"TPATTERN", RCP_PARAM_TEST_PATTERN},
-#line 828 "rcp_api_parameters_hash_table.gperf"
-    {"DPLCD", RCP_PARAM_DISPLAY_PRESET_LCD},
-#line 95 "rcp_api_parameters_hash_table.gperf"
-    {"LCDM", RCP_PARAM_MONITOR_MODE_LCD},
-#line 55 "rcp_api_parameters_hash_table.gperf"
-    {"FRPRNUMT", RCP_PARAM_FRAME_PROCESSING_NUM},
-#line 843 "rcp_api_parameters_hash_table.gperf"
-    {"ROLLOFF", RCP_PARAM_ROLL_OFF},
-#line 530 "rcp_api_parameters_hash_table.gperf"
+    {"CUSTMFPS", RCP_PARAM_CUSTOM_SENSOR_FRAME_RATE},
+    {"CALSTAT", RCP_PARAM_CALIBRATION_STATUS},
     {"MLOK", RCP_PARAM_MEDIA_LOOK_LIST},
-#line 529 "rcp_api_parameters_hash_table.gperf"
     {"CLOK", RCP_PARAM_CAMERA_LOOK_LIST},
-#line 19 "rcp_api_parameters_hash_table.gperf"
-    {"POSTTC", RCP_PARAM_TIMECODE},
-#line 123 "rcp_api_parameters_hash_table.gperf"
-    {"CAMSCENE", RCP_PARAM_SLATE_SCENE},
-#line 82 "rcp_api_parameters_hash_table.gperf"
-    {"RECFS", RCP_PARAM_FAN_REC_SPEED},
-#line 440 "rcp_api_parameters_hash_table.gperf"
-    {"CAMMODE", RCP_PARAM_CAMERA_CAPTURE_MODE},
-#line 273 "rcp_api_parameters_hash_table.gperf"
-    {"F0SCL", RCP_PARAM_FRAME_GUIDE_SCALE},
-#line 459 "rcp_api_parameters_hash_table.gperf"
-    {"GESTDTR", RCP_PARAM_UI_GESTURE_DOUBLE_TAP_RIGHT_REC},
-#line 531 "rcp_api_parameters_hash_table.gperf"
-    {"AFRCKSPD", RCP_PARAM_AF_RACK_SPEED},
-#line 832 "rcp_api_parameters_hash_table.gperf"
-    {"DPRLCD", RCP_PARAM_DISPLAY_PRESET_REAR_LCD},
-#line 21 "rcp_api_parameters_hash_table.gperf"
-    {"REDCODE", RCP_PARAM_REDCODE},
-#line 707 "rcp_api_parameters_hash_table.gperf"
-    {"LENSCAP", RCP_PARAM_LENS_CAPABILITIES},
-#line 211 "rcp_api_parameters_hash_table.gperf"
-    {"PLCDF", RCP_PARAM_MONITOR_FREQ_REAR_LCD},
-#line 188 "rcp_api_parameters_hash_table.gperf"
-    {"AELOCKAP", RCP_PARAM_AE_LOCK_APERTURE},
-#line 227 "rcp_api_parameters_hash_table.gperf"
-    {"PLCDFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_REAR_LCD},
-#line 121 "rcp_api_parameters_hash_table.gperf"
-    {"CAMERAOP", RCP_PARAM_SLATE_CAMERA_OPERATOR},
-#line 532 "rcp_api_parameters_hash_table.gperf"
-    {"AFRCKNPT", RCP_PARAM_AF_RACK_NUMBER_OF_POINTS},
-#line 424 "rcp_api_parameters_hash_table.gperf"
-    {"RLCDFMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_REAR_LCD},
-#line 686 "rcp_api_parameters_hash_table.gperf"
-    {"PORECFPS", RCP_PARAM_OVERDRIVE_FRAME_RATE},
-#line 460 "rcp_api_parameters_hash_table.gperf"
-    {"GESTDTL", RCP_PARAM_UI_GESTURE_DOUBLE_TAP_LEFT_AF},
-#line 340 "rcp_api_parameters_hash_table.gperf"
-    {"PRERECON", RCP_PARAM_PRE_RECORD_ALWAYS_TRIGGER},
-#line 328 "rcp_api_parameters_hash_table.gperf"
-    {"TCDMODE", RCP_PARAM_TIMECODE_DISPLAY_MODE},
-#line 40 "rcp_api_parameters_hash_table.gperf"
-    {"CONTRST", RCP_PARAM_CONTRAST},
-#line 283 "rcp_api_parameters_hash_table.gperf"
-    {"F1MODE", RCP_PARAM_ACTION_GUIDE_MODE},
-#line 146 "rcp_api_parameters_hash_table.gperf"
-    {"FOCSCTRL", RCP_PARAM_FOCUS_CONTROL},
-#line 443 "rcp_api_parameters_hash_table.gperf"
-    {"CMATRG", RCP_PARAM_USER_MATRIX_RG},
-#line 449 "rcp_api_parameters_hash_table.gperf"
-    {"CMATBG", RCP_PARAM_USER_MATRIX_BG},
-#line 436 "rcp_api_parameters_hash_table.gperf"
-    {"MTMST1", RCP_PARAM_IRIS_STATE},
-#line 788 "rcp_api_parameters_hash_table.gperf"
-    {"SENSNAME", RCP_PARAM_SENSOR_NAME},
-#line 32 "rcp_api_parameters_hash_table.gperf"
-    {"COLTMP", RCP_PARAM_COLOR_TEMPERATURE},
-#line 94 "rcp_api_parameters_hash_table.gperf"
-    {"DRPFRMS", RCP_PARAM_DROPPED_FRAMES},
-#line 438 "rcp_api_parameters_hash_table.gperf"
-    {"TCLTCOUT", RCP_PARAM_TIMECODE_LTC_OUT_ENABLE},
-#line 402 "rcp_api_parameters_hash_table.gperf"
-    {"GENSRC", RCP_PARAM_GENLOCK_SOURCE},
-#line 207 "rcp_api_parameters_hash_table.gperf"
-    {"LCDF", RCP_PARAM_MONITOR_FREQ_LCD},
-#line 192 "rcp_api_parameters_hash_table.gperf"
-    {"COLTMPP", RCP_PARAM_COLOR_TEMPERATURE_PRESET},
-#line 800 "rcp_api_parameters_hash_table.gperf"
-    {"CAMCOLOR", RCP_PARAM_SLATE_CAMERA_COLOR},
-#line 79 "rcp_api_parameters_hash_table.gperf"
-    {"GENLOC", RCP_PARAM_GENLOCK_STATE},
-#line 26 "rcp_api_parameters_hash_table.gperf"
-    {"SENSFPS", RCP_PARAM_SENSOR_FRAME_RATE},
-#line 739 "rcp_api_parameters_hash_table.gperf"
-    {"LNMTNAME", RCP_PARAM_LENS_META_NAME},
-#line 281 "rcp_api_parameters_hash_table.gperf"
-    {"F0COLOR", RCP_PARAM_FRAME_GUIDE_COLOR},
-#line 665 "rcp_api_parameters_hash_table.gperf"
-    {"USECFL", RCP_PARAM_USE_CUSTOM_FORMAT},
-#line 285 "rcp_api_parameters_hash_table.gperf"
-    {"F1SCL", RCP_PARAM_ACTION_GUIDE_SCALE},
-#line 785 "rcp_api_parameters_hash_table.gperf"
-    {"FRMTAR", RCP_PARAM_RECORD_FORMAT_ASPECT_RATIO},
-#line 666 "rcp_api_parameters_hash_table.gperf"
-    {"USECFRL", RCP_PARAM_USE_CUSTOM_FRAME_RATE},
-#line 52 "rcp_api_parameters_hash_table.gperf"
-    {"FRPRMODE", RCP_PARAM_FRAME_PROCESSING_MODE},
-#line 194 "rcp_api_parameters_hash_table.gperf"
-    {"TPATTONE", RCP_PARAM_TEST_PATTERN_TONE},
-#line 439 "rcp_api_parameters_hash_table.gperf"
-    {"RMSTATE", RCP_PARAM_REDMOTE_STATE},
-#line 53 "rcp_api_parameters_hash_table.gperf"
-    {"FRPRMODT", RCP_PARAM_FRAME_PROCESSING_MODE},
-#line 247 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDDM", RCP_PARAM_MONITOR_DOCK_MENUS_LCD},
-#line 280 "rcp_api_parameters_hash_table.gperf"
-    {"F0LNST", RCP_PARAM_FRAME_GUIDE_LINE_STYLE},
-#line 817 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_LCD},
-#line 255 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDBR", RCP_PARAM_MONITOR_BRIGHTNESS_LCD},
-#line 464 "rcp_api_parameters_hash_table.gperf"
-    {"PBCLSTTM", RCP_PARAM_PLAYBACK_CLIP_TIME},
-#line 360 "rcp_api_parameters_hash_table.gperf"
-    {"GENETMSK", RCP_PARAM_GIGABIT_ETHERNET_NETMASK},
-#line 467 "rcp_api_parameters_hash_table.gperf"
-    {"PBCOLTMP", RCP_PARAM_PLAYBACK_METADATA_COLOR_TEMPERATURE},
-#line 849 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDLUT", RCP_PARAM_MONITOR_LUT_LCD},
-#line 742 "rcp_api_parameters_hash_table.gperf"
-    {"LNMTMANU", RCP_PARAM_LENS_META_MANUFACTURER},
-#line 191 "rcp_api_parameters_hash_table.gperf"
-    {"FANTRGTT", RCP_PARAM_FAN_TARGET_TEMPERATURE},
-#line 444 "rcp_api_parameters_hash_table.gperf"
-    {"CMATRB", RCP_PARAM_USER_MATRIX_RB},
-#line 342 "rcp_api_parameters_hash_table.gperf"
-    {"ROFFSET", RCP_PARAM_CDL_OFFSET_RED},
-#line 816 "rcp_api_parameters_hash_table.gperf"
-    {"RTRNFST", RCP_PARAM_RETURN_FEED_STATE},
-#line 450 "rcp_api_parameters_hash_table.gperf"
-    {"CMATBB", RCP_PARAM_USER_MATRIX_BB},
-#line 14 "rcp_api_parameters_hash_table.gperf"
-    {"BATTRTM", RCP_PARAM_POWER_TIME_REMAINING},
-#line 215 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDTL", RCP_PARAM_MONITOR_TOOLS_LCD},
-#line 310 "rcp_api_parameters_hash_table.gperf"
-    {"CGCOLOR", RCP_PARAM_CENTER_GUIDE_COLOR},
-#line 542 "rcp_api_parameters_hash_table.gperf"
-    {"RMMAC", RCP_PARAM_REDMOTE_ATTACHED_MAC},
-#line 543 "rcp_api_parameters_hash_table.gperf"
-    {"APSTART", RCP_PARAM_AUTO_PRESET_STARTUP},
-#line 517 "rcp_api_parameters_hash_table.gperf"
-    {"OLPF", RCP_PARAM_OLPF_TYPE},
-#line 243 "rcp_api_parameters_hash_table.gperf"
-    {"PLCDFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_REAR_LCD},
-#line 68 "rcp_api_parameters_hash_table.gperf"
-    {"CSPACE", RCP_PARAM_COLOR_SPACE},
-#line 266 "rcp_api_parameters_hash_table.gperf"
-    {"MMNDMODE", RCP_PARAM_MM_ND_MODE},
-#line 124 "rcp_api_parameters_hash_table.gperf"
-    {"CAMTAKE", RCP_PARAM_SLATE_TAKE},
-#line 295 "rcp_api_parameters_hash_table.gperf"
-    {"F1RELF0", RCP_PARAM_ACTION_GUIDE_RELATIVE},
-#line 540 "rcp_api_parameters_hash_table.gperf"
-    {"RMPMAC", RCP_PARAM_REDMOTE_PAIRED_LIST},
-#line 463 "rcp_api_parameters_hash_table.gperf"
-    {"PBCLSTDT", RCP_PARAM_PLAYBACK_CLIP_DATE},
-#line 293 "rcp_api_parameters_hash_table.gperf"
-    {"F1COLOR", RCP_PARAM_ACTION_GUIDE_COLOR},
-#line 27 "rcp_api_parameters_hash_table.gperf"
-    {"PROJFPS", RCP_PARAM_PROJECT_FRAME_RATE},
-#line 738 "rcp_api_parameters_hash_table.gperf"
-    {"OLPFTPEM", RCP_PARAM_OLPF_THIRD_PARTY_EMULATED_TYPE},
-#line 705 "rcp_api_parameters_hash_table.gperf"
-    {"OGTSTATE", RCP_PARAM_OPEN_GATE_STATE},
-#line 292 "rcp_api_parameters_hash_table.gperf"
-    {"F1LNST", RCP_PARAM_ACTION_GUIDE_LINE_STYLE},
-#line 815 "rcp_api_parameters_hash_table.gperf"
-    {"RTRNFEED", RCP_PARAM_RETURN_FEED},
-#line 541 "rcp_api_parameters_hash_table.gperf"
-    {"RMCAMMAC", RCP_PARAM_REDMOTE_CAMERA_MAC},
-#line 743 "rcp_api_parameters_hash_table.gperf"
-    {"LNMTFLMN", RCP_PARAM_LENS_META_FLEN_MIN},
-#line 786 "rcp_api_parameters_hash_table.gperf"
-    {"FRMTANA", RCP_PARAM_RECORD_FORMAT_ANAMORPHIC},
-#line 347 "rcp_api_parameters_hash_table.gperf"
-    {"RGAMMA", RCP_PARAM_LGG_GAMMA_RED},
-#line 539 "rcp_api_parameters_hash_table.gperf"
-    {"RMDMAC", RCP_PARAM_REDMOTE_DISCOVERED_LIST},
-#line 51 "rcp_api_parameters_hash_table.gperf"
-    {"LENSFDMD", RCP_PARAM_FOCUS_DIST_DISPLAY_MODE},
-#line 513 "rcp_api_parameters_hash_table.gperf"
-    {"MEDASRNU", RCP_PARAM_MEDIA_SERIAL_NUMBER},
-#line 775 "rcp_api_parameters_hash_table.gperf"
-    {"SUNAME", RCP_PARAM_SIDE_UI_NAME},
-#line 119 "rcp_api_parameters_hash_table.gperf"
-    {"CAMNAME", RCP_PARAM_CAMERA_TYPE},
-#line 169 "rcp_api_parameters_hash_table.gperf"
-    {"MEDACLPC", RCP_PARAM_MEDIA_CLIP_COUNT},
-#line 333 "rcp_api_parameters_hash_table.gperf"
-    {"AFENCONS", RCP_PARAM_AF_ENHANCED_CONFIRM_STYLE},
-#line 538 "rcp_api_parameters_hash_table.gperf"
-    {"RMCH", RCP_PARAM_REDMOTE_WIRELESS_CHANNEL},
-#line 582 "rcp_api_parameters_hash_table.gperf"
-    {"VMCODEC", RCP_PARAM_RECORD_VIDEO_MXF_CODEC},
-#line 585 "rcp_api_parameters_hash_table.gperf"
-    {"VMCODECR", RCP_PARAM_RECORD_VIDEO_MXF_CODEC_RESOLUTION},
-#line 737 "rcp_api_parameters_hash_table.gperf"
-    {"OLPFTPNM", RCP_PARAM_OLPF_THIRD_PARTY_NAME},
-#line 583 "rcp_api_parameters_hash_table.gperf"
-    {"VMCODECT", RCP_PARAM_RECORD_VIDEO_MXF_CODEC},
-#line 586 "rcp_api_parameters_hash_table.gperf"
-    {"VMCODCRT", RCP_PARAM_RECORD_VIDEO_MXF_CODEC_RESOLUTION},
-#line 329 "rcp_api_parameters_hash_table.gperf"
-    {"TCSOURCE", RCP_PARAM_TIMECODE_SOURCE},
-#line 550 "rcp_api_parameters_hash_table.gperf"
-    {"TETHERS", RCP_PARAM_TETHERING_SUPPORTED},
-#line 681 "rcp_api_parameters_hash_table.gperf"
-    {"CLUTF1", RCP_PARAM_LUT_FEED_1},
-#line 259 "rcp_api_parameters_hash_table.gperf"
-    {"FUIBR", RCP_PARAM_MONITOR_BRIGHTNESS_SIDE_UI},
-#line 22 "rcp_api_parameters_hash_table.gperf"
-    {"RCTARGET", RCP_PARAM_REDCODE},
-#line 704 "rcp_api_parameters_hash_table.gperf"
-    {"OGTMODE", RCP_PARAM_OPEN_GATE_MODE},
-#line 199 "rcp_api_parameters_hash_table.gperf"
-    {"PLCDOV", RCP_PARAM_MONITOR_OVERLAY_REAR_LCD},
-#line 223 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_LCD},
-#line 421 "rcp_api_parameters_hash_table.gperf"
-    {"FMTCAMPO", RCP_PARAM_MEDIA_FORMAT_CAMERA_POS},
-#line 36 "rcp_api_parameters_hash_table.gperf"
-    {"FORMATST", RCP_PARAM_RECORD_FORMAT_NAME},
-#line 423 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDFMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_LCD},
-#line 44 "rcp_api_parameters_hash_table.gperf"
-    {"GREENG", RCP_PARAM_GREEN_GAIN},
-#line 162 "rcp_api_parameters_hash_table.gperf"
-    {"CLPOUTPT", RCP_PARAM_PLAYBACK_OUT_POINT},
-#line 98 "rcp_api_parameters_hash_table.gperf"
-    {"EVFM", RCP_PARAM_MONITOR_MODE_EVF},
-#line 344 "rcp_api_parameters_hash_table.gperf"
-    {"GOFFSET", RCP_PARAM_CDL_OFFSET_GREEN},
-#line 263 "rcp_api_parameters_hash_table.gperf"
-    {"VUSRC", RCP_PARAM_AUDIO_VU_METER_SOURCE},
-#line 38 "rcp_api_parameters_hash_table.gperf"
-    {"SATURAT", RCP_PARAM_SATURATION},
-#line 313 "rcp_api_parameters_hash_table.gperf"
-    {"GGCOLOR", RCP_PARAM_GRID_GUIDE_COLOR},
-#line 365 "rcp_api_parameters_hash_table.gperf"
-    {"GEMAC", RCP_PARAM_GIGABIT_ETHERNET_MAC_ADDRESS},
-#line 39 "rcp_api_parameters_hash_table.gperf"
-    {"CSATURAT", RCP_PARAM_CDL_SATURATION},
-#line 67 "rcp_api_parameters_hash_table.gperf"
-    {"GSPACE", RCP_PARAM_GAMMA_SPACE},
-#line 324 "rcp_api_parameters_hash_table.gperf"
-    {"PLCDCV", RCP_PARAM_MONITOR_CURVE_REAR_LCD},
-#line 847 "rcp_api_parameters_hash_table.gperf"
-    {"TCDFMODE", RCP_PARAM_TIMECODE_DROP_FRAME_DISPLAY_MODE},
-#line 814 "rcp_api_parameters_hash_table.gperf"
-    {"DPUHD", RCP_PARAM_DISPLAY_PRESET_REAR_UHDSDI},
-#line 74 "rcp_api_parameters_hash_table.gperf"
-    {"TINT", RCP_PARAM_TINT},
-#line 682 "rcp_api_parameters_hash_table.gperf"
-    {"ROTF0", RCP_PARAM_FLIP_MIRROR_FEED_0},
-#line 632 "rcp_api_parameters_hash_table.gperf"
-    {"MODCAP", RCP_PARAM_MODULE_CAPABILITIES},
-#line 407 "rcp_api_parameters_hash_table.gperf"
-    {"RECTLINT", RCP_PARAM_RECORD_TIMELAPSE_INTERVAL},
-#line 534 "rcp_api_parameters_hash_table.gperf"
-    {"MOVR", RCP_PARAM_MEDIA_OVERLAY_LIST},
-#line 533 "rcp_api_parameters_hash_table.gperf"
-    {"COVR", RCP_PARAM_CAMERA_OVERLAY_LIST},
-#line 48 "rcp_api_parameters_hash_table.gperf"
-    {"FOCUS", RCP_PARAM_FOCUS_DIST},
-#line 577 "rcp_api_parameters_hash_table.gperf"
-    {"VCODEC", RCP_PARAM_RECORD_VIDEO_CODEC},
-#line 50 "rcp_api_parameters_hash_table.gperf"
-    {"FOCUSF", RCP_PARAM_FOCUS_DIST_FAR},
-#line 414 "rcp_api_parameters_hash_table.gperf"
-    {"DATETIME", RCP_PARAM_RTC_DATE_TIME},
-#line 580 "rcp_api_parameters_hash_table.gperf"
-    {"VCODECR", RCP_PARAM_RECORD_VIDEO_CODEC_RESOLUTION},
-#line 20 "rcp_api_parameters_hash_table.gperf"
-    {"ISO", RCP_PARAM_ISO},
-#line 578 "rcp_api_parameters_hash_table.gperf"
-    {"VCODECT", RCP_PARAM_RECORD_VIDEO_CODEC},
-#line 581 "rcp_api_parameters_hash_table.gperf"
-    {"VCODECRT", RCP_PARAM_RECORD_VIDEO_CODEC_RESOLUTION},
-#line 584 "rcp_api_parameters_hash_table.gperf"
-    {"MVMCODEC", RCP_PARAM_MIN_RECORD_VIDEO_MXF_CODEC},
-#line 658 "rcp_api_parameters_hash_table.gperf"
-    {"MASTRINT", RCP_PARAM_MASTER_INTEGRATION_TIME},
-#line 59 "rcp_api_parameters_hash_table.gperf"
-    {"MINRC", RCP_PARAM_MIN_REDCODE},
-#line 349 "rcp_api_parameters_hash_table.gperf"
-    {"GGAMMA", RCP_PARAM_LGG_GAMMA_GREEN},
-#line 461 "rcp_api_parameters_hash_table.gperf"
-    {"UILOCK", RCP_PARAM_UI_LOCK_TOUCHSCREEN},
-#line 346 "rcp_api_parameters_hash_table.gperf"
-    {"BOFFSET", RCP_PARAM_CDL_OFFSET_BLUE},
-#line 114 "rcp_api_parameters_hash_table.gperf"
-    {"BATTMODE", RCP_PARAM_POWER_DISPLAY_MODE},
-#line 210 "rcp_api_parameters_hash_table.gperf"
-    {"EVFF", RCP_PARAM_MONITOR_FREQ_EVF},
-#line 239 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_LCD},
-#line 127 "rcp_api_parameters_hash_table.gperf"
-    {"DOPNAME", RCP_PARAM_SLATE_DOP},
-#line 441 "rcp_api_parameters_hash_table.gperf"
-    {"PRISTOR", RCP_PARAM_PRIMARY_STORAGE},
-#line 254 "rcp_api_parameters_hash_table.gperf"
-    {"REVFDM", RCP_PARAM_MONITOR_DOCK_MENUS_REAR_EVF},
-#line 824 "rcp_api_parameters_hash_table.gperf"
-    {"REVFRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_REAR_EVF},
-#line 258 "rcp_api_parameters_hash_table.gperf"
-    {"REVFBR", RCP_PARAM_MONITOR_BRIGHTNESS_REAR_EVF},
-#line 153 "rcp_api_parameters_hash_table.gperf"
-    {"SHMODE", RCP_PARAM_SHUTTER_MODE},
-#line 795 "rcp_api_parameters_hash_table.gperf"
-    {"COLORSCI", RCP_PARAM_COLOR_SCIENCE},
-#line 433 "rcp_api_parameters_hash_table.gperf"
-    {"CAMSHOT", RCP_PARAM_SLATE_SHOT},
-#line 130 "rcp_api_parameters_hash_table.gperf"
-    {"CAMMEID", RCP_PARAM_SLATE_CAMERA_ID},
-#line 660 "rcp_api_parameters_hash_table.gperf"
-    {"MASTRISO", RCP_PARAM_MASTER_ISO},
-#line 854 "rcp_api_parameters_hash_table.gperf"
-    {"REVFLUT", RCP_PARAM_MONITOR_LUT_REAR_EVF},
-#line 657 "rcp_api_parameters_hash_table.gperf"
-    {"CUSTMINT", RCP_PARAM_CUSTOM_INTEGRATION_TIME},
-#line 780 "rcp_api_parameters_hash_table.gperf"
-    {"FRMTSPH", RCP_PARAM_RECORD_FORMAT_SPHERICAL},
-#line 676 "rcp_api_parameters_hash_table.gperf"
-    {"PLCDG", RCP_PARAM_MONITOR_FEED_REAR_LCD},
-#line 49 "rcp_api_parameters_hash_table.gperf"
-    {"FOCUSN", RCP_PARAM_FOCUS_DIST_NEAR},
-#line 838 "rcp_api_parameters_hash_table.gperf"
-    {"DEVCON", RCP_PARAM_OUTPUT_TONE_MAP},
-#line 222 "rcp_api_parameters_hash_table.gperf"
-    {"REVFTL", RCP_PARAM_MONITOR_TOOLS_REAR_EVF},
-#line 416 "rcp_api_parameters_hash_table.gperf"
-    {"TARGET", RCP_PARAM_TARGET},
-#line 762 "rcp_api_parameters_hash_table.gperf"
-    {"SMLCKNAV", RCP_PARAM_SIDE_MODULE_NAV_KEYS_LOCKABLE},
-#line 576 "rcp_api_parameters_hash_table.gperf"
-    {"FILEFMT", RCP_PARAM_RECORD_FILE_FORMAT},
-#line 128 "rcp_api_parameters_hash_table.gperf"
-    {"PRODUCTN", RCP_PARAM_SLATE_PRODUCTION},
-#line 445 "rcp_api_parameters_hash_table.gperf"
-    {"CMATGR", RCP_PARAM_USER_MATRIX_GR},
-#line 418 "rcp_api_parameters_hash_table.gperf"
-    {"TIMEZONE", RCP_PARAM_TIMEZONE},
-#line 341 "rcp_api_parameters_hash_table.gperf"
-    {"RLIFT", RCP_PARAM_LGG_LIFT_RED},
-#line 176 "rcp_api_parameters_hash_table.gperf"
-    {"MMSHCOLR", RCP_PARAM_MM_SHUTTER_COLOR},
-#line 43 "rcp_api_parameters_hash_table.gperf"
-    {"REDG", RCP_PARAM_RED_GAIN},
-#line 656 "rcp_api_parameters_hash_table.gperf"
-    {"MASTRPHS", RCP_PARAM_MASTER_SHUTTER_ANGLE},
-#line 351 "rcp_api_parameters_hash_table.gperf"
-    {"BGAMMA", RCP_PARAM_LGG_GAMMA_BLUE},
-#line 640 "rcp_api_parameters_hash_table.gperf"
-    {"POBAE", RCP_PARAM_POWER_OUT_BAT_AUX_ENABLE},
-#line 641 "rcp_api_parameters_hash_table.gperf"
-    {"POBAS", RCP_PARAM_POWER_OUT_BAT_AUX_STATUS},
-#line 102 "rcp_api_parameters_hash_table.gperf"
-    {"REVFM", RCP_PARAM_MONITOR_MODE_REAR_EVF},
-#line 659 "rcp_api_parameters_hash_table.gperf"
-    {"CUSTMISO", RCP_PARAM_CUSTOM_ISO},
-#line 76 "rcp_api_parameters_hash_table.gperf"
-    {"RIGSTATE", RCP_PARAM_RIG_STATE},
-#line 672 "rcp_api_parameters_hash_table.gperf"
-    {"LCDG", RCP_PARAM_MONITOR_FEED_LCD},
-#line 574 "rcp_api_parameters_hash_table.gperf"
-    {"CH56ONME", RCP_PARAM_AUDIO_CH56_OUTPUT_NAME},
-#line 173 "rcp_api_parameters_hash_table.gperf"
-    {"HCFOCUS", RCP_PARAM_HAND_CONTROLLER_FOCUS_POS},
-#line 272 "rcp_api_parameters_hash_table.gperf"
-    {"F0NUM", RCP_PARAM_FRAME_GUIDE_USER_AR_NUM},
-#line 126 "rcp_api_parameters_hash_table.gperf"
-    {"DIRECTOR", RCP_PARAM_SLATE_DIRECTOR},
-#line 839 "rcp_api_parameters_hash_table.gperf"
-    {"MINFRPRM", RCP_PARAM_MIN_FRAME_PROCESSING_MODE},
-#line 841 "rcp_api_parameters_hash_table.gperf"
-    {"MINFRPRF", RCP_PARAM_MIN_FRAME_PROCESSING_FRAME_COUNT},
-#line 544 "rcp_api_parameters_hash_table.gperf"
-    {"APMOTION", RCP_PARAM_AUTO_PRESET_MOTION},
-#line 432 "rcp_api_parameters_hash_table.gperf"
-    {"FRSHARP", RCP_PARAM_OUTPUT_SHARPNESS},
-#line 655 "rcp_api_parameters_hash_table.gperf"
-    {"CUSTMPHS", RCP_PARAM_CUSTOM_SHUTTER_ANGLE},
-#line 195 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDOV", RCP_PARAM_MONITOR_OVERLAY_LCD},
-#line 466 "rcp_api_parameters_hash_table.gperf"
-    {"PBISO", RCP_PARAM_PLAYBACK_METADATA_ISO},
-#line 793 "rcp_api_parameters_hash_table.gperf"
-    {"DIALOGS", RCP_PARAM_DIALOG_LIST},
-#line 642 "rcp_api_parameters_hash_table.gperf"
-    {"POBAC", RCP_PARAM_POWER_OUT_BAT_AUX_CURRENT},
-#line 405 "rcp_api_parameters_hash_table.gperf"
-    {"RECLIMFR", RCP_PARAM_RECORD_LIMIT_FRAMES},
-#line 688 "rcp_api_parameters_hash_table.gperf"
-    {"VCODECG", RCP_PARAM_RECORD_VIDEO_CODEC_FEED},
-#line 701 "rcp_api_parameters_hash_table.gperf"
-    {"PRORESH", RCP_PARAM_PRORES_HEIGHT},
-#line 316 "rcp_api_parameters_hash_table.gperf"
-    {"SHCOLOR", RCP_PARAM_SHADING_COLOR},
-#line 331 "rcp_api_parameters_hash_table.gperf"
-    {"AFENHNCD", RCP_PARAM_AF_ENHANCED_ENABLE},
-#line 684 "rcp_api_parameters_hash_table.gperf"
-    {"ROTF01", RCP_PARAM_FLIP_MIRROR_FEED_0_1},
-#line 400 "rcp_api_parameters_hash_table.gperf"
-    {"GPIN", RCP_PARAM_GPI_FUNCTION},
-#line 401 "rcp_api_parameters_hash_table.gperf"
-    {"GPOUT", RCP_PARAM_GPO_FUNCTION},
-#line 745 "rcp_api_parameters_hash_table.gperf"
-    {"METACV", RCP_PARAM_RECORD_R3D_METADATA_CURVE},
-#line 362 "rcp_api_parameters_hash_table.gperf"
-    {"GEDHCP", RCP_PARAM_GIGABIT_ETHERNET_DHCP_ENABLE},
-#line 267 "rcp_api_parameters_hash_table.gperf"
-    {"SHRCKDST", RCP_PARAM_SHOW_RACK_DISTANCES},
-#line 66 "rcp_api_parameters_hash_table.gperf"
-    {"CAMID", RCP_PARAM_CAMERA_ID},
-#line 160 "rcp_api_parameters_hash_table.gperf"
-    {"CLPDIR", RCP_PARAM_PLAYBACK_CLIP_DIR},
-#line 330 "rcp_api_parameters_hash_table.gperf"
-    {"AFSIZE", RCP_PARAM_AF_SIZE},
-#line 559 "rcp_api_parameters_hash_table.gperf"
-    {"TURRGLO", RCP_PARAM_GENLOCK_OFFSET_REDCAST},
-#line 279 "rcp_api_parameters_hash_table.gperf"
-    {"F0ABSH", RCP_PARAM_FRAME_GUIDE_ABS_H},
-#line 751 "rcp_api_parameters_hash_table.gperf"
-    {"AINSR1ST", RCP_PARAM_AUDIO_CH1_MODE_STATUS},
-#line 214 "rcp_api_parameters_hash_table.gperf"
-    {"REVFF", RCP_PARAM_MONITOR_FREQ_REAR_EVF},
-#line 230 "rcp_api_parameters_hash_table.gperf"
-    {"REVFFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_REAR_EVF},
-#line 545 "rcp_api_parameters_hash_table.gperf"
-    {"APAUMOTN", RCP_PARAM_AUTO_PRESET_MOTION_AUTO_UPDATE},
-#line 284 "rcp_api_parameters_hash_table.gperf"
-    {"F1NUM", RCP_PARAM_ACTION_GUIDE_USER_AR_NUM},
-#line 569 "rcp_api_parameters_hash_table.gperf"
-    {"REVFFMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_REAR_EVF},
-#line 332 "rcp_api_parameters_hash_table.gperf"
-    {"AFENHMON", RCP_PARAM_AF_ENHANCED_MONITOR},
-#line 404 "rcp_api_parameters_hash_table.gperf"
-    {"RECLIMEN", RCP_PARAM_RECORD_LIMIT_ENABLE},
-#line 833 "rcp_api_parameters_hash_table.gperf"
-    {"DPPHDSD1", RCP_PARAM_DISPLAY_PRESET_REAR_HDSDI1},
-#line 70 "rcp_api_parameters_hash_table.gperf"
-    {"HDRMODE", RCP_PARAM_RECORD_HDR_MODE},
-#line 456 "rcp_api_parameters_hash_table.gperf"
-    {"GIOCSEC", RCP_PARAM_GIO_SCOPE_SECONDARY_COLORS},
-#line 446 "rcp_api_parameters_hash_table.gperf"
-    {"CMATGG", RCP_PARAM_USER_MATRIX_GG},
-#line 343 "rcp_api_parameters_hash_table.gperf"
-    {"GLIFT", RCP_PARAM_LGG_LIFT_GREEN},
-#line 470 "rcp_api_parameters_hash_table.gperf"
-    {"RUNTIME", RCP_PARAM_CAMERA_RUNTIME},
-#line 546 "rcp_api_parameters_hash_table.gperf"
-    {"APSTILLS", RCP_PARAM_AUTO_PRESET_STILLS},
-#line 457 "rcp_api_parameters_hash_table.gperf"
-    {"GIOZONE", RCP_PARAM_GIO_SCOPE_ZONES},
-#line 420 "rcp_api_parameters_hash_table.gperf"
-    {"FMTCAMID", RCP_PARAM_MEDIA_FORMAT_CAMERA_ID},
-#line 564 "rcp_api_parameters_hash_table.gperf"
-    {"CLUTCH0", RCP_PARAM_LUT_CH_0},
-#line 792 "rcp_api_parameters_hash_table.gperf"
-    {"ACTION", RCP_PARAM_KEY_MAPPING_ACTION_LIST},
-#line 291 "rcp_api_parameters_hash_table.gperf"
-    {"F1ABSH", RCP_PARAM_ACTION_GUIDE_ABS_H},
-#line 250 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFDM", RCP_PARAM_MONITOR_DOCK_MENUS_EVF},
-#line 820 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_EVF},
-#line 256 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFBR", RCP_PARAM_MONITOR_BRIGHTNESS_EVF},
-#line 689 "rcp_api_parameters_hash_table.gperf"
+    {"ROLLOFF", RCP_PARAM_ROLL_OFF},
+    {"FRPRNUM", RCP_PARAM_FRAME_PROCESSING_NUM},
     {"R3DST", RCP_PARAM_RECORD_REDCODE_RAW_STATE},
-#line 171 "rcp_api_parameters_hash_table.gperf"
-    {"TAGGED", RCP_PARAM_FRAME_TAG},
-#line 117 "rcp_api_parameters_hash_table.gperf"
-    {"PBHDRTRC", RCP_PARAM_PLAYBACK_NUM_HDR_TRACKS},
-#line 850 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFLUT", RCP_PARAM_MONITOR_LUT_EVF},
-#line 551 "rcp_api_parameters_hash_table.gperf"
-    {"TETHERSI", RCP_PARAM_TETHERING_SUPPORTED_ON_THIS_INTERFACE},
-#line 177 "rcp_api_parameters_hash_table.gperf"
-    {"MMSHTIME", RCP_PARAM_MM_INTEGRATION_TIME},
-#line 45 "rcp_api_parameters_hash_table.gperf"
-    {"BLUEG", RCP_PARAM_BLUE_GAIN},
-#line 635 "rcp_api_parameters_hash_table.gperf"
-    {"POPIOPE", RCP_PARAM_POWER_OUT_PRO_IO_PWR_ENABLE},
-#line 636 "rcp_api_parameters_hash_table.gperf"
-    {"POPIOPS", RCP_PARAM_POWER_OUT_PRO_IO_PWR_STATUS},
-#line 693 "rcp_api_parameters_hash_table.gperf"
-    {"MXFST", RCP_PARAM_RECORD_MXF_STATE},
-#line 218 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFTL", RCP_PARAM_MONITOR_TOOLS_EVF},
-#line 695 "rcp_api_parameters_hash_table.gperf"
-    {"SSCANDIR", RCP_PARAM_SENSOR_SCAN_DIRECTION},
-#line 706 "rcp_api_parameters_hash_table.gperf"
-    {"LENSISEN", RCP_PARAM_LENS_IMAGE_STABILIZATION_ENABLED},
-#line 161 "rcp_api_parameters_hash_table.gperf"
-    {"CLPINPT", RCP_PARAM_PLAYBACK_IN_POINT},
-#line 246 "rcp_api_parameters_hash_table.gperf"
-    {"REVFFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_REAR_EVF},
-#line 668 "rcp_api_parameters_hash_table.gperf"
-    {"USECINTL", RCP_PARAM_USE_CUSTOM_INTEGRATION_TIME},
-#line 447 "rcp_api_parameters_hash_table.gperf"
-    {"CMATGB", RCP_PARAM_USER_MATRIX_GB},
-#line 345 "rcp_api_parameters_hash_table.gperf"
-    {"BLIFT", RCP_PARAM_LGG_LIFT_BLUE},
-#line 536 "rcp_api_parameters_hash_table.gperf"
-    {"CALINT", RCP_PARAM_CURRENT_CALIBRATION_INTEGRATION_TIME},
-#line 637 "rcp_api_parameters_hash_table.gperf"
-    {"POPIOAE", RCP_PARAM_POWER_OUT_PRO_IO_AUX_ENABLE},
-#line 774 "rcp_api_parameters_hash_table.gperf"
-    {"MONLIST", RCP_PARAM_MONITOR_LIST},
-#line 565 "rcp_api_parameters_hash_table.gperf"
-    {"CLUTCH1", RCP_PARAM_LUT_CH_1},
-#line 690 "rcp_api_parameters_hash_table.gperf"
+    {"FRPRNUMT", RCP_PARAM_FRAME_PROCESSING_NUM},
+    {"APERCTRL", RCP_PARAM_APERTURE_CONTROL},
+    {"LCDM", RCP_PARAM_MONITOR_MODE_LCD},
+    {"POSTTC", RCP_PARAM_TIMECODE},
+    {"F0MODE", RCP_PARAM_FRAME_GUIDE_MODE},
+    {"DPLCD", RCP_PARAM_DISPLAY_PRESET_LCD},
+    {"RECMODE", RCP_PARAM_RECORD_MODE},
+    {"MTMST0", RCP_PARAM_FOCUS_STATE},
+    {"TPATTERN", RCP_PARAM_TEST_PATTERN},
+    {"CAMSCENE", RCP_PARAM_SLATE_SCENE},
+    {"CAMMODE", RCP_PARAM_CAMERA_CAPTURE_MODE},
+    {"PRERECON", RCP_PARAM_PRE_RECORD_ALWAYS_TRIGGER},
+    {"FOCSCTRL", RCP_PARAM_FOCUS_CONTROL},
+    {"CONTRST", RCP_PARAM_CONTRAST},
+    {"RECFS", RCP_PARAM_FAN_REC_SPEED},
+    {"PORECFPS", RCP_PARAM_OVERDRIVE_FRAME_RATE},
+    {"AFRCKSPD", RCP_PARAM_AF_RACK_SPEED},
+    {"F0SCL", RCP_PARAM_FRAME_GUIDE_SCALE},
     {"R3DSTD", RCP_PARAM_RECORD_REDCODE_RAW_STATE_DETAILED},
-#line 556 "rcp_api_parameters_hash_table.gperf"
-    {"PLPOWER", RCP_PARAM_PL_POWER},
-#line 680 "rcp_api_parameters_hash_table.gperf"
-    {"VIDEOSRC", RCP_PARAM_VIDEO_SOURCE},
-#line 453 "rcp_api_parameters_hash_table.gperf"
-    {"SLHEAD", RCP_PARAM_SLATE_AUTO_HEAD_FRAMES},
-#line 836 "rcp_api_parameters_hash_table.gperf"
+    {"LENSCAP", RCP_PARAM_LENS_CAPABILITIES},
+    {"CAMERAOP", RCP_PARAM_SLATE_CAMERA_OPERATOR},
+    {"DPRLCD", RCP_PARAM_DISPLAY_PRESET_REAR_LCD},
     {"DPLCD3", RCP_PARAM_DISPLAY_PRESET_LCD3},
-#line 84 "rcp_api_parameters_hash_table.gperf"
-    {"FPRDELAY", RCP_PARAM_FAN_DELAY},
-#line 61 "rcp_api_parameters_hash_table.gperf"
-    {"MINSHT", RCP_PARAM_MIN_EXPOSURE_INTEGRATION_TIME},
-#line 669 "rcp_api_parameters_hash_table.gperf"
-    {"USECISOL", RCP_PARAM_USE_CUSTOM_ISO},
-#line 694 "rcp_api_parameters_hash_table.gperf"
-    {"MXFSTD", RCP_PARAM_RECORD_MXF_STATE_DETAILED},
-#line 375 "rcp_api_parameters_hash_table.gperf"
-    {"CH1MODE", RCP_PARAM_AUDIO_CH1_MODE},
-#line 547 "rcp_api_parameters_hash_table.gperf"
-    {"APAUSTIL", RCP_PARAM_AUTO_PRESET_STILLS_AUTO_UPDATE},
-#line 33 "rcp_api_parameters_hash_table.gperf"
-    {"RCPVER", RCP_PARAM_RCP_VERSION},
-#line 154 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVE", RCP_PARAM_RED_CURVE},
-#line 148 "rcp_api_parameters_hash_table.gperf"
-    {"PWRSRC", RCP_PARAM_POWER_SOURCE},
-#line 164 "rcp_api_parameters_hash_table.gperf"
-    {"PLAY", RCP_PARAM_PLAYBACK_PLAY},
-#line 553 "rcp_api_parameters_hash_table.gperf"
-    {"TSRVSPR", RCP_PARAM_TETHERED_SERVER_SPACE_REMAINING},
-#line 60 "rcp_api_parameters_hash_table.gperf"
-    {"MAXRC", RCP_PARAM_MAX_REDCODE},
-#line 178 "rcp_api_parameters_hash_table.gperf"
-    {"MMSHANGL", RCP_PARAM_MM_SHUTTER_ANGLE},
-#line 42 "rcp_api_parameters_hash_table.gperf"
-    {"EXPCOMP", RCP_PARAM_EXPOSURE_COMPENSATION},
-#line 552 "rcp_api_parameters_hash_table.gperf"
-    {"TSRVSPT", RCP_PARAM_TETHERED_SERVER_SPACE_TOTAL},
-#line 63 "rcp_api_parameters_hash_table.gperf"
-    {"MINSHA", RCP_PARAM_MIN_EXPOSURE_ANGLE},
-#line 235 "rcp_api_parameters_hash_table.gperf"
-    {"PLCDVF", RCP_PARAM_MONITOR_VIDEO_FLIP_REAR_LCD},
-#line 157 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVE", RCP_PARAM_LUMA_CURVE},
-#line 24 "rcp_api_parameters_hash_table.gperf"
-    {"MMMISOND", RCP_PARAM_MM_ISO_PULL},
-#line 296 "rcp_api_parameters_hash_table.gperf"
-    {"F2MODE", RCP_PARAM_TITLE_GUIDE_MODE},
-#line 579 "rcp_api_parameters_hash_table.gperf"
-    {"MIVCODEC", RCP_PARAM_MIN_RECORD_VIDEO_CODEC},
-#line 511 "rcp_api_parameters_hash_table.gperf"
-    {"MEDATCHD", RCP_PARAM_MEDIA_IS_ATTACHED},
-#line 431 "rcp_api_parameters_hash_table.gperf"
-    {"TSRVSTAT", RCP_PARAM_TETHERED_SERVER_STATE},
-#line 675 "rcp_api_parameters_hash_table.gperf"
-    {"EVFG", RCP_PARAM_MONITOR_FEED_EVF},
-#line 437 "rcp_api_parameters_hash_table.gperf"
-    {"MTMST2", RCP_PARAM_ZOOM_STATE},
-#line 78 "rcp_api_parameters_hash_table.gperf"
-    {"SYNC", RCP_PARAM_SYNC_STATE},
-#line 172 "rcp_api_parameters_hash_table.gperf"
-    {"CAMINFO", RCP_PARAM_CAMERA_INFO},
-#line 348 "rcp_api_parameters_hash_table.gperf"
-    {"RPOWER", RCP_PARAM_CDL_POWER_RED},
-#line 760 "rcp_api_parameters_hash_table.gperf"
-    {"SMLCKKEY", RCP_PARAM_SIDE_MODULE_LOCK_KEYS},
-#line 25 "rcp_api_parameters_hash_table.gperf"
-    {"MMNDV", RCP_PARAM_ND_VAL},
-#line 125 "rcp_api_parameters_hash_table.gperf"
-    {"CAMUNIT", RCP_PARAM_SLATE_UNIT},
-#line 202 "rcp_api_parameters_hash_table.gperf"
-    {"REVFOV", RCP_PARAM_MONITOR_OVERLAY_REAR_EVF},
-#line 835 "rcp_api_parameters_hash_table.gperf"
-    {"DPREVF", RCP_PARAM_DISPLAY_PRESET_REAR_EVF},
-#line 363 "rcp_api_parameters_hash_table.gperf"
+    {"AFRCKNPT", RCP_PARAM_AF_RACK_NUMBER_OF_POINTS},
+    {"REDCODE", RCP_PARAM_REDCODE},
+    {"COLTMP", RCP_PARAM_COLOR_TEMPERATURE},
+    {"GESTDTR", RCP_PARAM_UI_GESTURE_DOUBLE_TAP_RIGHT_REC},
+    {"PLCDF", RCP_PARAM_MONITOR_FREQ_REAR_LCD},
+    {"PLCDFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_REAR_LCD},
+    {"TCDMODE", RCP_PARAM_TIMECODE_DISPLAY_MODE},
+    {"TCLTCOUT", RCP_PARAM_TIMECODE_LTC_OUT_ENABLE},
+    {"SENSNAME", RCP_PARAM_SENSOR_NAME},
+    {"GESTDTL", RCP_PARAM_UI_GESTURE_DOUBLE_TAP_LEFT_AF},
+    {"RLCDFMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_REAR_LCD},
+    {"COLTMPP", RCP_PARAM_COLOR_TEMPERATURE_PRESET},
+    {"AELOCKAP", RCP_PARAM_AE_LOCK_APERTURE},
+    {"CAMCOLOR", RCP_PARAM_SLATE_CAMERA_COLOR},
+    {"LNMTNAME", RCP_PARAM_LENS_META_NAME},
+    {"CMATRG", RCP_PARAM_USER_MATRIX_RG},
+    {"CMATBG", RCP_PARAM_USER_MATRIX_BG},
+    {"FRPRMODE", RCP_PARAM_FRAME_PROCESSING_MODE},
+    {"FRPRMODT", RCP_PARAM_FRAME_PROCESSING_MODE},
+    {"F0COLOR", RCP_PARAM_FRAME_GUIDE_COLOR},
+    {"F0LNST", RCP_PARAM_FRAME_GUIDE_LINE_STYLE},
+    {"TPATTONE", RCP_PARAM_TEST_PATTERN_TONE},
+    {"LCDF", RCP_PARAM_MONITOR_FREQ_LCD},
+    {"GENSRC", RCP_PARAM_GENLOCK_SOURCE},
+    {"DRPFRMS", RCP_PARAM_R3D_DROPPED_FRAMES},
+    {"GENLOC", RCP_PARAM_GENLOCK_STATE},
+    {"BLCDDM", RCP_PARAM_MONITOR_DOCK_MENUS_LCD},
+    {"BLCDRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_LCD},
+    {"SENSFPS", RCP_PARAM_SENSOR_FRAME_RATE},
+    {"FRMTAR", RCP_PARAM_RECORD_FORMAT_ASPECT_RATIO},
+    {"BLCDBR", RCP_PARAM_MONITOR_BRIGHTNESS_LCD},
+    {"USECFL", RCP_PARAM_USE_CUSTOM_FORMAT},
+    {"RMSTATE", RCP_PARAM_REDMOTE_STATE},
+    {"USECFRL", RCP_PARAM_USE_CUSTOM_FRAME_RATE},
+    {"PBCLSTTM", RCP_PARAM_PLAYBACK_CLIP_TIME},
+    {"LNMTMANU", RCP_PARAM_LENS_META_MANUFACTURER},
+    {"BLCDLUT", RCP_PARAM_MONITOR_LUT_LCD},
+    {"BLCDTL", RCP_PARAM_MONITOR_TOOLS_LCD},
+    {"ROFFSET", RCP_PARAM_CDL_OFFSET_RED},
+    {"RTRNFST", RCP_PARAM_RETURN_FEED_STATE},
+    {"PBCOLTMP", RCP_PARAM_PLAYBACK_METADATA_COLOR_TEMPERATURE},
+    {"MMNDMODE", RCP_PARAM_MM_ND_MODE},
     {"GEC2C", RCP_PARAM_GIGABIT_ETHERNET_C2C_ENABLE},
-#line 554 "rcp_api_parameters_hash_table.gperf"
-    {"TSRVRN", RCP_PARAM_TETHERED_SERVER_REEL_NO},
-#line 454 "rcp_api_parameters_hash_table.gperf"
-    {"SLTAIL", RCP_PARAM_SLATE_AUTO_TAIL_FRAMES},
-#line 648 "rcp_api_parameters_hash_table.gperf"
-    {"PORXTCE", RCP_PARAM_POWER_OUT_TIMECODE_ENABLE},
-#line 649 "rcp_api_parameters_hash_table.gperf"
-    {"PORXTCS", RCP_PARAM_POWER_OUT_TIMECODE_STATUS},
-#line 859 "rcp_api_parameters_hash_table.gperf"
-    {"VCBAKED", RCP_PARAM_RECORD_PROXY_BAKED_IN_SETTINGS},
-#line 791 "rcp_api_parameters_hash_table.gperf"
-    {"AMBNTCH", RCP_PARAM_AMBIENT_CHANNEL},
-#line 226 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_EVF},
-#line 408 "rcp_api_parameters_hash_table.gperf"
-    {"RECPRE", RCP_PARAM_RECORD_PRE_FRAME_COUNT},
-#line 860 "rcp_api_parameters_hash_table.gperf"
-    {"VCBAKEDT", RCP_PARAM_RECORD_PROXY_BAKED_IN_SETTINGS},
-#line 189 "rcp_api_parameters_hash_table.gperf"
-    {"AELOCKEX", RCP_PARAM_AE_LOCK_EXPOSURE},
-#line 452 "rcp_api_parameters_hash_table.gperf"
-    {"MEDIA", RCP_PARAM_MEDIA_ACTIVE_MEDIA},
-#line 298 "rcp_api_parameters_hash_table.gperf"
-    {"F2SCL", RCP_PARAM_TITLE_GUIDE_SCALE},
-#line 691 "rcp_api_parameters_hash_table.gperf"
-    {"QTST", RCP_PARAM_RECORD_QUICKTIME_STATE},
-#line 692 "rcp_api_parameters_hash_table.gperf"
-    {"QTSTD", RCP_PARAM_RECORD_QUICKTIME_STATE_DETAILED},
-#line 568 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFFMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_BRAIN_EVF},
-#line 104 "rcp_api_parameters_hash_table.gperf"
-    {"PLAYBACK", RCP_PARAM_PLAYBACK_STATE},
-#line 409 "rcp_api_parameters_hash_table.gperf"
-    {"RECPOST", RCP_PARAM_RECORD_POST_FRAME_COUNT},
-#line 168 "rcp_api_parameters_hash_table.gperf"
-    {"PLAYSPD", RCP_PARAM_PLAYBACK_SPEED},
-#line 353 "rcp_api_parameters_hash_table.gperf"
-    {"RGAIN", RCP_PARAM_LGG_GAIN_RED},
-#line 633 "rcp_api_parameters_hash_table.gperf"
-    {"POPIOGE", RCP_PARAM_POWER_OUT_PRO_IO_GPIO_ENABLE},
-#line 634 "rcp_api_parameters_hash_table.gperf"
-    {"POPIOGS", RCP_PARAM_POWER_OUT_PRO_IO_GPIO_STATUS},
-#line 696 "rcp_api_parameters_hash_table.gperf"
-    {"FMTFSYS", RCP_PARAM_MEDIA_FORMAT_FILE_SYSTEM},
-#line 80 "rcp_api_parameters_hash_table.gperf"
-    {"TCJAM", RCP_PARAM_TIMECODE_STATE},
-#line 364 "rcp_api_parameters_hash_table.gperf"
-    {"GEEXT", RCP_PARAM_GIGABIT_ETHERNET_EXT_ENABLE},
-#line 354 "rcp_api_parameters_hash_table.gperf"
-    {"RSLOPE", RCP_PARAM_CDL_SLOPE_RED},
-#line 852 "rcp_api_parameters_hash_table.gperf"
-    {"BSDILUT", RCP_PARAM_MONITOR_LUT_HDSDI},
-#line 107 "rcp_api_parameters_hash_table.gperf"
-    {"MEDIAPCT", RCP_PARAM_MEDIA_VAL},
-#line 687 "rcp_api_parameters_hash_table.gperf"
-    {"CALENTRY", RCP_PARAM_CALIBRATION_ENTRY},
-#line 410 "rcp_api_parameters_hash_table.gperf"
-    {"RECPREA", RCP_PARAM_RECORD_PRE_FRAME_COUNT_AVAILABLE},
-#line 797 "rcp_api_parameters_hash_table.gperf"
-    {"SUPPORT", RCP_PARAM_SUPPORT_CONTACT},
-#line 327 "rcp_api_parameters_hash_table.gperf"
-    {"REVFCV", RCP_PARAM_MONITOR_CURVE_REAR_EVF},
-#line 85 "rcp_api_parameters_hash_table.gperf"
-    {"AFZONE", RCP_PARAM_AF_ZONE},
-#line 131 "rcp_api_parameters_hash_table.gperf"
-    {"CAMPOS", RCP_PARAM_SLATE_CAMERA_POS},
-#line 524 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPDFPS", RCP_PARAM_RAMP_D_FPS},
-#line 520 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPBFPS", RCP_PARAM_RAMP_B_FPS},
-#line 411 "rcp_api_parameters_hash_table.gperf"
-    {"RECPOSTA", RCP_PARAM_RECORD_POST_FRAME_COUNT_AVAILABLE},
-#line 700 "rcp_api_parameters_hash_table.gperf"
-    {"PRORESW", RCP_PARAM_PRORES_WIDTH},
-#line 555 "rcp_api_parameters_hash_table.gperf"
-    {"TSRVCN", RCP_PARAM_TETHERED_SERVER_CLIP_NO},
-#line 129 "rcp_api_parameters_hash_table.gperf"
-    {"PROJINFO", RCP_PARAM_SLATE_COPYRIGHT},
-#line 320 "rcp_api_parameters_hash_table.gperf"
-    {"LCDCV", RCP_PARAM_MONITOR_CURVE_LCD},
-#line 840 "rcp_api_parameters_hash_table.gperf"
-    {"MAXFRPRM", RCP_PARAM_MAX_FRAME_PROCESSING_MODE},
-#line 842 "rcp_api_parameters_hash_table.gperf"
-    {"MAXFRPRF", RCP_PARAM_MAX_FRAME_PROCESSING_FRAME_COUNT},
-#line 72 "rcp_api_parameters_hash_table.gperf"
-    {"HDRFACT", RCP_PARAM_HDR_FACTOR},
-#line 813 "rcp_api_parameters_hash_table.gperf"
-    {"UHDSDIF", RCP_PARAM_MONITOR_FREQ_REAR_UHDSDI},
-#line 11 "rcp_api_parameters_hash_table.gperf"
-    {"MPITCH", RCP_PARAM_CAMERA_PITCH},
-#line 308 "rcp_api_parameters_hash_table.gperf"
-    {"F2RELF0", RCP_PARAM_TITLE_GUIDE_RELATIVE},
-#line 278 "rcp_api_parameters_hash_table.gperf"
-    {"F0ABSW", RCP_PARAM_FRAME_GUIDE_ABS_W},
-#line 306 "rcp_api_parameters_hash_table.gperf"
-    {"F2COLOR", RCP_PARAM_TITLE_GUIDE_COLOR},
-#line 468 "rcp_api_parameters_hash_table.gperf"
-    {"PBTINT", RCP_PARAM_PLAYBACK_METADATA_TINT},
-#line 186 "rcp_api_parameters_hash_table.gperf"
-    {"AESPEED", RCP_PARAM_AE_SPEED},
-#line 69 "rcp_api_parameters_hash_table.gperf"
-    {"RAWMODE", RCP_PARAM_RAW_MODE},
-#line 417 "rcp_api_parameters_hash_table.gperf"
-    {"TARGETID", RCP_PARAM_TARGET_ID},
-#line 83 "rcp_api_parameters_hash_table.gperf"
-    {"PREVFS", RCP_PARAM_FAN_PREVIEW_SPEED},
-#line 451 "rcp_api_parameters_hash_table.gperf"
-    {"MEDIANUM", RCP_PARAM_MEDIA_MODEL_NUMBER},
-#line 429 "rcp_api_parameters_hash_table.gperf"
-    {"CNA1STA", RCP_PARAM_REMOTE_CONTROL_PANEL_STATUS},
-#line 305 "rcp_api_parameters_hash_table.gperf"
-    {"F2LNST", RCP_PARAM_TITLE_GUIDE_LINE_STYLE},
-#line 155 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVE", RCP_PARAM_GREEN_CURVE},
-#line 522 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPCFPS", RCP_PARAM_RAMP_C_FPS},
-#line 741 "rcp_api_parameters_hash_table.gperf"
-    {"LNMTOWNR", RCP_PARAM_LENS_META_OWNER},
-#line 525 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPDDUR", RCP_PARAM_RAMP_D_DURATION},
-#line 526 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPRDUR", RCP_PARAM_RAMP_RESET_DURATION},
-#line 521 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPBDUR", RCP_PARAM_RAMP_B_DURATION},
-#line 708 "rcp_api_parameters_hash_table.gperf"
-    {"PLAYFMT", RCP_PARAM_PLAYBACK_FILE_FORMAT},
-#line 242 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_EVF},
-#line 709 "rcp_api_parameters_hash_table.gperf"
-    {"PLAYFMTT", RCP_PARAM_PLAYBACK_FILE_FORMAT},
-#line 626 "rcp_api_parameters_hash_table.gperf"
-    {"WLANSCRL", RCP_PARAM_WIFI_SCAN_RESULTS},
-#line 462 "rcp_api_parameters_hash_table.gperf"
-    {"SMDLG9IN", RCP_PARAM_UI_SMALL_DIALOGS_ON_9_INCH},
-#line 846 "rcp_api_parameters_hash_table.gperf"
-    {"AUTOPEAK", RCP_PARAM_AUTO_FOCUS_PEAK},
-#line 830 "rcp_api_parameters_hash_table.gperf"
-    {"DPHDSDI", RCP_PARAM_DISPLAY_PRESET_HDSDI},
-#line 829 "rcp_api_parameters_hash_table.gperf"
-    {"DPHDMI", RCP_PARAM_DISPLAY_PRESET_HDMI},
-#line 277 "rcp_api_parameters_hash_table.gperf"
-    {"F0ABSYOF", RCP_PARAM_FRAME_GUIDE_ABS_Y_OFFSET},
-#line 512 "rcp_api_parameters_hash_table.gperf"
-    {"MEDPRSNT", RCP_PARAM_MEDIA_IS_PRESENT},
-#line 276 "rcp_api_parameters_hash_table.gperf"
-    {"F0ABSXOF", RCP_PARAM_FRAME_GUIDE_ABS_X_OFFSET},
-#line 434 "rcp_api_parameters_hash_table.gperf"
-    {"WLANSTAT", RCP_PARAM_WIFI_STATE},
-#line 679 "rcp_api_parameters_hash_table.gperf"
-    {"REVFG", RCP_PARAM_MONITOR_FEED_REAR_EVF},
-#line 426 "rcp_api_parameters_hash_table.gperf"
-    {"RLCDFM2", RCP_PARAM_MONITOR_FLIP_MIRROR_REAR_LCD},
-#line 744 "rcp_api_parameters_hash_table.gperf"
-    {"LNMTFLMX", RCP_PARAM_LENS_META_FLEN_MAX},
-#line 638 "rcp_api_parameters_hash_table.gperf"
-    {"POPOPE", RCP_PARAM_POWER_OUT_PLUS_ONE_PWR_ENABLE},
-#line 639 "rcp_api_parameters_hash_table.gperf"
-    {"POPOPS", RCP_PARAM_POWER_OUT_PLUS_ONE_PWR_STATUS},
-#line 548 "rcp_api_parameters_hash_table.gperf"
-    {"APPLAY", RCP_PARAM_AUTO_PRESET_PLAYBACK},
-#line 350 "rcp_api_parameters_hash_table.gperf"
-    {"GPOWER", RCP_PARAM_CDL_POWER_GREEN},
-#line 831 "rcp_api_parameters_hash_table.gperf"
-    {"DPEVF", RCP_PARAM_DISPLAY_PRESET_EVF},
-#line 374 "rcp_api_parameters_hash_table.gperf"
-    {"CH1NAME", RCP_PARAM_AUDIO_CH1_NAME},
-#line 465 "rcp_api_parameters_hash_table.gperf"
-    {"PBZOOM", RCP_PARAM_PLAYBACK_METADATA_FOCAL_LENGTH},
-#line 427 "rcp_api_parameters_hash_table.gperf"
-    {"CNA1ENA", RCP_PARAM_REMOTE_CONTROL_PANEL_ENABLE},
-#line 290 "rcp_api_parameters_hash_table.gperf"
-    {"F1ABSW", RCP_PARAM_ACTION_GUIDE_ABS_W},
-#line 16 "rcp_api_parameters_hash_table.gperf"
-    {"FANPCTF", RCP_PARAM_FAN_SPEED_FRONT},
-#line 523 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPCDUR", RCP_PARAM_RAMP_C_DURATION},
-#line 15 "rcp_api_parameters_hash_table.gperf"
-    {"FANPCTT", RCP_PARAM_FAN_SPEED_TOP},
-#line 268 "rcp_api_parameters_hash_table.gperf"
-    {"PSLEVEL1", RCP_PARAM_POWER_SAVE_LEVEL_1},
-#line 156 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVE", RCP_PARAM_BLUE_CURVE},
-#line 376 "rcp_api_parameters_hash_table.gperf"
-    {"CH1_48V", RCP_PARAM_AUDIO_CH1_48V_POWER},
-#line 355 "rcp_api_parameters_hash_table.gperf"
-    {"GGAIN", RCP_PARAM_LGG_GAIN_GREEN},
-#line 231 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDVF", RCP_PARAM_MONITOR_VIDEO_FLIP_LCD},
-#line 719 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3DM", RCP_PARAM_MONITOR_DOCK_MENUS_LCD3},
-#line 825 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3RF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_LCD3},
-#line 116 "rcp_api_parameters_hash_table.gperf"
-    {"MEDIAMOD", RCP_PARAM_MEDIA_DISPLAY_MODE},
-#line 671 "rcp_api_parameters_hash_table.gperf"
-    {"USECWBL", RCP_PARAM_USE_CUSTOM_COLOR_TEMPERATURE},
-#line 356 "rcp_api_parameters_hash_table.gperf"
-    {"GSLOPE", RCP_PARAM_CDL_SLOPE_GREEN},
-#line 377 "rcp_api_parameters_hash_table.gperf"
-    {"CH1_48VP", RCP_PARAM_AUDIO_CH1_48V_PRESENT},
-#line 734 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3BR", RCP_PARAM_MONITOR_BRIGHTNESS_LCD3},
-#line 631 "rcp_api_parameters_hash_table.gperf"
-    {"WLANMAC", RCP_PARAM_WIFI_MAC_ADDRESS},
-#line 625 "rcp_api_parameters_hash_table.gperf"
-    {"WLANSCAN", RCP_PARAM_WIFI_SCAN},
-#line 13 "rcp_api_parameters_hash_table.gperf"
-    {"PWRBATL", RCP_PARAM_POWER_VAL},
-#line 857 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3LUT", RCP_PARAM_MONITOR_LUT_BRAIN_LCD3},
-#line 783 "rcp_api_parameters_hash_table.gperf"
-    {"FRMTA2", RCP_PARAM_RECORD_FORMAT_ANA_2},
-#line 685 "rcp_api_parameters_hash_table.gperf"
-    {"SSDTALLY", RCP_PARAM_SSD_TALLY_LIGHT},
-#line 289 "rcp_api_parameters_hash_table.gperf"
-    {"F1ABSYOF", RCP_PARAM_ACTION_GUIDE_ABS_Y_OFFSET},
-#line 628 "rcp_api_parameters_hash_table.gperf"
-    {"WLANNETM", RCP_PARAM_WIFI_NETMASK},
-#line 288 "rcp_api_parameters_hash_table.gperf"
-    {"F1ABSXOF", RCP_PARAM_ACTION_GUIDE_ABS_X_OFFSET},
-#line 714 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3TL", RCP_PARAM_MONITOR_TOOLS_LCD3},
-#line 645 "rcp_api_parameters_hash_table.gperf"
-    {"PORXAE", RCP_PARAM_POWER_OUT_REAR_AUX_ENABLE},
-#line 646 "rcp_api_parameters_hash_table.gperf"
-    {"PORXAS", RCP_PARAM_POWER_OUT_REAR_AUX_STATUS},
-#line 10 "rcp_api_parameters_hash_table.gperf"
-    {"AUDIOVU", RCP_PARAM_AUDIO_VU_DATA},
-#line 352 "rcp_api_parameters_hash_table.gperf"
-    {"BPOWER", RCP_PARAM_CDL_POWER_BLUE},
-#line 647 "rcp_api_parameters_hash_table.gperf"
-    {"PORXAC", RCP_PARAM_POWER_OUT_REAR_AUX_CURRENT},
-#line 781 "rcp_api_parameters_hash_table.gperf"
-    {"FRMTA13", RCP_PARAM_RECORD_FORMAT_ANA_1_3},
-#line 430 "rcp_api_parameters_hash_table.gperf"
-    {"TSRVAD", RCP_PARAM_TETHERED_SERVER_ADDRESS},
-#line 198 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFOV", RCP_PARAM_MONITOR_OVERLAY_EVF},
-#line 683 "rcp_api_parameters_hash_table.gperf"
-    {"ROTF1", RCP_PARAM_FLIP_MIRROR_FEED_1},
-#line 366 "rcp_api_parameters_hash_table.gperf"
-    {"SERPROTO", RCP_PARAM_SERIAL_PROTOCOL},
-#line 664 "rcp_api_parameters_hash_table.gperf"
-    {"MASTRAWB", RCP_PARAM_MASTER_COLOR_TEMPERATURE},
-#line 335 "rcp_api_parameters_hash_table.gperf"
-    {"BEEPREC", RCP_PARAM_BEEP_RECORD_START},
-#line 412 "rcp_api_parameters_hash_table.gperf"
-    {"RECPREB", RCP_PARAM_RECORD_PRE_FRAME_COUNT_ACTUAL},
-#line 804 "rcp_api_parameters_hash_table.gperf"
-    {"SUILAH", RCP_PARAM_SIDE_UI_AUTO_HOME_LEFT},
-#line 809 "rcp_api_parameters_hash_table.gperf"
-    {"SUIRAH", RCP_PARAM_SIDE_UI_AUTO_HOME_RIGHT},
-#line 163 "rcp_api_parameters_hash_table.gperf"
-    {"LOOP", RCP_PARAM_PLAYBACK_LOOP},
-#line 77 "rcp_api_parameters_hash_table.gperf"
-    {"NWSTAT", RCP_PARAM_GIGE_STATE},
-#line 703 "rcp_api_parameters_hash_table.gperf"
-    {"MXFH", RCP_PARAM_MXF_HEIGHT},
-#line 589 "rcp_api_parameters_hash_table.gperf"
-    {"CH1MUTE", RCP_PARAM_AUDIO_CH1_MUTE},
-#line 325 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSD1CV", RCP_PARAM_MONITOR_CURVE_REAR_HDSDI1},
-#line 710 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3M", RCP_PARAM_MONITOR_MODE_LCD3},
-#line 413 "rcp_api_parameters_hash_table.gperf"
-    {"RECPOSTB", RCP_PARAM_RECORD_POST_FRAME_COUNT_ACTUAL},
-#line 357 "rcp_api_parameters_hash_table.gperf"
-    {"BGAIN", RCP_PARAM_LGG_GAIN_BLUE},
-#line 100 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSDI1M", RCP_PARAM_MONITOR_MODE_REAR_HDSDI1},
-#line 212 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSDI1F", RCP_PARAM_MONITOR_FREQ_REAR_HDSDI1},
-#line 205 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSDI1R", RCP_PARAM_MONITOR_RESOLUTION_REAR_HDSDI1},
-#line 811 "rcp_api_parameters_hash_table.gperf"
-    {"UHDSDI1M", RCP_PARAM_MONITOR_MODE_REAR_UHDSDI1},
-#line 358 "rcp_api_parameters_hash_table.gperf"
-    {"BSLOPE", RCP_PARAM_CDL_SLOPE_BLUE},
-#line 180 "rcp_api_parameters_hash_table.gperf"
-    {"TWARN1", RCP_PARAM_CORE_TEMP_WARNING_1},
-#line 144 "rcp_api_parameters_hash_table.gperf"
-    {"FLENGTH", RCP_PARAM_FOCAL_LENGTH},
-#line 753 "rcp_api_parameters_hash_table.gperf"
-    {"AINSR3ST", RCP_PARAM_AUDIO_CH3_MODE_STATUS},
-#line 518 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPAFPS", RCP_PARAM_RAMP_A_FPS},
-#line 62 "rcp_api_parameters_hash_table.gperf"
-    {"MAXSHT", RCP_PARAM_MAX_EXPOSURE_INTEGRATION_TIME},
-#line 663 "rcp_api_parameters_hash_table.gperf"
-    {"CUSTMAWB", RCP_PARAM_CUSTOM_COLOR_TEMPERATURE},
-#line 225 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSDIFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_HDSDI},
-#line 819 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSDIRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_HDSDI},
-#line 56 "rcp_api_parameters_hash_table.gperf"
-    {"SHANGLE", RCP_PARAM_EXPOSURE_ANGLE},
-#line 334 "rcp_api_parameters_hash_table.gperf"
-    {"BEEPEN", RCP_PARAM_BEEP_ENABLE},
-#line 57 "rcp_api_parameters_hash_table.gperf"
-    {"SHANGLET", RCP_PARAM_EXPOSURE_ANGLE},
-#line 203 "rcp_api_parameters_hash_table.gperf"
-    {"HDMIR", RCP_PARAM_MONITOR_RESOLUTION_HDMI},
-#line 97 "rcp_api_parameters_hash_table.gperf"
-    {"HDSDIM", RCP_PARAM_MONITOR_MODE_HDSDI},
-#line 209 "rcp_api_parameters_hash_table.gperf"
-    {"HDSDIF", RCP_PARAM_MONITOR_FREQ_HDSDI},
-#line 204 "rcp_api_parameters_hash_table.gperf"
-    {"HDSDIR", RCP_PARAM_MONITOR_RESOLUTION_HDSDI},
-#line 64 "rcp_api_parameters_hash_table.gperf"
-    {"MAXSHA", RCP_PARAM_MAX_EXPOSURE_ANGLE},
-#line 9 "rcp_api_parameters_hash_table.gperf"
-    {"DSHIST", RCP_PARAM_HISTOGRAM},
-#line 217 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSDITL", RCP_PARAM_MONITOR_TOOLS_HDSDI},
-#line 113 "rcp_api_parameters_hash_table.gperf"
+    {"OLPF", RCP_PARAM_OLPF_TYPE},
+    {"CGCOLOR", RCP_PARAM_CENTER_GUIDE_COLOR},
+    {"PLCDFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_REAR_LCD},
+    {"CMATRB", RCP_PARAM_USER_MATRIX_RB},
+    {"CMATBB", RCP_PARAM_USER_MATRIX_BB},
+    {"GENETMSK", RCP_PARAM_GIGABIT_ETHERNET_NETMASK},
+    {"RMMAC", RCP_PARAM_REDMOTE_ATTACHED_MAC},
+    {"BATTRTM", RCP_PARAM_POWER_TIME_REMAINING},
+    {"FANTRGTT", RCP_PARAM_FAN_TARGET_TEMPERATURE},
+    {"APSTART", RCP_PARAM_AUTO_PRESET_STARTUP},
+    {"VMCODEC", RCP_PARAM_RECORD_VIDEO_MXF_CODEC},
+    {"VMCODECR", RCP_PARAM_RECORD_VIDEO_MXF_CODEC_RESOLUTION},
+    {"CSPACE", RCP_PARAM_COLOR_SPACE},
+    {"VMCODECT", RCP_PARAM_RECORD_VIDEO_MXF_CODEC},
+    {"VMCODCRT", RCP_PARAM_RECORD_VIDEO_MXF_CODEC_RESOLUTION},
+    {"TCSOURCE", RCP_PARAM_TIMECODE_SOURCE},
+    {"OLPFTPEM", RCP_PARAM_OLPF_THIRD_PARTY_EMULATED_TYPE},
+    {"RMPMAC", RCP_PARAM_REDMOTE_PAIRED_LIST},
+    {"PBCLSTDT", RCP_PARAM_PLAYBACK_CLIP_DATE},
+    {"PLCDOV", RCP_PARAM_MONITOR_OVERLAY_REAR_LCD},
+    {"OGTSTATE", RCP_PARAM_OPEN_GATE_STATE},
+    {"PROJFPS", RCP_PARAM_PROJECT_FRAME_RATE},
+    {"CAMTAKE", RCP_PARAM_SLATE_TAKE},
+    {"RTRNFEED", RCP_PARAM_RETURN_FEED},
+    {"LNMTFLMN", RCP_PARAM_LENS_META_FLEN_MIN},
+    {"CLPOUTPT", RCP_PARAM_PLAYBACK_OUT_POINT},
+    {"RMCAMMAC", RCP_PARAM_REDMOTE_CAMERA_MAC},
+    {"EVFM", RCP_PARAM_MONITOR_MODE_EVF},
+    {"AFENCONS", RCP_PARAM_AF_ENHANCED_CONFIRM_STYLE},
+    {"FRMTANA", RCP_PARAM_RECORD_FORMAT_ANAMORPHIC},
+    {"VUSRC", RCP_PARAM_AUDIO_VU_METER_SOURCE},
+    {"RMDMAC", RCP_PARAM_REDMOTE_DISCOVERED_LIST},
+    {"LENSFDMD", RCP_PARAM_FOCUS_DIST_DISPLAY_MODE},
+    {"PLCDCV", RCP_PARAM_MONITOR_CURVE_REAR_LCD},
+    {"CAMNAME", RCP_PARAM_CAMERA_TYPE},
+    {"SATURAT", RCP_PARAM_SATURATION},
+    {"RGAMMA", RCP_PARAM_LGG_GAMMA_RED},
+    {"SUNAME", RCP_PARAM_SIDE_UI_NAME},
+    {"OLPFTPNM", RCP_PARAM_OLPF_THIRD_PARTY_NAME},
+    {"MOVR", RCP_PARAM_MEDIA_OVERLAY_LIST},
+    {"MEDASRNU", RCP_PARAM_MEDIA_SERIAL_NUMBER},
+    {"COVR", RCP_PARAM_CAMERA_OVERLAY_LIST},
+    {"MEDACLPC", RCP_PARAM_MEDIA_CLIP_COUNT},
+    {"FOCUS", RCP_PARAM_FOCUS_DIST},
+    {"VCODEC", RCP_PARAM_RECORD_VIDEO_CODEC},
+    {"CSATURAT", RCP_PARAM_CDL_SATURATION},
+    {"FOCUSF", RCP_PARAM_FOCUS_DIST_FAR},
+    {"VCODECR", RCP_PARAM_RECORD_VIDEO_CODEC_RESOLUTION},
+    {"VCODECT", RCP_PARAM_RECORD_VIDEO_CODEC},
+    {"VCODECRT", RCP_PARAM_RECORD_VIDEO_CODEC_RESOLUTION},
+    {"OGTMODE", RCP_PARAM_OPEN_GATE_MODE},
+    {"FORMATST", RCP_PARAM_RECORD_FORMAT_NAME},
+    {"FMTCAMPO", RCP_PARAM_MEDIA_FORMAT_CAMERA_POS},
+    {"RMCH", RCP_PARAM_REDMOTE_WIRELESS_CHANNEL},
+    {"TETHERS", RCP_PARAM_TETHERING_SUPPORTED},
+    {"FUIBR", RCP_PARAM_MONITOR_BRIGHTNESS_SIDE_UI},
+    {"MVMCODEC", RCP_PARAM_MIN_RECORD_VIDEO_MXF_CODEC},
+    {"BLCDFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_LCD},
+    {"RCTARGET", RCP_PARAM_REDCODE},
+    {"SHMODE", RCP_PARAM_SHUTTER_MODE},
+    {"PLCDG", RCP_PARAM_MONITOR_FEED_REAR_LCD},
+    {"BLCDFMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_LCD},
+    {"GREENG", RCP_PARAM_GREEN_GAIN},
+    {"FRMTSPH", RCP_PARAM_RECORD_FORMAT_SPHERICAL},
+    {"GOFFSET", RCP_PARAM_CDL_OFFSET_GREEN},
+    {"FOCUSN", RCP_PARAM_FOCUS_DIST_NEAR},
+    {"TCDFMODE", RCP_PARAM_TIMECODE_DROP_FRAME_DISPLAY_MODE},
+    {"GGCOLOR", RCP_PARAM_GRID_GUIDE_COLOR},
+    {"MODCAP", RCP_PARAM_MODULE_CAPABILITIES},
+    {"EVFF", RCP_PARAM_MONITOR_FREQ_EVF},
+    {"TARGET", RCP_PARAM_TARGET},
+    {"REVFDM", RCP_PARAM_MONITOR_DOCK_MENUS_REAR_EVF},
+    {"REVFRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_REAR_EVF},
+    {"PRODUCTN", RCP_PARAM_SLATE_PRODUCTION},
+    {"REVFBR", RCP_PARAM_MONITOR_BRIGHTNESS_REAR_EVF},
+    {"GEMAC", RCP_PARAM_GIGABIT_ETHERNET_MAC_ADDRESS},
+    {"CMATGR", RCP_PARAM_USER_MATRIX_GR},
+    {"REDG", RCP_PARAM_RED_GAIN},
+    {"SMLCKNAV", RCP_PARAM_SIDE_MODULE_NAV_KEYS_LOCKABLE},
+    {"F1MODE", RCP_PARAM_ACTION_GUIDE_MODE},
     {"CH34ST", RCP_PARAM_AUDIO_CH34_STATE},
-#line 369 "rcp_api_parameters_hash_table.gperf"
     {"CH34SRC", RCP_PARAM_AUDIO_CH34_SOURCE},
-#line 30 "rcp_api_parameters_hash_table.gperf"
-    {"SHTIME", RCP_PARAM_EXPOSURE_INTEGRATION_TIME},
-#line 152 "rcp_api_parameters_hash_table.gperf"
-    {"SHDISP", RCP_PARAM_SHUTTER_DISPLAY_MODE},
-#line 31 "rcp_api_parameters_hash_table.gperf"
-    {"SHTIMET", RCP_PARAM_EXPOSURE_INTEGRATION_TIME},
-#line 403 "rcp_api_parameters_hash_table.gperf"
-    {"AWBMODE", RCP_PARAM_AWB_MODE},
-#line 616 "rcp_api_parameters_hash_table.gperf"
-    {"WLANMODE", RCP_PARAM_WIFI_MODE},
-#line 519 "rcp_api_parameters_hash_table.gperf"
-    {"RAMPADUR", RCP_PARAM_RAMP_A_DURATION},
-#line 712 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3F", RCP_PARAM_MONITOR_FREQ_LCD3},
-#line 715 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3FM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_LCD3},
-#line 766 "rcp_api_parameters_hash_table.gperf"
-    {"PWIBTRT", RCP_PARAM_POWER_IN_RUNTIME_0},
-#line 249 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSDIDM", RCP_PARAM_MONITOR_DOCK_MENUS_HDSDI},
-#line 323 "rcp_api_parameters_hash_table.gperf"
-    {"EVFCV", RCP_PARAM_MONITOR_CURVE_EVF},
-#line 721 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3FMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_LCD3},
-#line 260 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSDIEN", RCP_PARAM_MONITOR_ENABLE_HDSDI},
-#line 805 "rcp_api_parameters_hash_table.gperf"
-    {"SUILAHTO", RCP_PARAM_SIDE_UI_AUTO_HOME_TIMEOUT_LEFT},
-#line 810 "rcp_api_parameters_hash_table.gperf"
-    {"SUIRAHTO", RCP_PARAM_SIDE_UI_AUTO_HOME_TIMEOUT_RIGHT},
-#line 763 "rcp_api_parameters_hash_table.gperf"
-    {"KEYACNOT", RCP_PARAM_SHOW_KEY_ACTION_NOTIFICATIONS},
-#line 336 "rcp_api_parameters_hash_table.gperf"
-    {"BEEPSTOP", RCP_PARAM_BEEP_RECORD_STOP},
-#line 96 "rcp_api_parameters_hash_table.gperf"
-    {"HDMIM", RCP_PARAM_MONITOR_MODE_HDMI},
-#line 425 "rcp_api_parameters_hash_table.gperf"
-    {"BLCDFM2", RCP_PARAM_MONITOR_FLIP_MIRROR_LCD},
-#line 35 "rcp_api_parameters_hash_table.gperf"
-    {"FORMAT2", RCP_PARAM_RECORD_FORMAT},
-#line 573 "rcp_api_parameters_hash_table.gperf"
+    {"DEVCON", RCP_PARAM_OUTPUT_TONE_MAP},
+    {"REVFLUT", RCP_PARAM_MONITOR_LUT_REAR_EVF},
+    {"GSPACE", RCP_PARAM_GAMMA_SPACE},
+    {"MTMST1", RCP_PARAM_IRIS_STATE},
+    {"TINT", RCP_PARAM_TINT},
+    {"MASTRPHS", RCP_PARAM_MASTER_SHUTTER_ANGLE},
+    {"LCDG", RCP_PARAM_MONITOR_FEED_LCD},
+    {"REVFTL", RCP_PARAM_MONITOR_TOOLS_REAR_EVF},
+    {"DPUHD", RCP_PARAM_DISPLAY_PRESET_REAR_UHDSDI},
+    {"RECTLINT", RCP_PARAM_RECORD_TIMELAPSE_INTERVAL},
+    {"DOPNAME", RCP_PARAM_SLATE_DOP},
+    {"ISO", RCP_PARAM_ISO},
+    {"CH56ONME", RCP_PARAM_AUDIO_CH56_OUTPUT_NAME},
+    {"HCFOCUS", RCP_PARAM_HAND_CONTROLLER_FOCUS_POS},
+    {"BATTMODE", RCP_PARAM_POWER_DISPLAY_MODE},
+    {"BOFFSET", RCP_PARAM_CDL_OFFSET_BLUE},
+    {"BLCDFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_LCD},
+    {"F1SCL", RCP_PARAM_ACTION_GUIDE_SCALE},
+    {"CUSTMPHS", RCP_PARAM_CUSTOM_SHUTTER_ANGLE},
+    {"DATETIME", RCP_PARAM_RTC_DATE_TIME},
+    {"REVFM", RCP_PARAM_MONITOR_MODE_REAR_EVF},
+    {"PRORESH", RCP_PARAM_PRORES_HEIGHT},
+    {"SHCOLOR", RCP_PARAM_SHADING_COLOR},
+    {"MINRC", RCP_PARAM_MIN_REDCODE},
+    {"MASTRINT", RCP_PARAM_MASTER_INTEGRATION_TIME},
+    {"PRISTOR", RCP_PARAM_PRIMARY_STORAGE},
+    {"COLORSCI", RCP_PARAM_COLOR_SCIENCE},
+    {"F0NUM", RCP_PARAM_FRAME_GUIDE_USER_AR_NUM},
+    {"TURRGLO", RCP_PARAM_GENLOCK_OFFSET_REDCAST},
+    {"UILOCK", RCP_PARAM_UI_LOCK_TOUCHSCREEN},
     {"CH34ONME", RCP_PARAM_AUDIO_CH34_OUTPUT_NAME},
-#line 514 "rcp_api_parameters_hash_table.gperf"
-    {"MEDIAVER", RCP_PARAM_MEDIA_FIRMWARE_VERSION},
-#line 469 "rcp_api_parameters_hash_table.gperf"
-    {"CAMVCREV", RCP_PARAM_CAMERA_FIRMWARE_SVN_REVISION},
-#line 34 "rcp_api_parameters_hash_table.gperf"
-    {"RCPPSVER", RCP_PARAM_RCP_PARAMETER_SET_VERSION},
-#line 861 "rcp_api_parameters_hash_table.gperf"
-    {"VCBAKMIN", RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS},
-#line 621 "rcp_api_parameters_hash_table.gperf"
-    {"WLANAPEN", RCP_PARAM_WIFI_INFRASTRUCTURE_ENCRYPTION},
-#line 782 "rcp_api_parameters_hash_table.gperf"
-    {"FRMTA125", RCP_PARAM_RECORD_FORMAT_ANA_1_25},
-#line 241 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSDIFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_HDSDI},
-#line 275 "rcp_api_parameters_hash_table.gperf"
-    {"F0OFFSY", RCP_PARAM_FRAME_GUIDE_Y_OFFSET},
-#line 428 "rcp_api_parameters_hash_table.gperf"
-    {"CNA1ADDR", RCP_PARAM_REMOTE_CONTROL_PANEL_ADDRESS},
-#line 274 "rcp_api_parameters_hash_table.gperf"
-    {"F0OFFSX", RCP_PARAM_FRAME_GUIDE_X_OFFSET},
-#line 567 "rcp_api_parameters_hash_table.gperf"
+    {"GGAMMA", RCP_PARAM_LGG_GAMMA_GREEN},
+    {"CAMSHOT", RCP_PARAM_SLATE_SHOT},
+    {"BLCDOV", RCP_PARAM_MONITOR_OVERLAY_LCD},
+    {"SHRCKDST", RCP_PARAM_SHOW_RACK_DISTANCES},
+    {"MASTRISO", RCP_PARAM_MASTER_ISO},
+    {"RCPVER", RCP_PARAM_RCP_VERSION},
+    {"RCURVE", RCP_PARAM_RED_CURVE},
+    {"PWRSRC", RCP_PARAM_POWER_SOURCE},
+    {"VCODECG", RCP_PARAM_RECORD_VIDEO_CODEC_FEED},
+    {"TSRVSPR", RCP_PARAM_TETHERED_SERVER_SPACE_REMAINING},
+    {"TSRVSPT", RCP_PARAM_TETHERED_SERVER_SPACE_TOTAL},
     {"CLUTCH3", RCP_PARAM_LUT_CH_3},
-#line 801 "rcp_api_parameters_hash_table.gperf"
-    {"SUILPUSR", RCP_PARAM_SIDE_UI_PAGE_USER_LEFT},
-#line 806 "rcp_api_parameters_hash_table.gperf"
-    {"SUIRPUSR", RCP_PARAM_SIDE_UI_PAGE_USER_RIGHT},
-#line 677 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSDI1G", RCP_PARAM_MONITOR_FEED_REAR_HDSDI1},
-#line 118 "rcp_api_parameters_hash_table.gperf"
-    {"CAMFWVER", RCP_PARAM_CAMERA_FIRMWARE_VERSION},
-#line 373 "rcp_api_parameters_hash_table.gperf"
+    {"PLCDVF", RCP_PARAM_MONITOR_VIDEO_FLIP_REAR_LCD},
+    {"LCURVE", RCP_PARAM_LUMA_CURVE},
+    {"CUSTMINT", RCP_PARAM_CUSTOM_INTEGRATION_TIME},
+    {"AINSR3ST", RCP_PARAM_AUDIO_CH3_MODE_STATUS},
+    {"CAMMEID", RCP_PARAM_SLATE_CAMERA_ID},
+    {"F1COLOR", RCP_PARAM_ACTION_GUIDE_COLOR},
+    {"F1LNST", RCP_PARAM_ACTION_GUIDE_LINE_STYLE},
+    {"TIMEZONE", RCP_PARAM_TIMEZONE},
+    {"MMSHCOLR", RCP_PARAM_MM_SHUTTER_COLOR},
+    {"GPOUT", RCP_PARAM_GPO_FUNCTION},
+    {"POBAE", RCP_PARAM_POWER_OUT_BAT_AUX_ENABLE},
+    {"POBAS", RCP_PARAM_POWER_OUT_BAT_AUX_STATUS},
+    {"F0ABSH", RCP_PARAM_FRAME_GUIDE_ABS_H},
+    {"METACV", RCP_PARAM_RECORD_R3D_METADATA_CURVE},
+    {"F1RELF0", RCP_PARAM_ACTION_GUIDE_RELATIVE},
+    {"CUSTMISO", RCP_PARAM_CUSTOM_ISO},
+    {"TSRVSTAT", RCP_PARAM_TETHERED_SERVER_STATE},
+    {"FILEFMT", RCP_PARAM_RECORD_FILE_FORMAT},
     {"CH34OLNK", RCP_PARAM_AUDIO_CH34_LINK_VOL},
-#line 175 "rcp_api_parameters_hash_table.gperf"
-    {"HCZOOM", RCP_PARAM_HAND_CONTROLLER_ZOOM_POS},
-#line 337 "rcp_api_parameters_hash_table.gperf"
-    {"BEEPTAGS", RCP_PARAM_BEEP_TAG_STILL_FRAME},
-#line 587 "rcp_api_parameters_hash_table.gperf"
-    {"MXFCMPID", RCP_PARAM_RECORD_VIDEO_MXF_COMPRESSION_ID},
-#line 387 "rcp_api_parameters_hash_table.gperf"
+    {"APAUMOTN", RCP_PARAM_AUTO_PRESET_MOTION_AUTO_UPDATE},
+    {"MMNDV", RCP_PARAM_ND_VAL},
     {"CH3MODE", RCP_PARAM_AUDIO_CH3_MODE},
-#line 262 "rcp_api_parameters_hash_table.gperf"
     {"PHDS2EN", RCP_PARAM_MONITOR_ENABLE_REAR_HDSDI2},
-#line 752 "rcp_api_parameters_hash_table.gperf"
-    {"AINSR2ST", RCP_PARAM_AUDIO_CH2_MODE_STATUS},
-#line 718 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3FO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_LCD3},
-#line 238 "rcp_api_parameters_hash_table.gperf"
-    {"REVFVF", RCP_PARAM_MONITOR_VIDEO_FLIP_REAR_EVF},
-#line 379 "rcp_api_parameters_hash_table.gperf"
-    {"CH1LIMPR", RCP_PARAM_AUDIO_CH1_LIMITER_PRESENT},
-#line 297 "rcp_api_parameters_hash_table.gperf"
-    {"F2NUM", RCP_PARAM_TITLE_GUIDE_USER_AR_NUM},
-#line 208 "rcp_api_parameters_hash_table.gperf"
-    {"HDMIF", RCP_PARAM_MONITOR_FREQ_HDMI},
-#line 674 "rcp_api_parameters_hash_table.gperf"
-    {"HDSDIG", RCP_PARAM_MONITOR_FEED_HDSDI},
-#line 265 "rcp_api_parameters_hash_table.gperf"
-    {"LDISPM", RCP_PARAM_APERTURE_LIST_MODE},
-#line 282 "rcp_api_parameters_hash_table.gperf"
-    {"F0OPAC", RCP_PARAM_FRAME_GUIDE_OPACITY},
-#line 115 "rcp_api_parameters_hash_table.gperf"
-    {"MEDIAMIN", RCP_PARAM_MEDIA_TIME_REMAINING},
-#line 309 "rcp_api_parameters_hash_table.gperf"
-    {"CGGUIDE", RCP_PARAM_CENTER_GUIDE_GUIDE},
-#line 158 "rcp_api_parameters_hash_table.gperf"
-    {"CLIPLEN", RCP_PARAM_PLAYBACK_CLIP_LENGTH},
-#line 731 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3DM", RCP_PARAM_MONITOR_DOCK_MENUS_EVF3},
-#line 779 "rcp_api_parameters_hash_table.gperf"
-    {"PXFMTH", RCP_PARAM_FORMAT_HEIGHT_PIXELS},
-#line 826 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3RF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_EVF3},
-#line 834 "rcp_api_parameters_hash_table.gperf"
-    {"DPPHDSD2", RCP_PARAM_DISPLAY_PRESET_REAR_HDSDI2},
-#line 735 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3BR", RCP_PARAM_MONITOR_BRIGHTNESS_EVF3},
-#line 287 "rcp_api_parameters_hash_table.gperf"
-    {"F1OFFSY", RCP_PARAM_ACTION_GUIDE_Y_OFFSET},
-#line 286 "rcp_api_parameters_hash_table.gperf"
-    {"F1OFFSX", RCP_PARAM_ACTION_GUIDE_X_OFFSET},
-#line 229 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI2FM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_REAR_HDSDI2},
-#line 823 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI2RF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_REAR_HDSDI2},
-#line 47 "rcp_api_parameters_hash_table.gperf"
-    {"SHADOW", RCP_PARAM_SHADOW},
-#line 184 "rcp_api_parameters_hash_table.gperf"
-    {"AEEVSHFT", RCP_PARAM_AE_EV_SHIFT},
-#line 858 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3LUT", RCP_PARAM_MONITOR_LUT_BRAIN_EVF3},
-#line 802 "rcp_api_parameters_hash_table.gperf"
-    {"SUILPAUD", RCP_PARAM_SIDE_UI_PAGE_AUDIO_LEFT},
-#line 807 "rcp_api_parameters_hash_table.gperf"
-    {"SUIRPAUD", RCP_PARAM_SIDE_UI_PAGE_AUDIO_RIGHT},
-#line 856 "rcp_api_parameters_hash_table.gperf"
-    {"RSDI2FLT", RCP_PARAM_MONITOR_LUT_REAR_HDSDI2},
-#line 112 "rcp_api_parameters_hash_table.gperf"
-    {"CH12ST", RCP_PARAM_AUDIO_CH12_STATE},
-#line 726 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3TL", RCP_PARAM_MONITOR_TOOLS_EVF3},
-#line 368 "rcp_api_parameters_hash_table.gperf"
-    {"CH12SRC", RCP_PARAM_AUDIO_CH12_SOURCE},
-#line 221 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI2TL", RCP_PARAM_MONITOR_TOOLS_REAR_HDSDI2},
-#line 311 "rcp_api_parameters_hash_table.gperf"
-    {"CGOPAC", RCP_PARAM_CENTER_GUIDE_OPACITY},
-#line 827 "rcp_api_parameters_hash_table.gperf"
-    {"OUTPUTTR", RCP_PARAM_OUTPUT_TRANSFORM},
-#line 338 "rcp_api_parameters_hash_table.gperf"
-    {"EVFTALLY", RCP_PARAM_EVF_TALLY_LIGHT},
-#line 304 "rcp_api_parameters_hash_table.gperf"
-    {"F2ABSH", RCP_PARAM_TITLE_GUIDE_ABS_H},
-#line 398 "rcp_api_parameters_hash_table.gperf"
-    {"CLIPNMST", RCP_PARAM_CLIP_NAME_STATUS},
-#line 361 "rcp_api_parameters_hash_table.gperf"
-    {"GEGWADDR", RCP_PARAM_GIGABIT_ETHERNET_GATEWAY},
-#line 399 "rcp_api_parameters_hash_table.gperf"
-    {"SHSYNC", RCP_PARAM_SENSOR_SYNC_MODE},
-#line 722 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3M", RCP_PARAM_MONITOR_MODE_EVF3},
-#line 294 "rcp_api_parameters_hash_table.gperf"
-    {"F1OPAC", RCP_PARAM_ACTION_GUIDE_OPACITY},
-#line 253 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI2DM", RCP_PARAM_MONITOR_DOCK_MENUS_REAR_HDSDI2},
-#line 193 "rcp_api_parameters_hash_table.gperf"
-    {"HORIZON", RCP_PARAM_SHOW_HORIZON_LINE},
-#line 650 "rcp_api_parameters_hash_table.gperf"
-    {"PWRSAVE", RCP_PARAM_POWER_SAVE_STATE},
-#line 132 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA1", RCP_PARAM_ZEBRA_1_ENABLE},
-#line 133 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA1M", RCP_PARAM_ZEBRA_1_MODE},
-#line 65 "rcp_api_parameters_hash_table.gperf"
-    {"CLIPNAME", RCP_PARAM_CLIP_NAME},
-#line 757 "rcp_api_parameters_hash_table.gperf"
-    {"BWFENABL", RCP_PARAM_BWF_ENABLE},
-#line 558 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSGLO", RCP_PARAM_GENLOCK_OFFSET_HDSDI},
-#line 711 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3OV", RCP_PARAM_MONITOR_OVERLAY_LCD3},
-#line 136 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA1LS", RCP_PARAM_ZEBRA_1_STOPS_LOW},
-#line 572 "rcp_api_parameters_hash_table.gperf"
-    {"CH12ONME", RCP_PARAM_AUDIO_CH12_OUTPUT_NAME},
-#line 803 "rcp_api_parameters_hash_table.gperf"
-    {"SUILPMON", RCP_PARAM_SIDE_UI_PAGE_MONITOR_LEFT},
-#line 808 "rcp_api_parameters_hash_table.gperf"
-    {"SUIRPMON", RCP_PARAM_SIDE_UI_PAGE_MONITOR_RIGHT},
-#line 566 "rcp_api_parameters_hash_table.gperf"
-    {"CLUTCH2", RCP_PARAM_LUT_CH_2},
-#line 754 "rcp_api_parameters_hash_table.gperf"
-    {"AINSR4ST", RCP_PARAM_AUDIO_CH4_MODE_STATUS},
-#line 245 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI2FO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_REAR_HDSDI2},
-#line 224 "rcp_api_parameters_hash_table.gperf"
-    {"BHDMIFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_HDMI},
-#line 818 "rcp_api_parameters_hash_table.gperf"
-    {"BHDMIRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_HDMI},
-#line 150 "rcp_api_parameters_hash_table.gperf"
-    {"MINFPS", RCP_PARAM_MIN_SENSOR_FRAME_RATE},
-#line 159 "rcp_api_parameters_hash_table.gperf"
-    {"CLIPLOAD", RCP_PARAM_PLAYBACK_CLIP_LOAD},
-#line 713 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3CV", RCP_PARAM_MONITOR_CURVE_LCD3},
-#line 41 "rcp_api_parameters_hash_table.gperf"
-    {"BRIGHT", RCP_PARAM_BRIGHTNESS},
-#line 667 "rcp_api_parameters_hash_table.gperf"
-    {"USECPHSL", RCP_PARAM_USE_CUSTOM_SHUTTER_ANGLE},
-#line 381 "rcp_api_parameters_hash_table.gperf"
-    {"CH2MODE", RCP_PARAM_AUDIO_CH2_MODE},
-#line 261 "rcp_api_parameters_hash_table.gperf"
-    {"PHDS1EN", RCP_PARAM_MONITOR_ENABLE_REAR_HDSDI1},
-#line 312 "rcp_api_parameters_hash_table.gperf"
-    {"GGGUIDE", RCP_PARAM_GRID_GUIDE_GUIDE},
-#line 790 "rcp_api_parameters_hash_table.gperf"
-    {"PXSFMTH", RCP_PARAM_SHADOW_FORMAT_HEIGHT_PIXELS},
-#line 372 "rcp_api_parameters_hash_table.gperf"
-    {"CH12OLNK", RCP_PARAM_AUDIO_CH12_LINK_VOL},
-#line 630 "rcp_api_parameters_hash_table.gperf"
-    {"WLANDHCP", RCP_PARAM_WIFI_DHCP_ENABLE},
-#line 216 "rcp_api_parameters_hash_table.gperf"
-    {"BHDMITL", RCP_PARAM_MONITOR_TOOLS_HDMI},
-#line 768 "rcp_api_parameters_hash_table.gperf"
-    {"PWIAMPS", RCP_PARAM_POWER_IN_CURRENT_0},
-#line 724 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3F", RCP_PARAM_MONITOR_FREQ_EVF3},
-#line 727 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3FM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_EVF3},
-#line 624 "rcp_api_parameters_hash_table.gperf"
-    {"WLANSIG", RCP_PARAM_WIFI_SIGNAL},
-#line 174 "rcp_api_parameters_hash_table.gperf"
-    {"HCIRIS", RCP_PARAM_HAND_CONTROLLER_IRIS_POS},
-#line 702 "rcp_api_parameters_hash_table.gperf"
-    {"MXFW", RCP_PARAM_MXF_WIDTH},
-#line 759 "rcp_api_parameters_hash_table.gperf"
-    {"WSHFOCUS", RCP_PARAM_WSH_FOCUS_WHEEL},
-#line 851 "rcp_api_parameters_hash_table.gperf"
-    {"BHDMILUT", RCP_PARAM_MONITOR_LUT_HDMI},
-#line 571 "rcp_api_parameters_hash_table.gperf"
-    {"REVFFM2", RCP_PARAM_MONITOR_FLIP_MIRROR_REAR_EVF},
-#line 733 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3FMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_EVF3},
-#line 629 "rcp_api_parameters_hash_table.gperf"
-    {"WLANGATE", RCP_PARAM_WIFI_GATEWAY},
-#line 386 "rcp_api_parameters_hash_table.gperf"
-    {"CH3NAME", RCP_PARAM_AUDIO_CH3_NAME},
-#line 23 "rcp_api_parameters_hash_table.gperf"
-    {"SHUTDOWN", RCP_PARAM_SHUTDOWN},
-#line 109 "rcp_api_parameters_hash_table.gperf"
-    {"RCLIP", RCP_PARAM_RED_CLIP},
-#line 233 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSDIVF", RCP_PARAM_MONITOR_VIDEO_FLIP_HDSDI},
-#line 248 "rcp_api_parameters_hash_table.gperf"
-    {"BHDMIDM", RCP_PARAM_MONITOR_DOCK_MENUS_HDMI},
-#line 746 "rcp_api_parameters_hash_table.gperf"
-    {"MMNDINSZ", RCP_PARAM_ND_INCREMENT_SIZE},
-#line 228 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI1FM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_REAR_HDSDI1},
-#line 314 "rcp_api_parameters_hash_table.gperf"
-    {"GGOPAC", RCP_PARAM_GRID_GUIDE_OPACITY},
-#line 822 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI1RF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_REAR_HDSDI1},
-#line 270 "rcp_api_parameters_hash_table.gperf"
+    {"RLIFT", RCP_PARAM_LGG_LIFT_RED},
+    {"TSRVRN", RCP_PARAM_TETHERED_SERVER_REEL_NO},
+    {"HDRMODE", RCP_PARAM_RECORD_HDR_MODE},
+    {"BGAMMA", RCP_PARAM_LGG_GAMMA_BLUE},
+    {"DPREVF", RCP_PARAM_DISPLAY_PRESET_REAR_EVF},
+    {"F2MODE", RCP_PARAM_TITLE_GUIDE_MODE},
+    {"MTMST2", RCP_PARAM_ZOOM_STATE},
+    {"DIRECTOR", RCP_PARAM_SLATE_DIRECTOR},
     {"PSLEVEL3", RCP_PARAM_POWER_SAVE_LEVEL_3},
-#line 170 "rcp_api_parameters_hash_table.gperf"
-    {"MEDAGCII", RCP_PARAM_MEDIA_CLIP_EXT_INFO},
-#line 90 "rcp_api_parameters_hash_table.gperf"
-    {"CH1VOL", RCP_PARAM_AUDIO_CH1_VOL},
-#line 388 "rcp_api_parameters_hash_table.gperf"
-    {"CH3_48V", RCP_PARAM_AUDIO_CH3_48V_POWER},
-#line 322 "rcp_api_parameters_hash_table.gperf"
-    {"HDSDICV", RCP_PARAM_MONITOR_CURVE_HDSDI},
-#line 855 "rcp_api_parameters_hash_table.gperf"
-    {"RSDI1FLT", RCP_PARAM_MONITOR_LUT_REAR_HDSDI1},
-#line 134 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA1LO", RCP_PARAM_ZEBRA_1_IRE_LOW},
-#line 220 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI1TL", RCP_PARAM_MONITOR_TOOLS_REAR_HDSDI1},
-#line 234 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFVF", RCP_PARAM_MONITOR_VIDEO_FLIP_EVF},
-#line 389 "rcp_api_parameters_hash_table.gperf"
-    {"CH3_48VP", RCP_PARAM_AUDIO_CH3_48V_PRESENT},
-#line 770 "rcp_api_parameters_hash_table.gperf"
-    {"PWOLIST", RCP_PARAM_POWER_OUT_LIST},
-#line 772 "rcp_api_parameters_hash_table.gperf"
-    {"PWOIST", RCP_PARAM_POWER_OUT_STATUS_0},
-#line 720 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3G", RCP_PARAM_MONITOR_FEED_LCD3},
-#line 240 "rcp_api_parameters_hash_table.gperf"
-    {"BHDMIFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_HDMI},
-#line 252 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI1DM", RCP_PARAM_MONITOR_DOCK_MENUS_REAR_HDSDI1},
-#line 476 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVEMY", RCP_PARAM_RED_CURVE_MIDTONE_Y},
-#line 472 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVESY", RCP_PARAM_RED_CURVE_SHADOW_Y},
-#line 475 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVEMX", RCP_PARAM_RED_CURVE_MIDTONE_X},
-#line 471 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVESX", RCP_PARAM_RED_CURVE_SHADOW_X},
-#line 321 "rcp_api_parameters_hash_table.gperf"
-    {"HDMICV", RCP_PARAM_MONITOR_CURVE_HDMI},
-#line 627 "rcp_api_parameters_hash_table.gperf"
-    {"WLANIP", RCP_PARAM_WIFI_IP_ADDRESS},
-#line 506 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVEMY", RCP_PARAM_LUMA_CURVE_MIDTONE_Y},
-#line 502 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVESY", RCP_PARAM_LUMA_CURVE_SHADOW_Y},
-#line 478 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVELY", RCP_PARAM_RED_CURVE_LIGHT_Y},
-#line 505 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVEMX", RCP_PARAM_LUMA_CURVE_MIDTONE_X},
-#line 501 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVESX", RCP_PARAM_LUMA_CURVE_SHADOW_X},
-#line 477 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVELX", RCP_PARAM_RED_CURVE_LIGHT_X},
-#line 730 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3FO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_EVF3},
-#line 765 "rcp_api_parameters_hash_table.gperf"
-    {"PWIBTLVL", RCP_PARAM_POWER_IN_PERCENT_0},
-#line 736 "rcp_api_parameters_hash_table.gperf"
-    {"PLAYTYPE", RCP_PARAM_PLAYBACK_FILE_FORMAT_TYPE},
-#line 771 "rcp_api_parameters_hash_table.gperf"
-    {"PWOIEN", RCP_PARAM_POWER_OUT_ENABLE_0},
-#line 862 "rcp_api_parameters_hash_table.gperf"
-    {"VCBAKMAX", RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS},
-#line 508 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVELY", RCP_PARAM_LUMA_CURVE_LIGHT_Y},
-#line 507 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVELX", RCP_PARAM_LUMA_CURVE_LIGHT_X},
-#line 848 "rcp_api_parameters_hash_table.gperf"
-    {"ISOCAL2", RCP_PARAM_ISO_CAL2_ENABLED},
-#line 393 "rcp_api_parameters_hash_table.gperf"
-    {"CH4MODE", RCP_PARAM_AUDIO_CH4_MODE},
-#line 182 "rcp_api_parameters_hash_table.gperf"
+    {"REVFF", RCP_PARAM_MONITOR_FREQ_REAR_EVF},
+    {"POBAC", RCP_PARAM_POWER_OUT_BAT_AUX_CURRENT},
+    {"REVFFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_REAR_EVF},
+    {"APMOTION", RCP_PARAM_AUTO_PRESET_MOTION},
+    {"CLUTCH0", RCP_PARAM_LUT_CH_0},
+    {"RIGSTATE", RCP_PARAM_RIG_STATE},
+    {"CMATGG", RCP_PARAM_USER_MATRIX_GG},
+    {"PRORESW", RCP_PARAM_PRORES_WIDTH},
+    {"REVFFMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_REAR_EVF},
+    {"MINFRPRM", RCP_PARAM_MIN_FRAME_PROCESSING_MODE},
+    {"MINFRPRF", RCP_PARAM_MIN_FRAME_PROCESSING_FRAME_COUNT},
+    {"FRSHARP", RCP_PARAM_OUTPUT_SHARPNESS},
+    {"F2SCL", RCP_PARAM_TITLE_GUIDE_SCALE},
+    {"AFENHNCD", RCP_PARAM_AF_ENHANCED_ENABLE},
+    {"TSRVCN", RCP_PARAM_TETHERED_SERVER_CLIP_NO},
+    {"PBISO", RCP_PARAM_PLAYBACK_METADATA_ISO},
+    {"LCDCV", RCP_PARAM_MONITOR_CURVE_LCD},
+    {"CLUTF1", RCP_PARAM_LUT_FEED_1},
+    {"PBHDRTRC", RCP_PARAM_PLAYBACK_NUM_HDR_TRACKS},
+    {"BLUEG", RCP_PARAM_BLUE_GAIN},
+    {"GPIN", RCP_PARAM_GPI_FUNCTION},
+    {"TAGGED", RCP_PARAM_FRAME_TAG},
+    {"DIALOGS", RCP_PARAM_DIALOG_LIST},
+    {"RECLIMFR", RCP_PARAM_RECORD_LIMIT_FRAMES},
+    {"AFENHMON", RCP_PARAM_AF_ENHANCED_MONITOR},
+    {"PLAY", RCP_PARAM_PLAYBACK_PLAY},
+    {"BEVFDM", RCP_PARAM_MONITOR_DOCK_MENUS_EVF},
+    {"BEVFRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_EVF},
+    {"EVFG", RCP_PARAM_MONITOR_FEED_EVF},
+    {"WLANSCRL", RCP_PARAM_WIFI_SCAN_RESULTS},
+    {"BEVFBR", RCP_PARAM_MONITOR_BRIGHTNESS_EVF},
+    {"LNMTOWNR", RCP_PARAM_LENS_META_OWNER},
+    {"CMATGB", RCP_PARAM_USER_MATRIX_GB},
+    {"GEDHCP", RCP_PARAM_GIGABIT_ETHERNET_DHCP_ENABLE},
+    {"F0ABSW", RCP_PARAM_FRAME_GUIDE_ABS_W},
+    {"CLPDIR", RCP_PARAM_PLAYBACK_CLIP_DIR},
+    {"RAWMODE", RCP_PARAM_RAW_MODE},
+    {"F2COLOR", RCP_PARAM_TITLE_GUIDE_COLOR},
+    {"F2LNST", RCP_PARAM_TITLE_GUIDE_LINE_STYLE},
+    {"BEVFLUT", RCP_PARAM_MONITOR_LUT_EVF},
+    {"BEVFTL", RCP_PARAM_MONITOR_TOOLS_EVF},
     {"TWARN3", RCP_PARAM_CORE_TEMP_WARNING_3},
-#line 458 "rcp_api_parameters_hash_table.gperf"
-    {"GESTPNCH", RCP_PARAM_UI_GESTURE_PINCH_MAGNIFY},
-#line 620 "rcp_api_parameters_hash_table.gperf"
-    {"WLANCHAN", RCP_PARAM_WIFI_CHANNEL},
-#line 197 "rcp_api_parameters_hash_table.gperf"
-    {"BHDSDIOV", RCP_PARAM_MONITOR_OVERLAY_HDSDI},
-#line 623 "rcp_api_parameters_hash_table.gperf"
-    {"WLANAPID", RCP_PARAM_WIFI_INFRASTRUCTURE_SSID},
-#line 244 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI1FO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_REAR_HDSDI1},
-#line 474 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVEDY", RCP_PARAM_RED_CURVE_DARK_Y},
-#line 473 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVEDX", RCP_PARAM_RED_CURVE_DARK_X},
-#line 778 "rcp_api_parameters_hash_table.gperf"
-    {"PXFMTW", RCP_PARAM_FORMAT_WIDTH_PIXELS},
-#line 504 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVEDY", RCP_PARAM_LUMA_CURVE_DARK_Y},
-#line 503 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVEDX", RCP_PARAM_LUMA_CURVE_DARK_X},
-#line 75 "rcp_api_parameters_hash_table.gperf"
-    {"MAGNIFY", RCP_PARAM_MAGNIFY_STATE},
-#line 697 "rcp_api_parameters_hash_table.gperf"
-    {"PROXYFPS", RCP_PARAM_PROXY_ENCODE_FRAMERATE},
-#line 264 "rcp_api_parameters_hash_table.gperf"
-    {"HISTTYPE", RCP_PARAM_HISTOGRAM_TYPE},
-#line 110 "rcp_api_parameters_hash_table.gperf"
-    {"GCLIP", RCP_PARAM_GREEN_CLIP},
-#line 515 "rcp_api_parameters_hash_table.gperf"
-    {"MEDIASZ", RCP_PARAM_MEDIA_SIZE},
-#line 673 "rcp_api_parameters_hash_table.gperf"
-    {"HDMIG", RCP_PARAM_MONITOR_FEED_HDMI},
-#line 380 "rcp_api_parameters_hash_table.gperf"
-    {"CH2NAME", RCP_PARAM_AUDIO_CH2_NAME},
-#line 378 "rcp_api_parameters_hash_table.gperf"
-    {"CH1LIMIT", RCP_PARAM_AUDIO_CH1_LIMITER},
-#line 315 "rcp_api_parameters_hash_table.gperf"
-    {"SHGUIDE", RCP_PARAM_SHADING_GUIDE},
-#line 303 "rcp_api_parameters_hash_table.gperf"
-    {"F2ABSW", RCP_PARAM_TITLE_GUIDE_ABS_W},
-#line 837 "rcp_api_parameters_hash_table.gperf"
+    {"SLHEAD", RCP_PARAM_SLATE_AUTO_HEAD_FRAMES},
+    {"CAMID", RCP_PARAM_CAMERA_ID},
+    {"PREVFS", RCP_PARAM_FAN_PREVIEW_SPEED},
+    {"REVFFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_REAR_EVF},
+    {"GCURVE", RCP_PARAM_GREEN_CURVE},
+    {"AFSIZE", RCP_PARAM_AF_SIZE},
+    {"ROTF0", RCP_PARAM_FLIP_MIRROR_FEED_0},
+    {"WLANSTAT", RCP_PARAM_WIFI_STATE},
+    {"F2RELF0", RCP_PARAM_TITLE_GUIDE_RELATIVE},
+    {"GIOCSEC", RCP_PARAM_GIO_SCOPE_SECONDARY_COLORS},
+    {"LCD3DM", RCP_PARAM_MONITOR_DOCK_MENUS_LCD3},
+    {"LCD3RF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_LCD3},
+    {"LCD3BR", RCP_PARAM_MONITOR_BRIGHTNESS_LCD3},
+    {"GIOZONE", RCP_PARAM_GIO_SCOPE_ZONES},
+    {"CNA1STA", RCP_PARAM_REMOTE_CONTROL_PANEL_STATUS},
+    {"RECLIMEN", RCP_PARAM_RECORD_LIMIT_ENABLE},
+    {"CH3_48V", RCP_PARAM_AUDIO_CH3_48V_POWER},
+    {"REVFOV", RCP_PARAM_MONITOR_OVERLAY_REAR_EVF},
+    {"LCD3LUT", RCP_PARAM_MONITOR_LUT_BRAIN_LCD3},
+    {"FRMTA13", RCP_PARAM_RECORD_FORMAT_ANA_1_3},
+    {"LCD3TL", RCP_PARAM_MONITOR_TOOLS_LCD3},
+    {"FMTCAMID", RCP_PARAM_MEDIA_FORMAT_CAMERA_ID},
+    {"CH3_48VP", RCP_PARAM_AUDIO_CH3_48V_PRESENT},
+    {"VIDEOSRC", RCP_PARAM_VIDEO_SOURCE},
+    {"APSTILLS", RCP_PARAM_AUTO_PRESET_STILLS},
+    {"GLIFT", RCP_PARAM_LGG_LIFT_GREEN},
+    {"PLAYSPD", RCP_PARAM_PLAYBACK_SPEED},
+    {"RUNTIME", RCP_PARAM_CAMERA_RUNTIME},
+    {"WLANNETM", RCP_PARAM_WIFI_NETMASK},
+    {"DPEVF", RCP_PARAM_DISPLAY_PRESET_EVF},
+    {"AFZONE", RCP_PARAM_AF_ZONE},
+    {"WLANMAC", RCP_PARAM_WIFI_MAC_ADDRESS},
+    {"PLAYBACK", RCP_PARAM_PLAYBACK_STATE},
+    {"MEDATCHD", RCP_PARAM_MEDIA_IS_ATTACHED},
+    {"WLANSCAN", RCP_PARAM_WIFI_SCAN},
+    {"BLCDVF", RCP_PARAM_MONITOR_VIDEO_FLIP_LCD},
+    {"BCURVE", RCP_PARAM_BLUE_CURVE},
+    {"RLCDFM2", RCP_PARAM_MONITOR_FLIP_MIRROR_REAR_LCD},
+    {"RECPRE", RCP_PARAM_RECORD_PRE_FRAME_COUNT},
+    {"CH3NAME", RCP_PARAM_AUDIO_CH3_NAME},
+    {"AMBNTCH", RCP_PARAM_AMBIENT_CHANNEL},
+    {"APAUSTIL", RCP_PARAM_AUTO_PRESET_STILLS_AUTO_UPDATE},
+    {"ACTION", RCP_PARAM_KEY_MAPPING_ACTION_LIST},
+    {"SSCANDIR", RCP_PARAM_SENSOR_SCAN_DIRECTION},
+    {"LCD3M", RCP_PARAM_MONITOR_MODE_LCD3},
+    {"QTST", RCP_PARAM_RECORD_QUICKTIME_STATE},
+    {"PWRBATL", RCP_PARAM_POWER_VAL},
+    {"QTSTD", RCP_PARAM_RECORD_QUICKTIME_STATE_DETAILED},
+    {"PSDI2FM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_REAR_HDSDI2},
+    {"REVFCV", RCP_PARAM_MONITOR_CURVE_REAR_EVF},
+    {"PSDI2RF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_REAR_HDSDI2},
+    {"CNA1ENA", RCP_PARAM_REMOTE_CONTROL_PANEL_ENABLE},
+    {"RECPOST", RCP_PARAM_RECORD_POST_FRAME_COUNT},
+    {"RSDI2FLT", RCP_PARAM_MONITOR_LUT_REAR_HDSDI2},
+    {"RSLOPE", RCP_PARAM_CDL_SLOPE_RED},
+    {"CLPINPT", RCP_PARAM_PLAYBACK_IN_POINT},
+    {"PSDI2TL", RCP_PARAM_MONITOR_TOOLS_REAR_HDSDI2},
+    {"POPIOPE", RCP_PARAM_POWER_OUT_PRO_IO_PWR_ENABLE},
+    {"POPIOPS", RCP_PARAM_POWER_OUT_PRO_IO_PWR_STATUS},
+    {"TETHERSI", RCP_PARAM_TETHERING_SUPPORTED_ON_THIS_INTERFACE},
+    {"MIVCODEC", RCP_PARAM_MIN_RECORD_VIDEO_CODEC},
+    {"LENSISEN", RCP_PARAM_LENS_IMAGE_STABILIZATION_ENABLED},
+    {"MMSHTIME", RCP_PARAM_MM_INTEGRATION_TIME},
     {"DPEVF3", RCP_PARAM_DISPLAY_PRESET_EVF3},
-#line 269 "rcp_api_parameters_hash_table.gperf"
-    {"PSLEVEL2", RCP_PARAM_POWER_SAVE_LEVEL_2},
-#line 516 "rcp_api_parameters_hash_table.gperf"
-    {"MEDIASZA", RCP_PARAM_MEDIA_SIZE_AVIALABLE},
-#line 723 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3OV", RCP_PARAM_MONITOR_OVERLAY_EVF3},
-#line 382 "rcp_api_parameters_hash_table.gperf"
-    {"CH2_48V", RCP_PARAM_AUDIO_CH2_48V_POWER},
-#line 237 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI2VF", RCP_PARAM_MONITOR_VIDEO_FLIP_REAR_HDSDI2},
-#line 201 "rcp_api_parameters_hash_table.gperf"
+    {"CAMUNIT", RCP_PARAM_SLATE_UNIT},
+    {"CALINT", RCP_PARAM_CURRENT_CALIBRATION_INTEGRATION_TIME},
+    {"SUPPORT", RCP_PARAM_SUPPORT_CONTACT},
+    {"VCBAKED", RCP_PARAM_RECORD_PROXY_BAKED_IN_SETTINGS},
+    {"RECPREA", RCP_PARAM_RECORD_PRE_FRAME_COUNT_AVAILABLE},
+    {"USECINTL", RCP_PARAM_USE_CUSTOM_INTEGRATION_TIME},
+    {"BLIFT", RCP_PARAM_LGG_LIFT_BLUE},
+    {"TSRVAD", RCP_PARAM_TETHERED_SERVER_ADDRESS},
+    {"VCBAKEDT", RCP_PARAM_RECORD_PROXY_BAKED_IN_SETTINGS},
+    {"CAMPOS", RCP_PARAM_SLATE_CAMERA_POS},
+    {"MONLIST", RCP_PARAM_MONITOR_LIST},
+    {"RAMPDFPS", RCP_PARAM_RAMP_D_FPS},
+    {"RAMPBFPS", RCP_PARAM_RAMP_B_FPS},
+    {"POPIOAE", RCP_PARAM_POWER_OUT_PRO_IO_AUX_ENABLE},
+    {"RECPOSTA", RCP_PARAM_RECORD_POST_FRAME_COUNT_AVAILABLE},
+    {"NWSTAT", RCP_PARAM_GIGE_STATE},
+    {"FRMTA2", RCP_PARAM_RECORD_FORMAT_ANA_2},
+    {"USECISOL", RCP_PARAM_USE_CUSTOM_ISO},
+    {"PSDI2DM", RCP_PARAM_MONITOR_DOCK_MENUS_REAR_HDSDI2},
+    {"MASTRAWB", RCP_PARAM_MASTER_COLOR_TEMPERATURE},
+    {"BEVFFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_EVF},
+    {"ROTF1", RCP_PARAM_FLIP_MIRROR_FEED_1},
+    {"F1NUM", RCP_PARAM_ACTION_GUIDE_USER_AR_NUM},
+    {"REVFG", RCP_PARAM_MONITOR_FEED_REAR_EVF},
+    {"PLAYFMT", RCP_PARAM_PLAYBACK_FILE_FORMAT},
+    {"MXFST", RCP_PARAM_RECORD_MXF_STATE},
+    {"MXFDRPFM", RCP_PARAM_MXF_DROPPED_FRAMES},
+    {"MINSHT", RCP_PARAM_MIN_EXPOSURE_INTEGRATION_TIME},
+    {"PLAYFMTT", RCP_PARAM_PLAYBACK_FILE_FORMAT},
+    {"EVFCV", RCP_PARAM_MONITOR_CURVE_EVF},
+    {"BEVFFMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_BRAIN_EVF},
+    {"AESPEED", RCP_PARAM_AE_SPEED},
+    {"HDRFACT", RCP_PARAM_HDR_FACTOR},
+    {"MMSHANGL", RCP_PARAM_MM_SHUTTER_ANGLE},
+    {"WLANMODE", RCP_PARAM_WIFI_MODE},
+    {"UHDSDIF", RCP_PARAM_MONITOR_FREQ_REAR_UHDSDI},
+    {"PSDI2FO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_REAR_HDSDI2},
+    {"MPITCH", RCP_PARAM_CAMERA_PITCH},
+    {"RAMPCFPS", RCP_PARAM_RAMP_C_FPS},
+    {"MMMISOND", RCP_PARAM_MM_ISO_PULL},
+    {"RAMPDDUR", RCP_PARAM_RAMP_D_DURATION},
+    {"RAMPRDUR", RCP_PARAM_RAMP_RESET_DURATION},
+    {"CUSTMAWB", RCP_PARAM_CUSTOM_COLOR_TEMPERATURE},
+    {"RAMPBDUR", RCP_PARAM_RAMP_B_DURATION},
+    {"PLPOWER", RCP_PARAM_PL_POWER},
+    {"PBZOOM", RCP_PARAM_PLAYBACK_METADATA_FOCAL_LENGTH},
+    {"CAMINFO", RCP_PARAM_CAMERA_INFO},
+    {"LCD3F", RCP_PARAM_MONITOR_FREQ_LCD3},
+    {"MINSHA", RCP_PARAM_MIN_EXPOSURE_ANGLE},
+    {"LCD3FM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_LCD3},
+    {"POPOPE", RCP_PARAM_POWER_OUT_PLUS_ONE_PWR_ENABLE},
+    {"POPOPS", RCP_PARAM_POWER_OUT_PLUS_ONE_PWR_STATUS},
     {"PHDS2OV", RCP_PARAM_MONITOR_OVERLAY_REAR_HDSDI2},
-#line 383 "rcp_api_parameters_hash_table.gperf"
-    {"CH2_48VP", RCP_PARAM_AUDIO_CH2_48V_PRESENT},
-#line 317 "rcp_api_parameters_hash_table.gperf"
-    {"SHOPAC", RCP_PARAM_SHADING_OPACITY},
-#line 147 "rcp_api_parameters_hash_table.gperf"
-    {"VRISPDMD", RCP_PARAM_VARISPEED_MODE},
-#line 570 "rcp_api_parameters_hash_table.gperf"
-    {"BEVFFM2", RCP_PARAM_MONITOR_FLIP_MIRROR_BRAIN_EVF},
-#line 486 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVEMY", RCP_PARAM_GREEN_CURVE_MIDTONE_Y},
-#line 482 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVESY", RCP_PARAM_GREEN_CURVE_SHADOW_Y},
-#line 485 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVEMX", RCP_PARAM_GREEN_CURVE_MIDTONE_X},
-#line 481 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVESX", RCP_PARAM_GREEN_CURVE_SHADOW_X},
-#line 302 "rcp_api_parameters_hash_table.gperf"
-    {"F2ABSYOF", RCP_PARAM_TITLE_GUIDE_ABS_Y_OFFSET},
-#line 301 "rcp_api_parameters_hash_table.gperf"
-    {"F2ABSXOF", RCP_PARAM_TITLE_GUIDE_ABS_X_OFFSET},
-#line 111 "rcp_api_parameters_hash_table.gperf"
-    {"BCLIP", RCP_PARAM_BLUE_CLIP},
-#line 359 "rcp_api_parameters_hash_table.gperf"
-    {"GEIPADDR", RCP_PARAM_GIGABIT_ETHERNET_IP_ADDRESS},
-#line 750 "rcp_api_parameters_hash_table.gperf"
+    {"F1ABSH", RCP_PARAM_ACTION_GUIDE_ABS_H},
+    {"MEDPRSNT", RCP_PARAM_MEDIA_IS_PRESENT},
+    {"TARGETID", RCP_PARAM_TARGET_ID},
+    {"CAMVCREV", RCP_PARAM_CAMERA_FIRMWARE_SVN_REVISION},
+    {"LCD3FMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_LCD3},
+    {"CH12ST", RCP_PARAM_AUDIO_CH12_STATE},
+    {"CH12SRC", RCP_PARAM_AUDIO_CH12_SOURCE},
+    {"AUTOPEAK", RCP_PARAM_AUTO_FOCUS_PEAK},
+    {"MXFSTD", RCP_PARAM_RECORD_MXF_STATE_DETAILED},
+    {"FLENGTH", RCP_PARAM_FOCAL_LENGTH},
+    {"SMDLG9IN", RCP_PARAM_UI_SMALL_DIALOGS_ON_9_INCH},
+    {"AWBMODE", RCP_PARAM_AWB_MODE},
+    {"SLTAIL", RCP_PARAM_SLATE_AUTO_TAIL_FRAMES},
+    {"DPHDMI", RCP_PARAM_DISPLAY_PRESET_HDMI},
+    {"DPHDSDI", RCP_PARAM_DISPLAY_PRESET_HDSDI},
+    {"EXPCOMP", RCP_PARAM_EXPOSURE_COMPENSATION},
+    {"FANPCTF", RCP_PARAM_FAN_SPEED_FRONT},
+    {"MAXRC", RCP_PARAM_MAX_REDCODE},
+    {"FANPCTT", RCP_PARAM_FAN_SPEED_TOP},
+    {"EVF3DM", RCP_PARAM_MONITOR_DOCK_MENUS_EVF3},
+    {"EVF3RF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_EVF3},
+    {"BEVFFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_EVF},
+    {"EVF3BR", RCP_PARAM_MONITOR_BRIGHTNESS_EVF3},
+    {"RAMPCDUR", RCP_PARAM_RAMP_C_DURATION},
+    {"RPOWER", RCP_PARAM_CDL_POWER_RED},
+    {"SHANGLE", RCP_PARAM_EXPOSURE_ANGLE},
+    {"CLUTCH1", RCP_PARAM_LUT_CH_1},
+    {"PWIBTRT", RCP_PARAM_POWER_IN_RUNTIME_0},
+    {"EVF3LUT", RCP_PARAM_MONITOR_LUT_BRAIN_EVF3},
+    {"SHANGLET", RCP_PARAM_EXPOSURE_ANGLE},
+    {"AINSR1ST", RCP_PARAM_AUDIO_CH1_MODE_STATUS},
+    {"MEDIA", RCP_PARAM_MEDIA_ACTIVE_MEDIA},
+    {"EVF3TL", RCP_PARAM_MONITOR_TOOLS_EVF3},
+    {"LOOP", RCP_PARAM_PLAYBACK_LOOP},
+    {"POPIOGE", RCP_PARAM_POWER_OUT_PRO_IO_GPIO_ENABLE},
+    {"POPIOGS", RCP_PARAM_POWER_OUT_PRO_IO_GPIO_STATUS},
+    {"SERPROTO", RCP_PARAM_SERIAL_PROTOCOL},
+    {"GSLOPE", RCP_PARAM_CDL_SLOPE_GREEN},
+    {"RGAIN", RCP_PARAM_LGG_GAIN_RED},
+    {"TCJAM", RCP_PARAM_TIMECODE_STATE},
+    {"PROJINFO", RCP_PARAM_SLATE_COPYRIGHT},
+    {"WLANAPEN", RCP_PARAM_WIFI_INFRASTRUCTURE_ENCRYPTION},
+    {"BEVFOV", RCP_PARAM_MONITOR_OVERLAY_EVF},
+    {"BSDILUT", RCP_PARAM_MONITOR_LUT_HDSDI},
     {"ZEB2CLR", RCP_PARAM_ZEBRA_2_COLOR},
-#line 488 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVELY", RCP_PARAM_GREEN_CURVE_LIGHT_Y},
-#line 487 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVELX", RCP_PARAM_GREEN_CURVE_LIGHT_X},
-#line 608 "rcp_api_parameters_hash_table.gperf"
-    {"MIXHDPN1", RCP_PARAM_AUDIO_MIX_MON_PAN1},
-#line 725 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3CV", RCP_PARAM_MONITOR_CURVE_EVF3},
-#line 166 "rcp_api_parameters_hash_table.gperf"
-    {"PLAYPAUS", RCP_PARAM_PLAYBACK_PLAY_PAUSE},
-#line 617 "rcp_api_parameters_hash_table.gperf"
-    {"WLANAHEN", RCP_PARAM_WIFI_AD_HOC_ENCRYPTION},
-#line 319 "rcp_api_parameters_hash_table.gperf"
-    {"IMGSPCRV", RCP_PARAM_MONITOR_SPLIT_CURVE},
-#line 590 "rcp_api_parameters_hash_table.gperf"
-    {"CH2MUTE", RCP_PARAM_AUDIO_CH2_MUTE},
-#line 326 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSD2CV", RCP_PARAM_MONITOR_CURVE_REAR_HDSDI2},
-#line 773 "rcp_api_parameters_hash_table.gperf"
-    {"PWOIAMPS", RCP_PARAM_POWER_OUT_CURRENT_0},
-#line 484 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVEDY", RCP_PARAM_GREEN_CURVE_DARK_Y},
-#line 483 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVEDX", RCP_PARAM_GREEN_CURVE_DARK_X},
-#line 101 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSDI2M", RCP_PARAM_MONITOR_MODE_REAR_HDSDI2},
-#line 213 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSDI2F", RCP_PARAM_MONITOR_FREQ_REAR_HDSDI2},
-#line 206 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSDI2R", RCP_PARAM_MONITOR_RESOLUTION_REAR_HDSDI2},
-#line 812 "rcp_api_parameters_hash_table.gperf"
-    {"UHDSDI2M", RCP_PARAM_MONITOR_MODE_REAR_UHDSDI2},
-#line 789 "rcp_api_parameters_hash_table.gperf"
-    {"PXSFMTW", RCP_PARAM_SHADOW_FORMAT_WIDTH_PIXELS},
-#line 181 "rcp_api_parameters_hash_table.gperf"
-    {"TWARN2", RCP_PARAM_CORE_TEMP_WARNING_2},
-#line 496 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVEMY", RCP_PARAM_BLUE_CURVE_MIDTONE_Y},
-#line 492 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVESY", RCP_PARAM_BLUE_CURVE_SHADOW_Y},
-#line 495 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVEMX", RCP_PARAM_BLUE_CURVE_MIDTONE_X},
-#line 491 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVESX", RCP_PARAM_BLUE_CURVE_SHADOW_X},
-#line 391 "rcp_api_parameters_hash_table.gperf"
-    {"CH3LIMPR", RCP_PARAM_AUDIO_CH3_LIMITER_PRESENT},
-#line 415 "rcp_api_parameters_hash_table.gperf"
-    {"MONPRTY", RCP_PARAM_MONITOR_PRIORITY_LIST},
-#line 764 "rcp_api_parameters_hash_table.gperf"
-    {"PWILIST", RCP_PARAM_POWER_IN_LIST},
-#line 151 "rcp_api_parameters_hash_table.gperf"
-    {"MAXFPS", RCP_PARAM_MAX_SENSOR_FRAME_RATE},
-#line 498 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVELY", RCP_PARAM_BLUE_CURVE_LIGHT_Y},
-#line 497 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVELX", RCP_PARAM_BLUE_CURVE_LIGHT_X},
-#line 232 "rcp_api_parameters_hash_table.gperf"
-    {"BHDMIVF", RCP_PARAM_MONITOR_VIDEO_FLIP_HDMI},
-#line 167 "rcp_api_parameters_hash_table.gperf"
-    {"PLAYPOS", RCP_PARAM_PLAYBACK_POS},
-#line 392 "rcp_api_parameters_hash_table.gperf"
-    {"CH4NAME", RCP_PARAM_AUDIO_CH4_NAME},
-#line 777 "rcp_api_parameters_hash_table.gperf"
-    {"PHYSENSH", RCP_PARAM_SENSOR_HEIGHT_PHY},
-#line 367 "rcp_api_parameters_hash_table.gperf"
-    {"SERPROT2", RCP_PARAM_SERIAL_2_PROTOCOL},
-#line 732 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3G", RCP_PARAM_MONITOR_FEED_EVF3},
-#line 394 "rcp_api_parameters_hash_table.gperf"
-    {"CH4_48V", RCP_PARAM_AUDIO_CH4_48V_POWER},
-#line 494 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVEDY", RCP_PARAM_BLUE_CURVE_DARK_Y},
-#line 493 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVEDX", RCP_PARAM_BLUE_CURVE_DARK_X},
-#line 86 "rcp_api_parameters_hash_table.gperf"
-    {"CH1GAIN", RCP_PARAM_AUDIO_CH1_GAIN},
-#line 395 "rcp_api_parameters_hash_table.gperf"
-    {"CH4_48VP", RCP_PARAM_AUDIO_CH4_48V_PRESENT},
-#line 716 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3VF", RCP_PARAM_MONITOR_VIDEO_FLIP_LCD3},
-#line 236 "rcp_api_parameters_hash_table.gperf"
-    {"PSDI1VF", RCP_PARAM_MONITOR_VIDEO_FLIP_REAR_HDSDI1},
-#line 200 "rcp_api_parameters_hash_table.gperf"
-    {"PHDS1OV", RCP_PARAM_MONITOR_OVERLAY_REAR_HDSDI1},
-#line 845 "rcp_api_parameters_hash_table.gperf"
-    {"LOGVWMDE", RCP_PARAM_LOG_VIEW_MODE},
-#line 371 "rcp_api_parameters_hash_table.gperf"
-    {"CH34ILNK", RCP_PARAM_AUDIO_CH34_LINK_GAIN},
-#line 749 "rcp_api_parameters_hash_table.gperf"
-    {"ZEB1CLR", RCP_PARAM_ZEBRA_1_COLOR},
-#line 137 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA1HS", RCP_PARAM_ZEBRA_1_STOPS_HIGH},
-#line 179 "rcp_api_parameters_hash_table.gperf"
-    {"GROUPID", RCP_PARAM_GROUP_ID},
-#line 196 "rcp_api_parameters_hash_table.gperf"
-    {"BHDMIOV", RCP_PARAM_MONITOR_OVERLAY_HDMI},
-#line 678 "rcp_api_parameters_hash_table.gperf"
-    {"PHDSDI2G", RCP_PARAM_MONITOR_FEED_REAR_HDSDI2},
-#line 455 "rcp_api_parameters_hash_table.gperf"
-    {"GIOCPRI", RCP_PARAM_GIO_SCOPE_PRIMARY_COLORS},
-#line 643 "rcp_api_parameters_hash_table.gperf"
-    {"POJPUE", RCP_PARAM_POWER_OUT_JETPACK_USB_ENABLE},
-#line 644 "rcp_api_parameters_hash_table.gperf"
-    {"POJPUS", RCP_PARAM_POWER_OUT_JETPACK_USB_STATUS},
-#line 385 "rcp_api_parameters_hash_table.gperf"
-    {"CH2LIMPR", RCP_PARAM_AUDIO_CH2_LIMITER_PRESENT},
-#line 615 "rcp_api_parameters_hash_table.gperf"
-    {"HDMIMUX", RCP_PARAM_MONITOR_LCD_EVF_2_HDMI_MUX},
-#line 300 "rcp_api_parameters_hash_table.gperf"
-    {"F2OFFSY", RCP_PARAM_TITLE_GUIDE_Y_OFFSET},
-#line 299 "rcp_api_parameters_hash_table.gperf"
-    {"F2OFFSX", RCP_PARAM_TITLE_GUIDE_X_OFFSET},
-#line 92 "rcp_api_parameters_hash_table.gperf"
+    {"MEDIAPCT", RCP_PARAM_MEDIA_VAL},
+    {"REVFVF", RCP_PARAM_MONITOR_VIDEO_FLIP_REAR_EVF},
+    {"AEEVSHFT", RCP_PARAM_AE_EV_SHIFT},
+    {"FORMAT2", RCP_PARAM_RECORD_FORMAT},
+    {"SHADOW", RCP_PARAM_SHADOW},
+    {"CH12ONME", RCP_PARAM_AUDIO_CH12_OUTPUT_NAME},
+    {"LCD3FO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_LCD3},
+    {"DPPHDSD1", RCP_PARAM_DISPLAY_PRESET_REAR_HDSDI1},
+    {"CH1MODE", RCP_PARAM_AUDIO_CH1_MODE},
+    {"F2NUM", RCP_PARAM_TITLE_GUIDE_USER_AR_NUM},
+    {"EVF3M", RCP_PARAM_MONITOR_MODE_EVF3},
+    {"AELOCKEX", RCP_PARAM_AE_LOCK_EXPOSURE},
     {"CH3VOL", RCP_PARAM_AUDIO_CH3_VOL},
-#line 622 "rcp_api_parameters_hash_table.gperf"
+    {"FPRDELAY", RCP_PARAM_FAN_DELAY},
+    {"BLCDFM2", RCP_PARAM_MONITOR_FLIP_MIRROR_LCD},
+    {"PBTINT", RCP_PARAM_PLAYBACK_METADATA_TINT},
+    {"BEEPREC", RCP_PARAM_BEEP_RECORD_START},
+    {"RECPREB", RCP_PARAM_RECORD_PRE_FRAME_COUNT_ACTUAL},
+    {"PSLEVEL1", RCP_PARAM_POWER_SAVE_LEVEL_1},
+    {"LCD3OV", RCP_PARAM_MONITOR_OVERLAY_LCD3},
+    {"F1ABSW", RCP_PARAM_ACTION_GUIDE_ABS_W},
+    {"RECPOSTB", RCP_PARAM_RECORD_POST_FRAME_COUNT_ACTUAL},
+    {"BSLOPE", RCP_PARAM_CDL_SLOPE_BLUE},
+    {"CH12OLNK", RCP_PARAM_AUDIO_CH12_LINK_VOL},
+    {"MEDIANUM", RCP_PARAM_MEDIA_MODEL_NUMBER},
+    {"F2ABSH", RCP_PARAM_TITLE_GUIDE_ABS_H},
+    {"CNA1ADDR", RCP_PARAM_REMOTE_CONTROL_PANEL_ADDRESS},
+    {"SUILAH", RCP_PARAM_SIDE_UI_AUTO_HOME_LEFT},
+    {"SUIRAH", RCP_PARAM_SIDE_UI_AUTO_HOME_RIGHT},
+    {"HCZOOM", RCP_PARAM_HAND_CONTROLLER_ZOOM_POS},
+    {"PWRSAVE", RCP_PARAM_POWER_SAVE_STATE},
+    {"SYNC", RCP_PARAM_SYNC_STATE},
+    {"RAMPAFPS", RCP_PARAM_RAMP_A_FPS},
+    {"PORXTCE", RCP_PARAM_POWER_OUT_TIMECODE_ENABLE},
+    {"PORXTCS", RCP_PARAM_POWER_OUT_TIMECODE_STATUS},
+    {"SMLCKKEY", RCP_PARAM_SIDE_MODULE_LOCK_KEYS},
+    {"LCD3CV", RCP_PARAM_MONITOR_CURVE_LCD3},
+    {"MAXFRPRM", RCP_PARAM_MAX_FRAME_PROCESSING_MODE},
+    {"MAXFRPRF", RCP_PARAM_MAX_FRAME_PROCESSING_FRAME_COUNT},
+    {"BEEPEN", RCP_PARAM_BEEP_ENABLE},
+    {"PSDI2VF", RCP_PARAM_MONITOR_VIDEO_FLIP_REAR_HDSDI2},
+    {"RCPPSVER", RCP_PARAM_RCP_PARAMETER_SET_VERSION},
+    {"AUDIOVU", RCP_PARAM_AUDIO_VU_DATA},
+    {"WLANDHCP", RCP_PARAM_WIFI_DHCP_ENABLE},
+    {"CALENTRY", RCP_PARAM_CALIBRATION_ENTRY},
+    {"CLUTCH2", RCP_PARAM_LUT_CH_2},
+    {"AINSR2ST", RCP_PARAM_AUDIO_CH2_MODE_STATUS},
+    {"BHDSDIFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_HDSDI},
+    {"BHDSDIRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_HDSDI},
+    {"F0ABSXOF", RCP_PARAM_FRAME_GUIDE_ABS_X_OFFSET},
+    {"EVF3F", RCP_PARAM_MONITOR_FREQ_EVF3},
+    {"EVF3FM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_EVF3},
+    {"TWARN1", RCP_PARAM_CORE_TEMP_WARNING_1},
+    {"MEDIAMOD", RCP_PARAM_MEDIA_DISPLAY_MODE},
+    {"LNMTFLMX", RCP_PARAM_LENS_META_FLEN_MAX},
+    {"BHDSDITL", RCP_PARAM_MONITOR_TOOLS_HDSDI},
+    {"SHUTDOWN", RCP_PARAM_SHUTDOWN},
+    {"WLANGATE", RCP_PARAM_WIFI_GATEWAY},
+    {"GPOWER", RCP_PARAM_CDL_POWER_GREEN},
+    {"BEEPSTOP", RCP_PARAM_BEEP_RECORD_STOP},
+    {"RAMPADUR", RCP_PARAM_RAMP_A_DURATION},
+    {"FMTFSYS", RCP_PARAM_MEDIA_FORMAT_FILE_SYSTEM},
+    {"GEEXT", RCP_PARAM_GIGABIT_ETHERNET_EXT_ENABLE},
+    {"EVF3FMSP", RCP_PARAM_MONITOR_FLIP_MIRROR_SUPPORTED_EVF3},
+    {"SHSYNC", RCP_PARAM_SENSOR_SYNC_MODE},
+    {"DPPHDSD2", RCP_PARAM_DISPLAY_PRESET_REAR_HDSDI2},
+    {"CH2MODE", RCP_PARAM_AUDIO_CH2_MODE},
+    {"PHDS1EN", RCP_PARAM_MONITOR_ENABLE_REAR_HDSDI1},
+    {"LCD3G", RCP_PARAM_MONITOR_FEED_LCD3},
+    {"WSHFOCUS", RCP_PARAM_WSH_FOCUS_WHEEL},
+    {"HDMIR", RCP_PARAM_MONITOR_RESOLUTION_HDMI},
+    {"BWFENABL", RCP_PARAM_BWF_ENABLE},
+    {"GGAIN", RCP_PARAM_LGG_GAIN_GREEN},
+    {"HDSDIM", RCP_PARAM_MONITOR_MODE_HDSDI},
+    {"HDSDIF", RCP_PARAM_MONITOR_FREQ_HDSDI},
+    {"HDSDIR", RCP_PARAM_MONITOR_RESOLUTION_HDSDI},
+    {"DSHIST", RCP_PARAM_HISTOGRAM},
+    {"SHTIME", RCP_PARAM_EXPOSURE_INTEGRATION_TIME},
+    {"CH3LIMPR", RCP_PARAM_AUDIO_CH3_LIMITER_PRESENT},
+    {"CH1_48V", RCP_PARAM_AUDIO_CH1_48V_POWER},
+    {"SUILAHTO", RCP_PARAM_SIDE_UI_AUTO_HOME_TIMEOUT_LEFT},
+    {"SUIRAHTO", RCP_PARAM_SIDE_UI_AUTO_HOME_TIMEOUT_RIGHT},
+    {"SHTIMET", RCP_PARAM_EXPOSURE_INTEGRATION_TIME},
+    {"SHDISP", RCP_PARAM_SHUTTER_DISPLAY_MODE},
+    {"PSLEVEL2", RCP_PARAM_POWER_SAVE_LEVEL_2},
+    {"BHDSDIDM", RCP_PARAM_MONITOR_DOCK_MENUS_HDSDI},
+    {"CH1_48VP", RCP_PARAM_AUDIO_CH1_48V_PRESENT},
+    {"USECWBL", RCP_PARAM_USE_CUSTOM_COLOR_TEMPERATURE},
+    {"BHDSDIEN", RCP_PARAM_MONITOR_ENABLE_HDSDI},
+    {"F2ABSW", RCP_PARAM_TITLE_GUIDE_ABS_W},
+    {"AINSR4ST", RCP_PARAM_AUDIO_CH4_MODE_STATUS},
+    {"ROTF01", RCP_PARAM_FLIP_MIRROR_FEED_0_1},
+    {"OUTPUTTR", RCP_PARAM_OUTPUT_TRANSFORM},
+    {"BPOWER", RCP_PARAM_CDL_POWER_BLUE},
+    {"CH1NAME", RCP_PARAM_AUDIO_CH1_NAME},
+    {"BHDSDIFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_HDSDI},
+    {"HDMIM", RCP_PARAM_MONITOR_MODE_HDMI},
+    {"CH4MODE", RCP_PARAM_AUDIO_CH4_MODE},
+    {"BGAIN", RCP_PARAM_LGG_GAIN_BLUE},
+    {"EVF3FO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_EVF3},
+    {"F0ABSYOF", RCP_PARAM_FRAME_GUIDE_ABS_Y_OFFSET},
+    {"SUILPUSR", RCP_PARAM_SIDE_UI_PAGE_USER_LEFT},
+    {"SUIRPUSR", RCP_PARAM_SIDE_UI_PAGE_USER_RIGHT},
+    {"BHDSGLO", RCP_PARAM_GENLOCK_OFFSET_HDSDI},
+    {"CH1MUTE", RCP_PARAM_AUDIO_CH1_MUTE},
+    {"BEVFVF", RCP_PARAM_MONITOR_VIDEO_FLIP_EVF},
+    {"REVFFM2", RCP_PARAM_MONITOR_FLIP_MIRROR_REAR_EVF},
+    {"PHDSD1CV", RCP_PARAM_MONITOR_CURVE_REAR_HDSDI1},
+    {"VCBAKMIN", RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS},
+    {"F0OPAC", RCP_PARAM_FRAME_GUIDE_OPACITY},
+    {"BEEPTAGS", RCP_PARAM_BEEP_TAG_STILL_FRAME},
+    {"WLANCHAN", RCP_PARAM_WIFI_CHANNEL},
+    {"EVF3OV", RCP_PARAM_MONITOR_OVERLAY_EVF3},
+    {"APPLAY", RCP_PARAM_AUTO_PRESET_PLAYBACK},
+    {"WLANSIG", RCP_PARAM_WIFI_SIGNAL},
+    {"MXFH", RCP_PARAM_MXF_HEIGHT},
+    {"PWIAMPS", RCP_PARAM_POWER_IN_CURRENT_0},
+    {"LDISPM", RCP_PARAM_APERTURE_LIST_MODE},
+    {"CH34ILNK", RCP_PARAM_AUDIO_CH34_LINK_GAIN},
+    {"MEDIAVER", RCP_PARAM_MEDIA_FIRMWARE_VERSION},
+    {"CLIPLEN", RCP_PARAM_PLAYBACK_CLIP_LENGTH},
+    {"TWARN2", RCP_PARAM_CORE_TEMP_WARNING_2},
+    {"LCD3VF", RCP_PARAM_MONITOR_VIDEO_FLIP_LCD3},
+    {"PWIBTLVL", RCP_PARAM_POWER_IN_PERCENT_0},
+    {"USECPHSL", RCP_PARAM_USE_CUSTOM_SHUTTER_ANGLE},
+    {"SSDTALLY", RCP_PARAM_SSD_TALLY_LIGHT},
+    {"CGOPAC", RCP_PARAM_CENTER_GUIDE_OPACITY},
+    {"PORXAE", RCP_PARAM_POWER_OUT_REAR_AUX_ENABLE},
+    {"PORXAS", RCP_PARAM_POWER_OUT_REAR_AUX_STATUS},
+    {"EVF3CV", RCP_PARAM_MONITOR_CURVE_EVF3},
+    {"PORXAC", RCP_PARAM_POWER_OUT_REAR_AUX_CURRENT},
+    {"CLIPNMST", RCP_PARAM_CLIP_NAME_STATUS},
+    {"CH2_48V", RCP_PARAM_AUDIO_CH2_48V_POWER},
+    {"MAXSHT", RCP_PARAM_MAX_EXPOSURE_INTEGRATION_TIME},
+    {"FRMTA125", RCP_PARAM_RECORD_FORMAT_ANA_1_25},
+    {"SUILPAUD", RCP_PARAM_SIDE_UI_PAGE_AUDIO_LEFT},
+    {"SUIRPAUD", RCP_PARAM_SIDE_UI_PAGE_AUDIO_RIGHT},
+    {"CH2_48VP", RCP_PARAM_AUDIO_CH2_48V_PRESENT},
+    {"HDMIF", RCP_PARAM_MONITOR_FREQ_HDMI},
+    {"HDSDIG", RCP_PARAM_MONITOR_FEED_HDSDI},
+    {"PWOLIST", RCP_PARAM_POWER_OUT_LIST},
+    {"PWOIST", RCP_PARAM_POWER_OUT_STATUS_0},
+    {"SENSTVTY", RCP_PARAM_SENSOR_SENSITIVITY},
+    {"CLIPNAME", RCP_PARAM_CLIP_NAME},
+    {"MAXSHA", RCP_PARAM_MAX_EXPOSURE_ANGLE},
+    {"CH2NAME", RCP_PARAM_AUDIO_CH2_NAME},
+    {"HORIZON", RCP_PARAM_SHOW_HORIZON_LINE},
+    {"PHDSDI1M", RCP_PARAM_MONITOR_MODE_REAR_HDSDI1},
+    {"PHDSDI1F", RCP_PARAM_MONITOR_FREQ_REAR_HDSDI1},
+    {"PHDSDI1R", RCP_PARAM_MONITOR_RESOLUTION_REAR_HDSDI1},
+    {"UHDSDI1M", RCP_PARAM_MONITOR_MODE_REAR_UHDSDI1},
+    {"PSDI1FM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_REAR_HDSDI1},
+    {"PSDI1RF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_REAR_HDSDI1},
+    {"PXFMTH", RCP_PARAM_FORMAT_HEIGHT_PIXELS},
+    {"RSDI1FLT", RCP_PARAM_MONITOR_LUT_REAR_HDSDI1},
+    {"CAMFWVER", RCP_PARAM_CAMERA_FIRMWARE_VERSION},
+    {"SUILPMON", RCP_PARAM_SIDE_UI_PAGE_MONITOR_LEFT},
+    {"SUIRPMON", RCP_PARAM_SIDE_UI_PAGE_MONITOR_RIGHT},
+    {"EVF3G", RCP_PARAM_MONITOR_FEED_EVF3},
+    {"PSDI1TL", RCP_PARAM_MONITOR_TOOLS_REAR_HDSDI1},
+    {"WLANIP", RCP_PARAM_WIFI_IP_ADDRESS},
+    {"CH2MUTE", RCP_PARAM_AUDIO_CH2_MUTE},
+    {"CH4_48V", RCP_PARAM_AUDIO_CH4_48V_POWER},
+    {"CGGUIDE", RCP_PARAM_CENTER_GUIDE_GUIDE},
+    {"PHDSD2CV", RCP_PARAM_MONITOR_CURVE_REAR_HDSDI2},
+    {"PWOIEN", RCP_PARAM_POWER_OUT_ENABLE_0},
+    {"CH4_48VP", RCP_PARAM_AUDIO_CH4_48V_PRESENT},
+    {"WLANAPID", RCP_PARAM_WIFI_INFRASTRUCTURE_SSID},
+    {"WLANAHEN", RCP_PARAM_WIFI_AD_HOC_ENCRYPTION},
+    {"CLIPLOAD", RCP_PARAM_PLAYBACK_CLIP_LOAD},
+    {"ISOCAL2", RCP_PARAM_ISO_CAL2_ENABLED},
+    {"BHDSDIVF", RCP_PARAM_MONITOR_VIDEO_FLIP_HDSDI},
+    {"PSDI1DM", RCP_PARAM_MONITOR_DOCK_MENUS_REAR_HDSDI1},
+    {"CH4NAME", RCP_PARAM_AUDIO_CH4_NAME},
+    {"RCURVEMX", RCP_PARAM_RED_CURVE_MIDTONE_X},
+    {"RCURVESX", RCP_PARAM_RED_CURVE_SHADOW_X},
+    {"F0OFFSX", RCP_PARAM_FRAME_GUIDE_X_OFFSET},
+    {"LCURVEMX", RCP_PARAM_LUMA_CURVE_MIDTONE_X},
+    {"LCURVESX", RCP_PARAM_LUMA_CURVE_SHADOW_X},
+    {"RCURVELX", RCP_PARAM_RED_CURVE_LIGHT_X},
+    {"MINFPS", RCP_PARAM_MIN_SENSOR_FRAME_RATE},
+    {"CH1VOL", RCP_PARAM_AUDIO_CH1_VOL},
+    {"LCURVELX", RCP_PARAM_LUMA_CURVE_LIGHT_X},
+    {"HDSDICV", RCP_PARAM_MONITOR_CURVE_HDSDI},
+    {"MEDIAMIN", RCP_PARAM_MEDIA_TIME_REMAINING},
+    {"PSDI1FO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_REAR_HDSDI1},
+    {"MMNDINSZ", RCP_PARAM_ND_INCREMENT_SIZE},
+    {"KEYACNOT", RCP_PARAM_SHOW_KEY_ACTION_NOTIFICATIONS},
+    {"BHDMIFM", RCP_PARAM_MONITOR_UI_FLIP_MIRROR_HDMI},
+    {"GESTPNCH", RCP_PARAM_UI_GESTURE_PINCH_MAGNIFY},
+    {"BHDMIRF", RCP_PARAM_MONITOR_ALLOW_RETURN_FEED_HDMI},
+    {"MXFCMPID", RCP_PARAM_RECORD_VIDEO_MXF_COMPRESSION_ID},
+    {"F1ABSXOF", RCP_PARAM_ACTION_GUIDE_ABS_X_OFFSET},
+    {"BRIGHT", RCP_PARAM_BRIGHTNESS},
+    {"GGOPAC", RCP_PARAM_GRID_GUIDE_OPACITY},
+    {"PHDS1OV", RCP_PARAM_MONITOR_OVERLAY_REAR_HDSDI1},
+    {"BHDMITL", RCP_PARAM_MONITOR_TOOLS_HDMI},
+    {"BEVFFM2", RCP_PARAM_MONITOR_FLIP_MIRROR_BRAIN_EVF},
     {"WLANAPPW", RCP_PARAM_WIFI_INFRASTRUCTURE_PASSPHRASE},
-#line 575 "rcp_api_parameters_hash_table.gperf"
-    {"AEEXPRI", RCP_PARAM_AE_EXPOSURE_PRIORITY},
-#line 796 "rcp_api_parameters_hash_table.gperf"
-    {"IMGPIPEM", RCP_PARAM_IMAGE_PIPELINE_MODE},
-#line 767 "rcp_api_parameters_hash_table.gperf"
-    {"PWIVOLT", RCP_PARAM_POWER_IN_VOLTAGE_0},
-#line 607 "rcp_api_parameters_hash_table.gperf"
-    {"MIXHDVL1", RCP_PARAM_AUDIO_MIX_MON_VOL1},
-#line 717 "rcp_api_parameters_hash_table.gperf"
-    {"LCD3FM2", RCP_PARAM_MONITOR_FLIP_MIRROR_LCD3},
-#line 307 "rcp_api_parameters_hash_table.gperf"
-    {"F2OPAC", RCP_PARAM_TITLE_GUIDE_OPACITY},
-#line 138 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA2", RCP_PARAM_ZEBRA_2_ENABLE},
-#line 139 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA2M", RCP_PARAM_ZEBRA_2_MODE},
-#line 769 "rcp_api_parameters_hash_table.gperf"
-    {"PWIPRST", RCP_PARAM_POWER_IN_PRESENT_0},
-#line 480 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVEHY", RCP_PARAM_RED_CURVE_HIGHLIGHT_Y},
-#line 479 "rcp_api_parameters_hash_table.gperf"
-    {"RCURVEHX", RCP_PARAM_RED_CURVE_HIGHLIGHT_X},
-#line 142 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA2LS", RCP_PARAM_ZEBRA_2_STOPS_LOW},
-#line 370 "rcp_api_parameters_hash_table.gperf"
-    {"CH12ILNK", RCP_PARAM_AUDIO_CH12_LINK_GAIN},
-#line 510 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVEHY", RCP_PARAM_LUMA_CURVE_HIGHLIGHT_Y},
-#line 509 "rcp_api_parameters_hash_table.gperf"
-    {"LCURVEHX", RCP_PARAM_LUMA_CURVE_HIGHLIGHT_X},
-#line 549 "rcp_api_parameters_hash_table.gperf"
-    {"APAUPLAY", RCP_PARAM_AUTO_PRESET_PLAYBACK_AUTO_UPDATE},
-#line 397 "rcp_api_parameters_hash_table.gperf"
-    {"CH4LIMPR", RCP_PARAM_AUDIO_CH4_LIMITER_PRESENT},
-#line 619 "rcp_api_parameters_hash_table.gperf"
-    {"WLANAHID", RCP_PARAM_WIFI_AD_HOC_SSID},
-#line 776 "rcp_api_parameters_hash_table.gperf"
-    {"PHYSENSW", RCP_PARAM_SENSOR_WIDTH_PHY},
-#line 728 "rcp_api_parameters_hash_table.gperf"
+    {"RCURVEDX", RCP_PARAM_RED_CURVE_DARK_X},
+    {"BHDMILUT", RCP_PARAM_MONITOR_LUT_HDMI},
+    {"PXFMTW", RCP_PARAM_FORMAT_WIDTH_PIXELS},
+    {"RCLIP", RCP_PARAM_RED_CLIP},
+    {"LCURVEDX", RCP_PARAM_LUMA_CURVE_DARK_X},
+    {"SERPROT2", RCP_PARAM_SERIAL_2_PROTOCOL},
     {"EVF3VF", RCP_PARAM_MONITOR_VIDEO_FLIP_EVF3},
-#line 390 "rcp_api_parameters_hash_table.gperf"
+    {"PHDSDI2M", RCP_PARAM_MONITOR_MODE_REAR_HDSDI2},
+    {"PHDSDI2F", RCP_PARAM_MONITOR_FREQ_REAR_HDSDI2},
+    {"PHDSDI2R", RCP_PARAM_MONITOR_RESOLUTION_REAR_HDSDI2},
+    {"UHDSDI2M", RCP_PARAM_MONITOR_MODE_REAR_UHDSDI2},
+    {"BHDSDIOV", RCP_PARAM_MONITOR_OVERLAY_HDSDI},
+    {"HDMICV", RCP_PARAM_MONITOR_CURVE_HDMI},
+    {"HCIRIS", RCP_PARAM_HAND_CONTROLLER_IRIS_POS},
+    {"BHDMIDM", RCP_PARAM_MONITOR_DOCK_MENUS_HDMI},
+    {"PWIVOLT", RCP_PARAM_POWER_IN_VOLTAGE_0},
+    {"LCD3FM2", RCP_PARAM_MONITOR_FLIP_MIRROR_LCD3},
+    {"RCURVEMY", RCP_PARAM_RED_CURVE_MIDTONE_Y},
+    {"RCURVESY", RCP_PARAM_RED_CURVE_SHADOW_Y},
+    {"EVFTALLY", RCP_PARAM_EVF_TALLY_LIGHT},
+    {"F0OFFSY", RCP_PARAM_FRAME_GUIDE_Y_OFFSET},
+    {"MEDAGCII", RCP_PARAM_MEDIA_CLIP_EXT_INFO},
+    {"PXSFMTH", RCP_PARAM_SHADOW_FORMAT_HEIGHT_PIXELS},
+    {"PHDSDI1G", RCP_PARAM_MONITOR_FEED_REAR_HDSDI1},
+    {"LCURVEMY", RCP_PARAM_LUMA_CURVE_MIDTONE_Y},
+    {"LCURVESY", RCP_PARAM_LUMA_CURVE_SHADOW_Y},
+    {"RCURVELY", RCP_PARAM_RED_CURVE_LIGHT_Y},
+    {"SHOPAC", RCP_PARAM_SHADING_OPACITY},
+    {"LCURVELY", RCP_PARAM_LUMA_CURVE_LIGHT_Y},
+    {"PLAYPAUS", RCP_PARAM_PLAYBACK_PLAY_PAUSE},
+    {"GGGUIDE", RCP_PARAM_GRID_GUIDE_GUIDE},
+    {"BHDMIFO", RCP_PARAM_MONITOR_FRAMED_OVERLAY_HDMI},
+    {"ZEB1CLR", RCP_PARAM_ZEBRA_1_COLOR},
+    {"F1ABSYOF", RCP_PARAM_ACTION_GUIDE_ABS_Y_OFFSET},
     {"CH3LIMIT", RCP_PARAM_AUDIO_CH3_LIMITER},
-#line 91 "rcp_api_parameters_hash_table.gperf"
+    {"GEGWADDR", RCP_PARAM_GIGABIT_ETHERNET_GATEWAY},
+    {"HDMIG", RCP_PARAM_MONITOR_FEED_HDMI},
+    {"ZEBRA1", RCP_PARAM_ZEBRA_1_ENABLE},
+    {"ZEBRA1M", RCP_PARAM_ZEBRA_1_MODE},
+    {"PWOIAMPS", RCP_PARAM_POWER_OUT_CURRENT_0},
+    {"CH1LIMPR", RCP_PARAM_AUDIO_CH1_LIMITER_PRESENT},
+    {"RCURVEDY", RCP_PARAM_RED_CURVE_DARK_Y},
     {"CH2VOL", RCP_PARAM_AUDIO_CH2_VOL},
-#line 140 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA2LO", RCP_PARAM_ZEBRA_2_IRE_LOW},
-#line 490 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVEHY", RCP_PARAM_GREEN_CURVE_HIGHLIGHT_Y},
-#line 612 "rcp_api_parameters_hash_table.gperf"
-    {"MIXHDPN3", RCP_PARAM_AUDIO_MIX_MON_PAN3},
-#line 489 "rcp_api_parameters_hash_table.gperf"
-    {"GCURVEHX", RCP_PARAM_GREEN_CURVE_HIGHLIGHT_X},
-#line 135 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA1HI", RCP_PARAM_ZEBRA_1_IRE_HIGH},
-#line 71 "rcp_api_parameters_hash_table.gperf"
-    {"HDRXMONX", RCP_PARAM_HDR_MONITOR_TRACK},
-#line 500 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVEHY", RCP_PARAM_BLUE_CURVE_HIGHLIGHT_Y},
-#line 499 "rcp_api_parameters_hash_table.gperf"
-    {"BCURVEHX", RCP_PARAM_BLUE_CURVE_HIGHLIGHT_X},
-#line 93 "rcp_api_parameters_hash_table.gperf"
-    {"CH4VOL", RCP_PARAM_AUDIO_CH4_VOL},
-#line 729 "rcp_api_parameters_hash_table.gperf"
-    {"EVF3FM2", RCP_PARAM_MONITOR_FLIP_MIRROR_EVF3},
-#line 384 "rcp_api_parameters_hash_table.gperf"
-    {"CH2LIMIT", RCP_PARAM_AUDIO_CH2_LIMITER},
-#line 88 "rcp_api_parameters_hash_table.gperf"
+    {"F1OPAC", RCP_PARAM_ACTION_GUIDE_OPACITY},
+    {"PLAYPOS", RCP_PARAM_PLAYBACK_POS},
     {"CH3GAIN", RCP_PARAM_AUDIO_CH3_GAIN},
-#line 600 "rcp_api_parameters_hash_table.gperf"
-    {"MIX34PN1", RCP_PARAM_AUDIO_MIX_CH34_PAN1},
-#line 610 "rcp_api_parameters_hash_table.gperf"
-    {"MIXHDPN2", RCP_PARAM_AUDIO_MIX_MON_PAN2},
-#line 588 "rcp_api_parameters_hash_table.gperf"
-    {"HWCAP", RCP_PARAM_HARDWARE_CAPABILITIES},
-#line 561 "rcp_api_parameters_hash_table.gperf"
-    {"AFWPOSY", RCP_PARAM_AF_WINDOW_POS_Y},
-#line 560 "rcp_api_parameters_hash_table.gperf"
-    {"AFWPOSX", RCP_PARAM_AF_WINDOW_POS_X},
-#line 396 "rcp_api_parameters_hash_table.gperf"
-    {"CH4LIMIT", RCP_PARAM_AUDIO_CH4_LIMITER},
-#line 87 "rcp_api_parameters_hash_table.gperf"
-    {"CH2GAIN", RCP_PARAM_AUDIO_CH2_GAIN},
-#line 758 "rcp_api_parameters_hash_table.gperf"
-    {"BWFVALID", RCP_PARAM_BWF_VALID},
-#line 618 "rcp_api_parameters_hash_table.gperf"
-    {"WLANAHPW", RCP_PARAM_WIFI_AD_HOC_PASSPHRASE},
-#line 611 "rcp_api_parameters_hash_table.gperf"
-    {"MIXHDVL3", RCP_PARAM_AUDIO_MIX_MON_VOL3},
-#line 614 "rcp_api_parameters_hash_table.gperf"
-    {"MIXHDPN4", RCP_PARAM_AUDIO_MIX_MON_PAN4},
-#line 143 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA2HS", RCP_PARAM_ZEBRA_2_STOPS_HIGH},
-#line 748 "rcp_api_parameters_hash_table.gperf"
+    {"LCURVEDY", RCP_PARAM_LUMA_CURVE_DARK_Y},
+    {"ZEBRA1LS", RCP_PARAM_ZEBRA_1_STOPS_LOW},
+    {"GCURVEMX", RCP_PARAM_GREEN_CURVE_MIDTONE_X},
+    {"GCURVESX", RCP_PARAM_GREEN_CURVE_SHADOW_X},
+    {"GCURVELX", RCP_PARAM_GREEN_CURVE_LIGHT_X},
+    {"F2ABSXOF", RCP_PARAM_TITLE_GUIDE_ABS_X_OFFSET},
+    {"VRISPDMD", RCP_PARAM_VARISPEED_MODE},
+    {"SHGUIDE", RCP_PARAM_SHADING_GUIDE},
+    {"MEDIASZ", RCP_PARAM_MEDIA_SIZE},
+    {"PWILIST", RCP_PARAM_POWER_IN_LIST},
+    {"PSDI1VF", RCP_PARAM_MONITOR_VIDEO_FLIP_REAR_HDSDI1},
+    {"CH4VOL", RCP_PARAM_AUDIO_CH4_VOL},
+    {"QTDRPFRM", RCP_PARAM_QT_DROPPED_FRAMES},
+    {"GCURVEDX", RCP_PARAM_GREEN_CURVE_DARK_X},
+    {"PXSFMTW", RCP_PARAM_SHADOW_FORMAT_WIDTH_PIXELS},
+    {"BCURVEMX", RCP_PARAM_BLUE_CURVE_MIDTONE_X},
+    {"BCURVESX", RCP_PARAM_BLUE_CURVE_SHADOW_X},
+    {"GCLIP", RCP_PARAM_GREEN_CLIP},
+    {"MEDIASZA", RCP_PARAM_MEDIA_SIZE_AVIALABLE},
+    {"IMGSPCRV", RCP_PARAM_MONITOR_SPLIT_CURVE},
+    {"BCURVELX", RCP_PARAM_BLUE_CURVE_LIGHT_X},
+    {"PHDSDI2G", RCP_PARAM_MONITOR_FEED_REAR_HDSDI2},
+    {"VCBAKMAX", RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS},
+    {"ZEBRA1LO", RCP_PARAM_ZEBRA_1_IRE_LOW},
+    {"PLAYTYPE", RCP_PARAM_PLAYBACK_FILE_FORMAT_TYPE},
+    {"GCURVEMY", RCP_PARAM_GREEN_CURVE_MIDTONE_Y},
+    {"GCURVESY", RCP_PARAM_GREEN_CURVE_SHADOW_Y},
+    {"GCURVELY", RCP_PARAM_GREEN_CURVE_LIGHT_Y},
+    {"F2ABSYOF", RCP_PARAM_TITLE_GUIDE_ABS_Y_OFFSET},
+    {"BCURVEDX", RCP_PARAM_BLUE_CURVE_DARK_X},
+    {"ZEBRA2", RCP_PARAM_ZEBRA_2_ENABLE},
+    {"ZEBRA2M", RCP_PARAM_ZEBRA_2_MODE},
+    {"CH2LIMPR", RCP_PARAM_AUDIO_CH2_LIMITER_PRESENT},
+    {"PROXYFPS", RCP_PARAM_PROXY_ENCODE_FRAMERATE},
+    {"MXFW", RCP_PARAM_MXF_WIDTH},
+    {"BCLIP", RCP_PARAM_BLUE_CLIP},
+    {"F2OPAC", RCP_PARAM_TITLE_GUIDE_OPACITY},
+    {"GEIPADDR", RCP_PARAM_GIGABIT_ETHERNET_IP_ADDRESS},
+    {"CH12ILNK", RCP_PARAM_AUDIO_CH12_LINK_GAIN},
+    {"ZEBRA2LS", RCP_PARAM_ZEBRA_2_STOPS_LOW},
+    {"EVF3FM2", RCP_PARAM_MONITOR_FLIP_MIRROR_EVF3},
+    {"LOGVWMDE", RCP_PARAM_LOG_VIEW_MODE},
+    {"BHDMIVF", RCP_PARAM_MONITOR_VIDEO_FLIP_HDMI},
+    {"GCURVEDY", RCP_PARAM_GREEN_CURVE_DARK_Y},
+    {"PWIPRST", RCP_PARAM_POWER_IN_PRESENT_0},
+    {"BCURVEMY", RCP_PARAM_BLUE_CURVE_MIDTONE_Y},
+    {"BCURVESY", RCP_PARAM_BLUE_CURVE_SHADOW_Y},
     {"ZEB2PAT", RCP_PARAM_ZEBRA_2_PATTERN},
-#line 89 "rcp_api_parameters_hash_table.gperf"
-    {"CH4GAIN", RCP_PARAM_AUDIO_CH4_GAIN},
-#line 599 "rcp_api_parameters_hash_table.gperf"
-    {"MIX34VL1", RCP_PARAM_AUDIO_MIX_CH34_VOL1},
-#line 609 "rcp_api_parameters_hash_table.gperf"
-    {"MIXHDVL2", RCP_PARAM_AUDIO_MIX_MON_VOL2},
-#line 747 "rcp_api_parameters_hash_table.gperf"
-    {"ZEB1PAT", RCP_PARAM_ZEBRA_1_PATTERN},
-#line 604 "rcp_api_parameters_hash_table.gperf"
-    {"MIX34PN3", RCP_PARAM_AUDIO_MIX_CH34_PAN3},
-#line 613 "rcp_api_parameters_hash_table.gperf"
-    {"MIXHDVL4", RCP_PARAM_AUDIO_MIX_MON_VOL4},
-#line 592 "rcp_api_parameters_hash_table.gperf"
-    {"MIX12PN1", RCP_PARAM_AUDIO_MIX_CH12_PAN1},
-#line 141 "rcp_api_parameters_hash_table.gperf"
-    {"ZEBRA2HI", RCP_PARAM_ZEBRA_2_IRE_HIGH},
-#line 602 "rcp_api_parameters_hash_table.gperf"
-    {"MIX34PN2", RCP_PARAM_AUDIO_MIX_CH34_PAN2},
-#line 603 "rcp_api_parameters_hash_table.gperf"
-    {"MIX34VL3", RCP_PARAM_AUDIO_MIX_CH34_VOL3},
-#line 606 "rcp_api_parameters_hash_table.gperf"
-    {"MIX34PN4", RCP_PARAM_AUDIO_MIX_CH34_PAN4},
-#line 591 "rcp_api_parameters_hash_table.gperf"
-    {"MIX12VL1", RCP_PARAM_AUDIO_MIX_CH12_VOL1},
-#line 601 "rcp_api_parameters_hash_table.gperf"
-    {"MIX34VL2", RCP_PARAM_AUDIO_MIX_CH34_VOL2},
-#line 596 "rcp_api_parameters_hash_table.gperf"
+    {"F1OFFSX", RCP_PARAM_ACTION_GUIDE_X_OFFSET},
+    {"BCURVELY", RCP_PARAM_BLUE_CURVE_LIGHT_Y},
+    {"CH4LIMPR", RCP_PARAM_AUDIO_CH4_LIMITER_PRESENT},
+    {"WLANAHID", RCP_PARAM_WIFI_AD_HOC_SSID},
+    {"MIXHDPN3", RCP_PARAM_AUDIO_MIX_MON_PAN3},
+    {"GROUPID", RCP_PARAM_GROUP_ID},
+    {"BCURVEDY", RCP_PARAM_BLUE_CURVE_DARK_Y},
+    {"HISTTYPE", RCP_PARAM_HISTOGRAM_TYPE},
+    {"ZEBRA2LO", RCP_PARAM_ZEBRA_2_IRE_LOW},
+    {"RCURVEHX", RCP_PARAM_RED_CURVE_HIGHLIGHT_X},
+    {"BHDMIOV", RCP_PARAM_MONITOR_OVERLAY_HDMI},
+    {"LCURVEHX", RCP_PARAM_LUMA_CURVE_HIGHLIGHT_X},
+    {"F1OFFSY", RCP_PARAM_ACTION_GUIDE_Y_OFFSET},
+    {"MAXFPS", RCP_PARAM_MAX_SENSOR_FRAME_RATE},
+    {"POJPUE", RCP_PARAM_POWER_OUT_JETPACK_USB_ENABLE},
+    {"POJPUS", RCP_PARAM_POWER_OUT_JETPACK_USB_STATUS},
+    {"PHYSENSH", RCP_PARAM_SENSOR_HEIGHT_PHY},
+    {"WLANAHPW", RCP_PARAM_WIFI_AD_HOC_PASSPHRASE},
+    {"F2OFFSX", RCP_PARAM_TITLE_GUIDE_X_OFFSET},
+    {"MONPRTY", RCP_PARAM_MONITOR_PRIORITY_LIST},
+    {"GIOCPRI", RCP_PARAM_GIO_SCOPE_PRIMARY_COLORS},
+    {"RCURVEHY", RCP_PARAM_RED_CURVE_HIGHLIGHT_Y},
+    {"LCURVEHY", RCP_PARAM_LUMA_CURVE_HIGHLIGHT_Y},
+    {"MAGNIFY", RCP_PARAM_MAGNIFY_STATE},
+    {"CH1LIMIT", RCP_PARAM_AUDIO_CH1_LIMITER},
+    {"HWCAP", RCP_PARAM_HARDWARE_CAPABILITIES},
+    {"ZEBRA1HS", RCP_PARAM_ZEBRA_1_STOPS_HIGH},
+    {"PHYSENSW", RCP_PARAM_SENSOR_WIDTH_PHY},
+    {"CH1GAIN", RCP_PARAM_AUDIO_CH1_GAIN},
+    {"F2OFFSY", RCP_PARAM_TITLE_GUIDE_Y_OFFSET},
+    {"GCURVEHX", RCP_PARAM_GREEN_CURVE_HIGHLIGHT_X},
+    {"MIXHDVL3", RCP_PARAM_AUDIO_MIX_MON_VOL3},
+    {"BWFVALID", RCP_PARAM_BWF_VALID},
     {"MIX12PN3", RCP_PARAM_AUDIO_MIX_CH12_PAN3},
-#line 605 "rcp_api_parameters_hash_table.gperf"
-    {"MIX34VL4", RCP_PARAM_AUDIO_MIX_CH34_VOL4},
-#line 594 "rcp_api_parameters_hash_table.gperf"
-    {"MIX12PN2", RCP_PARAM_AUDIO_MIX_CH12_PAN2},
-#line 595 "rcp_api_parameters_hash_table.gperf"
+    {"MIX34PN3", RCP_PARAM_AUDIO_MIX_CH34_PAN3},
+    {"IMGPIPEM", RCP_PARAM_IMAGE_PIPELINE_MODE},
+    {"BCURVEHX", RCP_PARAM_BLUE_CURVE_HIGHLIGHT_X},
+    {"HDMIMUX", RCP_PARAM_MONITOR_LCD_EVF_2_HDMI_MUX},
+    {"GCURVEHY", RCP_PARAM_GREEN_CURVE_HIGHLIGHT_Y},
+    {"CH2LIMIT", RCP_PARAM_AUDIO_CH2_LIMITER},
+    {"ZEBRA2HS", RCP_PARAM_ZEBRA_2_STOPS_HIGH},
+    {"CH2GAIN", RCP_PARAM_AUDIO_CH2_GAIN},
+    {"BCURVEHY", RCP_PARAM_BLUE_CURVE_HIGHLIGHT_Y},
+    {"APAUPLAY", RCP_PARAM_AUTO_PRESET_PLAYBACK_AUTO_UPDATE},
+    {"CH4LIMIT", RCP_PARAM_AUDIO_CH4_LIMITER},
+    {"AEEXPRI", RCP_PARAM_AE_EXPOSURE_PRIORITY},
+    {"CH4GAIN", RCP_PARAM_AUDIO_CH4_GAIN},
+    {"MIXHDPN1", RCP_PARAM_AUDIO_MIX_MON_PAN1},
+    {"AFWPOSX", RCP_PARAM_AF_WINDOW_POS_X},
     {"MIX12VL3", RCP_PARAM_AUDIO_MIX_CH12_VOL3},
-#line 598 "rcp_api_parameters_hash_table.gperf"
+    {"MIX34VL3", RCP_PARAM_AUDIO_MIX_CH34_VOL3},
+    {"ZEB1PAT", RCP_PARAM_ZEBRA_1_PATTERN},
+    {"AFWPOSY", RCP_PARAM_AF_WINDOW_POS_Y},
+    {"MIXHDPN2", RCP_PARAM_AUDIO_MIX_MON_PAN2},
+    {"ZEBRA1HI", RCP_PARAM_ZEBRA_1_IRE_HIGH},
+    {"MIXHDPN4", RCP_PARAM_AUDIO_MIX_MON_PAN4},
+    {"MIXHDVL1", RCP_PARAM_AUDIO_MIX_MON_VOL1},
+    {"MIX12PN1", RCP_PARAM_AUDIO_MIX_CH12_PAN1},
+    {"MIX34PN1", RCP_PARAM_AUDIO_MIX_CH34_PAN1},
+    {"HDRXMONX", RCP_PARAM_HDR_MONITOR_TRACK},
+    {"ZEBRA2HI", RCP_PARAM_ZEBRA_2_IRE_HIGH},
+    {"MIXHDVL2", RCP_PARAM_AUDIO_MIX_MON_VOL2},
+    {"MIX12PN2", RCP_PARAM_AUDIO_MIX_CH12_PAN2},
+    {"MIX34PN2", RCP_PARAM_AUDIO_MIX_CH34_PAN2},
+    {"MIXHDVL4", RCP_PARAM_AUDIO_MIX_MON_VOL4},
     {"MIX12PN4", RCP_PARAM_AUDIO_MIX_CH12_PAN4},
-#line 593 "rcp_api_parameters_hash_table.gperf"
+    {"MIX12VL1", RCP_PARAM_AUDIO_MIX_CH12_VOL1},
+    {"MIX34PN4", RCP_PARAM_AUDIO_MIX_CH34_PAN4},
+    {"MIX34VL1", RCP_PARAM_AUDIO_MIX_CH34_VOL1},
     {"MIX12VL2", RCP_PARAM_AUDIO_MIX_CH12_VOL2},
-#line 597 "rcp_api_parameters_hash_table.gperf"
-    {"MIX12VL4", RCP_PARAM_AUDIO_MIX_CH12_VOL4}
+    {"MIX34VL2", RCP_PARAM_AUDIO_MIX_CH34_VOL2},
+    {"MIX12VL4", RCP_PARAM_AUDIO_MIX_CH12_VOL4},
+    {"MIX34VL4", RCP_PARAM_AUDIO_MIX_CH34_VOL4}
   };
 
 #ifdef __GNUC__
@@ -37603,2569 +36948,2578 @@ _rcp_get_id_from_cur_msg (register const char *str, register unsigned int len)
         {
           register const struct rcp_current_table *resword;
 
-          switch (key - 20)
+          switch (key - 22)
             {
               case 0:
                 resword = &wordlist[0];
                 goto compare;
-              case 6:
+              case 11:
                 resword = &wordlist[1];
                 goto compare;
-              case 7:
+              case 14:
                 resword = &wordlist[2];
                 goto compare;
-              case 9:
+              case 15:
                 resword = &wordlist[3];
                 goto compare;
-              case 11:
+              case 16:
                 resword = &wordlist[4];
                 goto compare;
-              case 19:
+              case 25:
                 resword = &wordlist[5];
                 goto compare;
-              case 24:
+              case 29:
                 resword = &wordlist[6];
                 goto compare;
-              case 28:
+              case 32:
                 resword = &wordlist[7];
                 goto compare;
-              case 39:
+              case 36:
                 resword = &wordlist[8];
                 goto compare;
-              case 41:
+              case 38:
                 resword = &wordlist[9];
                 goto compare;
-              case 43:
+              case 42:
                 resword = &wordlist[10];
                 goto compare;
-              case 44:
+              case 49:
                 resword = &wordlist[11];
                 goto compare;
-              case 45:
+              case 50:
                 resword = &wordlist[12];
                 goto compare;
-              case 48:
+              case 51:
                 resword = &wordlist[13];
                 goto compare;
-              case 52:
+              case 54:
                 resword = &wordlist[14];
                 goto compare;
-              case 53:
+              case 57:
                 resword = &wordlist[15];
                 goto compare;
-              case 54:
+              case 61:
                 resword = &wordlist[16];
                 goto compare;
-              case 55:
+              case 62:
                 resword = &wordlist[17];
                 goto compare;
-              case 56:
+              case 69:
                 resword = &wordlist[18];
                 goto compare;
-              case 57:
+              case 71:
                 resword = &wordlist[19];
                 goto compare;
-              case 58:
+              case 75:
                 resword = &wordlist[20];
                 goto compare;
-              case 59:
+              case 76:
                 resword = &wordlist[21];
                 goto compare;
-              case 61:
+              case 77:
                 resword = &wordlist[22];
                 goto compare;
-              case 62:
+              case 78:
                 resword = &wordlist[23];
                 goto compare;
-              case 63:
+              case 83:
                 resword = &wordlist[24];
                 goto compare;
-              case 65:
+              case 85:
                 resword = &wordlist[25];
                 goto compare;
-              case 66:
+              case 87:
                 resword = &wordlist[26];
                 goto compare;
-              case 69:
+              case 88:
                 resword = &wordlist[27];
                 goto compare;
-              case 70:
+              case 89:
                 resword = &wordlist[28];
                 goto compare;
-              case 71:
+              case 90:
                 resword = &wordlist[29];
                 goto compare;
-              case 72:
+              case 91:
                 resword = &wordlist[30];
                 goto compare;
-              case 74:
+              case 92:
                 resword = &wordlist[31];
                 goto compare;
-              case 78:
+              case 94:
                 resword = &wordlist[32];
                 goto compare;
-              case 79:
+              case 95:
                 resword = &wordlist[33];
                 goto compare;
-              case 80:
+              case 96:
                 resword = &wordlist[34];
                 goto compare;
-              case 81:
+              case 98:
                 resword = &wordlist[35];
                 goto compare;
-              case 82:
+              case 100:
                 resword = &wordlist[36];
                 goto compare;
-              case 84:
+              case 101:
                 resword = &wordlist[37];
                 goto compare;
-              case 90:
+              case 106:
                 resword = &wordlist[38];
                 goto compare;
-              case 101:
+              case 108:
                 resword = &wordlist[39];
                 goto compare;
-              case 102:
+              case 118:
                 resword = &wordlist[40];
                 goto compare;
-              case 108:
+              case 119:
                 resword = &wordlist[41];
                 goto compare;
-              case 110:
+              case 124:
                 resword = &wordlist[42];
                 goto compare;
-              case 117:
+              case 128:
                 resword = &wordlist[43];
                 goto compare;
-              case 122:
+              case 129:
                 resword = &wordlist[44];
                 goto compare;
-              case 129:
+              case 133:
                 resword = &wordlist[45];
                 goto compare;
-              case 134:
+              case 136:
                 resword = &wordlist[46];
                 goto compare;
-              case 136:
+              case 138:
                 resword = &wordlist[47];
                 goto compare;
-              case 137:
+              case 142:
                 resword = &wordlist[48];
                 goto compare;
-              case 139:
+              case 143:
                 resword = &wordlist[49];
                 goto compare;
-              case 147:
+              case 146:
                 resword = &wordlist[50];
                 goto compare;
-              case 148:
+              case 147:
                 resword = &wordlist[51];
                 goto compare;
-              case 149:
+              case 150:
                 resword = &wordlist[52];
                 goto compare;
-              case 152:
+              case 157:
                 resword = &wordlist[53];
                 goto compare;
-              case 158:
+              case 160:
                 resword = &wordlist[54];
                 goto compare;
-              case 159:
+              case 167:
                 resword = &wordlist[55];
                 goto compare;
-              case 160:
+              case 171:
                 resword = &wordlist[56];
                 goto compare;
-              case 162:
+              case 174:
                 resword = &wordlist[57];
                 goto compare;
-              case 181:
+              case 178:
                 resword = &wordlist[58];
                 goto compare;
-              case 182:
+              case 181:
                 resword = &wordlist[59];
                 goto compare;
-              case 183:
+              case 185:
                 resword = &wordlist[60];
                 goto compare;
-              case 199:
+              case 194:
                 resword = &wordlist[61];
                 goto compare;
-              case 202:
+              case 197:
                 resword = &wordlist[62];
                 goto compare;
-              case 203:
+              case 202:
                 resword = &wordlist[63];
                 goto compare;
               case 205:
                 resword = &wordlist[64];
                 goto compare;
-              case 206:
+              case 207:
                 resword = &wordlist[65];
                 goto compare;
-              case 208:
+              case 215:
                 resword = &wordlist[66];
                 goto compare;
-              case 211:
+              case 216:
                 resword = &wordlist[67];
                 goto compare;
-              case 212:
+              case 224:
                 resword = &wordlist[68];
                 goto compare;
-              case 216:
+              case 225:
                 resword = &wordlist[69];
                 goto compare;
-              case 221:
+              case 226:
                 resword = &wordlist[70];
                 goto compare;
-              case 223:
+              case 236:
                 resword = &wordlist[71];
                 goto compare;
-              case 239:
+              case 237:
                 resword = &wordlist[72];
                 goto compare;
-              case 241:
+              case 277:
                 resword = &wordlist[73];
                 goto compare;
-              case 246:
+              case 287:
                 resword = &wordlist[74];
                 goto compare;
-              case 253:
+              case 288:
                 resword = &wordlist[75];
                 goto compare;
-              case 261:
+              case 290:
                 resword = &wordlist[76];
                 goto compare;
-              case 262:
+              case 291:
                 resword = &wordlist[77];
                 goto compare;
-              case 267:
+              case 294:
                 resword = &wordlist[78];
                 goto compare;
-              case 269:
+              case 296:
                 resword = &wordlist[79];
                 goto compare;
-              case 276:
+              case 301:
                 resword = &wordlist[80];
                 goto compare;
-              case 277:
+              case 302:
                 resword = &wordlist[81];
                 goto compare;
-              case 278:
+              case 303:
                 resword = &wordlist[82];
                 goto compare;
-              case 279:
+              case 306:
                 resword = &wordlist[83];
                 goto compare;
-              case 280:
+              case 307:
                 resword = &wordlist[84];
                 goto compare;
-              case 281:
+              case 310:
                 resword = &wordlist[85];
                 goto compare;
-              case 286:
+              case 311:
                 resword = &wordlist[86];
                 goto compare;
-              case 287:
+              case 312:
                 resword = &wordlist[87];
                 goto compare;
-              case 288:
+              case 313:
                 resword = &wordlist[88];
                 goto compare;
-              case 290:
+              case 317:
                 resword = &wordlist[89];
                 goto compare;
-              case 292:
+              case 318:
                 resword = &wordlist[90];
                 goto compare;
-              case 297:
+              case 323:
                 resword = &wordlist[91];
                 goto compare;
-              case 298:
+              case 326:
                 resword = &wordlist[92];
                 goto compare;
-              case 301:
+              case 327:
                 resword = &wordlist[93];
                 goto compare;
-              case 302:
+              case 329:
                 resword = &wordlist[94];
                 goto compare;
-              case 306:
+              case 331:
                 resword = &wordlist[95];
                 goto compare;
-              case 314:
+              case 334:
                 resword = &wordlist[96];
                 goto compare;
-              case 319:
+              case 335:
                 resword = &wordlist[97];
                 goto compare;
-              case 331:
+              case 338:
                 resword = &wordlist[98];
                 goto compare;
-              case 337:
+              case 348:
                 resword = &wordlist[99];
                 goto compare;
-              case 338:
+              case 360:
                 resword = &wordlist[100];
                 goto compare;
-              case 342:
+              case 364:
                 resword = &wordlist[101];
                 goto compare;
-              case 346:
+              case 375:
                 resword = &wordlist[102];
                 goto compare;
-              case 348:
+              case 378:
                 resword = &wordlist[103];
                 goto compare;
-              case 349:
+              case 382:
                 resword = &wordlist[104];
                 goto compare;
-              case 350:
+              case 387:
                 resword = &wordlist[105];
                 goto compare;
-              case 355:
+              case 388:
                 resword = &wordlist[106];
                 goto compare;
-              case 361:
+              case 389:
                 resword = &wordlist[107];
                 goto compare;
-              case 362:
+              case 390:
                 resword = &wordlist[108];
                 goto compare;
-              case 366:
+              case 400:
                 resword = &wordlist[109];
                 goto compare;
-              case 368:
+              case 401:
                 resword = &wordlist[110];
                 goto compare;
-              case 369:
+              case 409:
                 resword = &wordlist[111];
                 goto compare;
-              case 370:
+              case 413:
                 resword = &wordlist[112];
                 goto compare;
-              case 371:
+              case 416:
                 resword = &wordlist[113];
                 goto compare;
-              case 373:
+              case 418:
                 resword = &wordlist[114];
                 goto compare;
-              case 375:
+              case 419:
                 resword = &wordlist[115];
                 goto compare;
-              case 377:
+              case 420:
                 resword = &wordlist[116];
                 goto compare;
-              case 378:
+              case 422:
                 resword = &wordlist[117];
                 goto compare;
-              case 379:
+              case 424:
                 resword = &wordlist[118];
                 goto compare;
-              case 380:
+              case 426:
                 resword = &wordlist[119];
                 goto compare;
-              case 385:
+              case 429:
                 resword = &wordlist[120];
                 goto compare;
-              case 386:
+              case 437:
                 resword = &wordlist[121];
                 goto compare;
-              case 401:
+              case 440:
                 resword = &wordlist[122];
                 goto compare;
-              case 404:
+              case 445:
                 resword = &wordlist[123];
                 goto compare;
-              case 406:
+              case 455:
                 resword = &wordlist[124];
                 goto compare;
-              case 411:
+              case 457:
                 resword = &wordlist[125];
                 goto compare;
-              case 414:
+              case 459:
                 resword = &wordlist[126];
                 goto compare;
-              case 416:
+              case 463:
                 resword = &wordlist[127];
                 goto compare;
-              case 417:
+              case 465:
                 resword = &wordlist[128];
                 goto compare;
-              case 419:
+              case 468:
                 resword = &wordlist[129];
                 goto compare;
-              case 420:
+              case 471:
                 resword = &wordlist[130];
                 goto compare;
-              case 425:
+              case 472:
                 resword = &wordlist[131];
                 goto compare;
-              case 427:
+              case 481:
                 resword = &wordlist[132];
                 goto compare;
-              case 429:
+              case 483:
                 resword = &wordlist[133];
                 goto compare;
-              case 430:
+              case 486:
                 resword = &wordlist[134];
                 goto compare;
-              case 436:
+              case 488:
                 resword = &wordlist[135];
                 goto compare;
-              case 440:
+              case 491:
                 resword = &wordlist[136];
                 goto compare;
-              case 449:
+              case 492:
                 resword = &wordlist[137];
                 goto compare;
-              case 451:
+              case 493:
                 resword = &wordlist[138];
                 goto compare;
-              case 452:
+              case 507:
                 resword = &wordlist[139];
                 goto compare;
-              case 462:
+              case 508:
                 resword = &wordlist[140];
                 goto compare;
-              case 464:
+              case 513:
                 resword = &wordlist[141];
                 goto compare;
-              case 466:
+              case 515:
                 resword = &wordlist[142];
                 goto compare;
-              case 472:
+              case 516:
                 resword = &wordlist[143];
                 goto compare;
-              case 477:
+              case 518:
                 resword = &wordlist[144];
                 goto compare;
-              case 480:
+              case 519:
                 resword = &wordlist[145];
                 goto compare;
-              case 483:
+              case 522:
                 resword = &wordlist[146];
                 goto compare;
-              case 488:
+              case 523:
                 resword = &wordlist[147];
                 goto compare;
-              case 494:
+              case 535:
                 resword = &wordlist[148];
                 goto compare;
-              case 500:
+              case 537:
                 resword = &wordlist[149];
                 goto compare;
-              case 506:
+              case 546:
                 resword = &wordlist[150];
                 goto compare;
-              case 512:
+              case 551:
                 resword = &wordlist[151];
                 goto compare;
-              case 515:
+              case 553:
                 resword = &wordlist[152];
                 goto compare;
-              case 524:
+              case 554:
                 resword = &wordlist[153];
                 goto compare;
-              case 537:
+              case 559:
                 resword = &wordlist[154];
                 goto compare;
-              case 541:
+              case 571:
                 resword = &wordlist[155];
                 goto compare;
-              case 562:
+              case 578:
                 resword = &wordlist[156];
                 goto compare;
-              case 565:
+              case 579:
                 resword = &wordlist[157];
                 goto compare;
-              case 567:
+              case 580:
                 resword = &wordlist[158];
                 goto compare;
-              case 569:
+              case 589:
                 resword = &wordlist[159];
                 goto compare;
-              case 570:
+              case 597:
                 resword = &wordlist[160];
                 goto compare;
-              case 574:
+              case 603:
                 resword = &wordlist[161];
                 goto compare;
-              case 577:
+              case 616:
                 resword = &wordlist[162];
                 goto compare;
-              case 581:
+              case 617:
                 resword = &wordlist[163];
                 goto compare;
-              case 583:
+              case 619:
                 resword = &wordlist[164];
                 goto compare;
-              case 585:
+              case 620:
                 resword = &wordlist[165];
                 goto compare;
-              case 587:
+              case 624:
                 resword = &wordlist[166];
                 goto compare;
-              case 588:
+              case 626:
                 resword = &wordlist[167];
                 goto compare;
-              case 589:
+              case 627:
                 resword = &wordlist[168];
                 goto compare;
-              case 594:
+              case 629:
                 resword = &wordlist[169];
                 goto compare;
-              case 596:
+              case 631:
                 resword = &wordlist[170];
                 goto compare;
-              case 606:
+              case 633:
                 resword = &wordlist[171];
                 goto compare;
-              case 609:
+              case 636:
                 resword = &wordlist[172];
                 goto compare;
-              case 614:
+              case 641:
                 resword = &wordlist[173];
                 goto compare;
-              case 616:
+              case 643:
                 resword = &wordlist[174];
                 goto compare;
-              case 626:
+              case 644:
                 resword = &wordlist[175];
                 goto compare;
-              case 634:
+              case 645:
                 resword = &wordlist[176];
                 goto compare;
-              case 636:
+              case 648:
                 resword = &wordlist[177];
                 goto compare;
-              case 641:
+              case 651:
                 resword = &wordlist[178];
                 goto compare;
-              case 645:
+              case 656:
                 resword = &wordlist[179];
                 goto compare;
-              case 647:
+              case 670:
                 resword = &wordlist[180];
                 goto compare;
-              case 653:
+              case 674:
                 resword = &wordlist[181];
                 goto compare;
-              case 656:
+              case 677:
                 resword = &wordlist[182];
                 goto compare;
-              case 658:
+              case 678:
                 resword = &wordlist[183];
                 goto compare;
-              case 662:
+              case 695:
                 resword = &wordlist[184];
                 goto compare;
-              case 666:
+              case 702:
                 resword = &wordlist[185];
                 goto compare;
-              case 680:
+              case 703:
                 resword = &wordlist[186];
                 goto compare;
-              case 684:
+              case 706:
                 resword = &wordlist[187];
                 goto compare;
-              case 685:
+              case 707:
                 resword = &wordlist[188];
                 goto compare;
-              case 687:
+              case 712:
                 resword = &wordlist[189];
                 goto compare;
-              case 690:
+              case 730:
                 resword = &wordlist[190];
                 goto compare;
-              case 693:
+              case 731:
                 resword = &wordlist[191];
                 goto compare;
-              case 696:
+              case 734:
                 resword = &wordlist[192];
                 goto compare;
-              case 701:
+              case 743:
                 resword = &wordlist[193];
                 goto compare;
-              case 708:
+              case 745:
                 resword = &wordlist[194];
                 goto compare;
-              case 717:
+              case 749:
                 resword = &wordlist[195];
                 goto compare;
-              case 722:
+              case 757:
                 resword = &wordlist[196];
                 goto compare;
-              case 730:
+              case 758:
                 resword = &wordlist[197];
                 goto compare;
-              case 731:
+              case 763:
                 resword = &wordlist[198];
                 goto compare;
-              case 733:
+              case 764:
                 resword = &wordlist[199];
                 goto compare;
-              case 734:
+              case 769:
                 resword = &wordlist[200];
                 goto compare;
-              case 735:
+              case 771:
                 resword = &wordlist[201];
                 goto compare;
-              case 736:
+              case 773:
                 resword = &wordlist[202];
                 goto compare;
-              case 739:
+              case 774:
                 resword = &wordlist[203];
                 goto compare;
-              case 743:
+              case 777:
                 resword = &wordlist[204];
                 goto compare;
-              case 746:
+              case 779:
                 resword = &wordlist[205];
                 goto compare;
-              case 749:
+              case 783:
                 resword = &wordlist[206];
                 goto compare;
-              case 756:
+              case 787:
                 resword = &wordlist[207];
                 goto compare;
-              case 760:
+              case 788:
                 resword = &wordlist[208];
                 goto compare;
-              case 766:
+              case 790:
                 resword = &wordlist[209];
                 goto compare;
-              case 767:
+              case 792:
                 resword = &wordlist[210];
                 goto compare;
-              case 776:
+              case 796:
                 resword = &wordlist[211];
                 goto compare;
-              case 785:
+              case 798:
                 resword = &wordlist[212];
                 goto compare;
-              case 786:
+              case 800:
                 resword = &wordlist[213];
                 goto compare;
-              case 787:
+              case 801:
                 resword = &wordlist[214];
                 goto compare;
-              case 788:
+              case 802:
                 resword = &wordlist[215];
                 goto compare;
-              case 790:
+              case 803:
                 resword = &wordlist[216];
                 goto compare;
-              case 792:
+              case 804:
                 resword = &wordlist[217];
                 goto compare;
-              case 797:
+              case 807:
                 resword = &wordlist[218];
                 goto compare;
-              case 798:
+              case 810:
                 resword = &wordlist[219];
                 goto compare;
-              case 801:
+              case 812:
                 resword = &wordlist[220];
                 goto compare;
-              case 806:
+              case 821:
                 resword = &wordlist[221];
                 goto compare;
-              case 811:
+              case 823:
                 resword = &wordlist[222];
                 goto compare;
-              case 814:
+              case 825:
                 resword = &wordlist[223];
                 goto compare;
-              case 818:
+              case 828:
                 resword = &wordlist[224];
                 goto compare;
-              case 827:
+              case 839:
                 resword = &wordlist[225];
                 goto compare;
-              case 828:
+              case 847:
                 resword = &wordlist[226];
                 goto compare;
-              case 829:
+              case 853:
                 resword = &wordlist[227];
                 goto compare;
-              case 832:
+              case 861:
                 resword = &wordlist[228];
                 goto compare;
-              case 837:
+              case 868:
                 resword = &wordlist[229];
                 goto compare;
-              case 839:
+              case 870:
                 resword = &wordlist[230];
                 goto compare;
-              case 843:
+              case 872:
                 resword = &wordlist[231];
                 goto compare;
-              case 845:
+              case 873:
                 resword = &wordlist[232];
                 goto compare;
-              case 848:
+              case 874:
                 resword = &wordlist[233];
                 goto compare;
-              case 852:
+              case 876:
                 resword = &wordlist[234];
                 goto compare;
-              case 855:
+              case 879:
                 resword = &wordlist[235];
                 goto compare;
-              case 856:
+              case 880:
                 resword = &wordlist[236];
                 goto compare;
-              case 858:
+              case 884:
                 resword = &wordlist[237];
                 goto compare;
-              case 863:
+              case 885:
                 resword = &wordlist[238];
                 goto compare;
-              case 866:
+              case 896:
                 resword = &wordlist[239];
                 goto compare;
-              case 870:
+              case 898:
                 resword = &wordlist[240];
                 goto compare;
-              case 874:
+              case 901:
                 resword = &wordlist[241];
                 goto compare;
-              case 880:
+              case 911:
                 resword = &wordlist[242];
                 goto compare;
-              case 885:
+              case 912:
                 resword = &wordlist[243];
                 goto compare;
-              case 888:
+              case 913:
                 resword = &wordlist[244];
                 goto compare;
-              case 892:
+              case 917:
                 resword = &wordlist[245];
                 goto compare;
-              case 893:
+              case 922:
                 resword = &wordlist[246];
                 goto compare;
-              case 898:
+              case 926:
                 resword = &wordlist[247];
                 goto compare;
-              case 907:
+              case 928:
                 resword = &wordlist[248];
                 goto compare;
-              case 912:
+              case 929:
                 resword = &wordlist[249];
                 goto compare;
-              case 924:
+              case 931:
                 resword = &wordlist[250];
                 goto compare;
-              case 928:
+              case 936:
                 resword = &wordlist[251];
                 goto compare;
-              case 931:
+              case 937:
                 resword = &wordlist[252];
                 goto compare;
-              case 932:
+              case 940:
                 resword = &wordlist[253];
                 goto compare;
               case 941:
                 resword = &wordlist[254];
                 goto compare;
-              case 946:
+              case 942:
                 resword = &wordlist[255];
                 goto compare;
-              case 948:
+              case 945:
                 resword = &wordlist[256];
                 goto compare;
-              case 951:
+              case 946:
                 resword = &wordlist[257];
                 goto compare;
-              case 957:
+              case 947:
                 resword = &wordlist[258];
                 goto compare;
-              case 959:
+              case 952:
                 resword = &wordlist[259];
                 goto compare;
-              case 965:
+              case 954:
                 resword = &wordlist[260];
                 goto compare;
-              case 968:
+              case 955:
                 resword = &wordlist[261];
                 goto compare;
-              case 971:
+              case 956:
                 resword = &wordlist[262];
                 goto compare;
-              case 974:
+              case 958:
                 resword = &wordlist[263];
                 goto compare;
-              case 977:
+              case 960:
                 resword = &wordlist[264];
                 goto compare;
-              case 983:
+              case 963:
                 resword = &wordlist[265];
                 goto compare;
-              case 988:
+              case 967:
                 resword = &wordlist[266];
                 goto compare;
-              case 990:
+              case 975:
                 resword = &wordlist[267];
                 goto compare;
-              case 991:
+              case 980:
                 resword = &wordlist[268];
                 goto compare;
-              case 994:
+              case 988:
                 resword = &wordlist[269];
                 goto compare;
-              case 996:
+              case 992:
                 resword = &wordlist[270];
                 goto compare;
-              case 997:
+              case 993:
                 resword = &wordlist[271];
                 goto compare;
-              case 1003:
+              case 996:
                 resword = &wordlist[272];
                 goto compare;
-              case 1005:
+              case 997:
                 resword = &wordlist[273];
                 goto compare;
-              case 1006:
+              case 999:
                 resword = &wordlist[274];
                 goto compare;
-              case 1012:
+              case 1003:
                 resword = &wordlist[275];
                 goto compare;
-              case 1015:
+              case 1004:
                 resword = &wordlist[276];
                 goto compare;
-              case 1025:
+              case 1005:
                 resword = &wordlist[277];
                 goto compare;
-              case 1026:
+              case 1006:
                 resword = &wordlist[278];
                 goto compare;
-              case 1028:
+              case 1015:
                 resword = &wordlist[279];
                 goto compare;
-              case 1037:
+              case 1017:
                 resword = &wordlist[280];
                 goto compare;
-              case 1039:
+              case 1020:
                 resword = &wordlist[281];
                 goto compare;
-              case 1048:
+              case 1021:
                 resword = &wordlist[282];
                 goto compare;
-              case 1062:
+              case 1029:
                 resword = &wordlist[283];
                 goto compare;
-              case 1065:
+              case 1041:
                 resword = &wordlist[284];
                 goto compare;
-              case 1068:
+              case 1045:
                 resword = &wordlist[285];
                 goto compare;
-              case 1073:
+              case 1046:
                 resword = &wordlist[286];
                 goto compare;
-              case 1078:
+              case 1058:
                 resword = &wordlist[287];
                 goto compare;
-              case 1091:
+              case 1060:
                 resword = &wordlist[288];
                 goto compare;
-              case 1094:
+              case 1061:
                 resword = &wordlist[289];
                 goto compare;
-              case 1098:
+              case 1064:
                 resword = &wordlist[290];
                 goto compare;
-              case 1099:
+              case 1067:
                 resword = &wordlist[291];
                 goto compare;
-              case 1100:
+              case 1070:
                 resword = &wordlist[292];
                 goto compare;
-              case 1106:
+              case 1071:
                 resword = &wordlist[293];
                 goto compare;
-              case 1119:
+              case 1082:
                 resword = &wordlist[294];
                 goto compare;
-              case 1126:
+              case 1086:
                 resword = &wordlist[295];
                 goto compare;
-              case 1130:
+              case 1100:
                 resword = &wordlist[296];
                 goto compare;
-              case 1140:
+              case 1101:
                 resword = &wordlist[297];
                 goto compare;
-              case 1142:
+              case 1103:
                 resword = &wordlist[298];
                 goto compare;
-              case 1147:
+              case 1107:
                 resword = &wordlist[299];
                 goto compare;
-              case 1150:
+              case 1110:
                 resword = &wordlist[300];
                 goto compare;
-              case 1159:
+              case 1112:
                 resword = &wordlist[301];
                 goto compare;
-              case 1167:
+              case 1114:
                 resword = &wordlist[302];
                 goto compare;
-              case 1168:
+              case 1116:
                 resword = &wordlist[303];
                 goto compare;
-              case 1170:
+              case 1125:
                 resword = &wordlist[304];
                 goto compare;
-              case 1175:
+              case 1127:
                 resword = &wordlist[305];
                 goto compare;
-              case 1182:
+              case 1128:
                 resword = &wordlist[306];
                 goto compare;
-              case 1186:
+              case 1135:
                 resword = &wordlist[307];
                 goto compare;
-              case 1187:
+              case 1150:
                 resword = &wordlist[308];
                 goto compare;
-              case 1188:
+              case 1151:
                 resword = &wordlist[309];
                 goto compare;
-              case 1189:
+              case 1162:
                 resword = &wordlist[310];
                 goto compare;
-              case 1192:
+              case 1163:
                 resword = &wordlist[311];
                 goto compare;
-              case 1194:
+              case 1165:
                 resword = &wordlist[312];
                 goto compare;
-              case 1196:
+              case 1167:
                 resword = &wordlist[313];
                 goto compare;
-              case 1198:
+              case 1169:
                 resword = &wordlist[314];
                 goto compare;
-              case 1200:
+              case 1171:
                 resword = &wordlist[315];
                 goto compare;
-              case 1205:
+              case 1172:
                 resword = &wordlist[316];
                 goto compare;
-              case 1208:
+              case 1173:
                 resword = &wordlist[317];
                 goto compare;
-              case 1210:
+              case 1176:
                 resword = &wordlist[318];
                 goto compare;
-              case 1217:
+              case 1179:
                 resword = &wordlist[319];
                 goto compare;
-              case 1233:
+              case 1182:
                 resword = &wordlist[320];
                 goto compare;
-              case 1234:
+              case 1183:
                 resword = &wordlist[321];
                 goto compare;
-              case 1238:
+              case 1189:
                 resword = &wordlist[322];
                 goto compare;
-              case 1241:
+              case 1190:
                 resword = &wordlist[323];
                 goto compare;
-              case 1243:
+              case 1193:
                 resword = &wordlist[324];
                 goto compare;
-              case 1251:
+              case 1194:
                 resword = &wordlist[325];
                 goto compare;
-              case 1254:
+              case 1196:
                 resword = &wordlist[326];
                 goto compare;
-              case 1258:
+              case 1206:
                 resword = &wordlist[327];
                 goto compare;
-              case 1262:
+              case 1208:
                 resword = &wordlist[328];
                 goto compare;
-              case 1265:
+              case 1209:
                 resword = &wordlist[329];
                 goto compare;
-              case 1276:
+              case 1211:
                 resword = &wordlist[330];
                 goto compare;
-              case 1280:
+              case 1212:
                 resword = &wordlist[331];
                 goto compare;
-              case 1281:
+              case 1216:
                 resword = &wordlist[332];
                 goto compare;
-              case 1284:
+              case 1217:
                 resword = &wordlist[333];
                 goto compare;
-              case 1287:
+              case 1218:
                 resword = &wordlist[334];
                 goto compare;
-              case 1288:
+              case 1220:
                 resword = &wordlist[335];
                 goto compare;
-              case 1291:
+              case 1221:
                 resword = &wordlist[336];
                 goto compare;
-              case 1293:
+              case 1227:
                 resword = &wordlist[337];
                 goto compare;
-              case 1294:
+              case 1233:
                 resword = &wordlist[338];
                 goto compare;
-              case 1295:
+              case 1244:
                 resword = &wordlist[339];
                 goto compare;
-              case 1296:
+              case 1246:
                 resword = &wordlist[340];
                 goto compare;
-              case 1297:
+              case 1250:
                 resword = &wordlist[341];
                 goto compare;
-              case 1302:
+              case 1255:
                 resword = &wordlist[342];
                 goto compare;
-              case 1309:
+              case 1258:
                 resword = &wordlist[343];
                 goto compare;
-              case 1314:
+              case 1264:
                 resword = &wordlist[344];
                 goto compare;
-              case 1320:
+              case 1268:
                 resword = &wordlist[345];
                 goto compare;
-              case 1322:
+              case 1272:
                 resword = &wordlist[346];
                 goto compare;
-              case 1325:
+              case 1273:
                 resword = &wordlist[347];
                 goto compare;
-              case 1335:
+              case 1279:
                 resword = &wordlist[348];
                 goto compare;
-              case 1336:
+              case 1283:
                 resword = &wordlist[349];
                 goto compare;
-              case 1337:
+              case 1284:
                 resword = &wordlist[350];
                 goto compare;
-              case 1338:
+              case 1289:
                 resword = &wordlist[351];
                 goto compare;
-              case 1343:
+              case 1291:
                 resword = &wordlist[352];
                 goto compare;
-              case 1348:
+              case 1293:
                 resword = &wordlist[353];
                 goto compare;
-              case 1353:
+              case 1294:
                 resword = &wordlist[354];
                 goto compare;
-              case 1354:
+              case 1295:
                 resword = &wordlist[355];
                 goto compare;
-              case 1357:
+              case 1299:
                 resword = &wordlist[356];
                 goto compare;
-              case 1358:
+              case 1303:
                 resword = &wordlist[357];
                 goto compare;
-              case 1363:
+              case 1304:
                 resword = &wordlist[358];
                 goto compare;
-              case 1364:
+              case 1309:
                 resword = &wordlist[359];
                 goto compare;
-              case 1365:
+              case 1312:
                 resword = &wordlist[360];
                 goto compare;
-              case 1369:
+              case 1316:
                 resword = &wordlist[361];
                 goto compare;
-              case 1371:
+              case 1318:
                 resword = &wordlist[362];
                 goto compare;
-              case 1374:
+              case 1320:
                 resword = &wordlist[363];
                 goto compare;
-              case 1375:
+              case 1322:
                 resword = &wordlist[364];
                 goto compare;
-              case 1376:
+              case 1325:
                 resword = &wordlist[365];
                 goto compare;
-              case 1377:
+              case 1327:
                 resword = &wordlist[366];
                 goto compare;
-              case 1378:
+              case 1333:
                 resword = &wordlist[367];
                 goto compare;
-              case 1379:
+              case 1336:
                 resword = &wordlist[368];
                 goto compare;
-              case 1384:
+              case 1337:
                 resword = &wordlist[369];
                 goto compare;
-              case 1388:
+              case 1339:
                 resword = &wordlist[370];
                 goto compare;
-              case 1390:
+              case 1342:
                 resword = &wordlist[371];
                 goto compare;
-              case 1392:
+              case 1343:
                 resword = &wordlist[372];
                 goto compare;
-              case 1394:
+              case 1346:
                 resword = &wordlist[373];
                 goto compare;
-              case 1396:
+              case 1347:
                 resword = &wordlist[374];
                 goto compare;
-              case 1398:
+              case 1349:
                 resword = &wordlist[375];
                 goto compare;
-              case 1400:
+              case 1350:
                 resword = &wordlist[376];
                 goto compare;
-              case 1402:
+              case 1351:
                 resword = &wordlist[377];
                 goto compare;
-              case 1404:
+              case 1352:
                 resword = &wordlist[378];
                 goto compare;
-              case 1408:
+              case 1353:
                 resword = &wordlist[379];
                 goto compare;
-              case 1409:
+              case 1354:
                 resword = &wordlist[380];
                 goto compare;
-              case 1410:
+              case 1359:
                 resword = &wordlist[381];
                 goto compare;
-              case 1414:
+              case 1361:
                 resword = &wordlist[382];
                 goto compare;
-              case 1415:
+              case 1365:
                 resword = &wordlist[383];
                 goto compare;
-              case 1416:
+              case 1368:
                 resword = &wordlist[384];
                 goto compare;
-              case 1418:
+              case 1373:
                 resword = &wordlist[385];
                 goto compare;
-              case 1421:
+              case 1377:
                 resword = &wordlist[386];
                 goto compare;
-              case 1422:
+              case 1378:
                 resword = &wordlist[387];
                 goto compare;
-              case 1423:
+              case 1380:
                 resword = &wordlist[388];
                 goto compare;
-              case 1427:
+              case 1385:
                 resword = &wordlist[389];
                 goto compare;
-              case 1432:
+              case 1387:
                 resword = &wordlist[390];
                 goto compare;
-              case 1434:
+              case 1388:
                 resword = &wordlist[391];
                 goto compare;
-              case 1437:
+              case 1390:
                 resword = &wordlist[392];
                 goto compare;
-              case 1438:
+              case 1391:
                 resword = &wordlist[393];
                 goto compare;
-              case 1440:
+              case 1392:
                 resword = &wordlist[394];
                 goto compare;
-              case 1445:
+              case 1394:
                 resword = &wordlist[395];
                 goto compare;
-              case 1450:
+              case 1398:
                 resword = &wordlist[396];
                 goto compare;
-              case 1451:
+              case 1399:
                 resword = &wordlist[397];
                 goto compare;
-              case 1454:
+              case 1401:
                 resword = &wordlist[398];
                 goto compare;
-              case 1461:
+              case 1402:
                 resword = &wordlist[399];
                 goto compare;
-              case 1463:
+              case 1405:
                 resword = &wordlist[400];
                 goto compare;
-              case 1469:
+              case 1406:
                 resword = &wordlist[401];
                 goto compare;
-              case 1470:
+              case 1412:
                 resword = &wordlist[402];
                 goto compare;
-              case 1473:
+              case 1416:
                 resword = &wordlist[403];
                 goto compare;
-              case 1476:
+              case 1417:
                 resword = &wordlist[404];
                 goto compare;
-              case 1482:
+              case 1421:
                 resword = &wordlist[405];
                 goto compare;
-              case 1488:
+              case 1422:
                 resword = &wordlist[406];
                 goto compare;
-              case 1492:
+              case 1425:
                 resword = &wordlist[407];
                 goto compare;
-              case 1501:
+              case 1431:
                 resword = &wordlist[408];
                 goto compare;
-              case 1503:
+              case 1432:
                 resword = &wordlist[409];
                 goto compare;
-              case 1507:
+              case 1447:
                 resword = &wordlist[410];
                 goto compare;
-              case 1510:
+              case 1448:
                 resword = &wordlist[411];
                 goto compare;
-              case 1512:
+              case 1454:
                 resword = &wordlist[412];
                 goto compare;
-              case 1515:
+              case 1457:
                 resword = &wordlist[413];
                 goto compare;
-              case 1516:
+              case 1459:
                 resword = &wordlist[414];
                 goto compare;
-              case 1517:
+              case 1462:
                 resword = &wordlist[415];
                 goto compare;
-              case 1518:
+              case 1465:
                 resword = &wordlist[416];
                 goto compare;
-              case 1523:
+              case 1469:
                 resword = &wordlist[417];
                 goto compare;
-              case 1526:
+              case 1470:
                 resword = &wordlist[418];
                 goto compare;
-              case 1529:
+              case 1473:
                 resword = &wordlist[419];
                 goto compare;
-              case 1531:
+              case 1475:
                 resword = &wordlist[420];
                 goto compare;
-              case 1532:
+              case 1477:
                 resword = &wordlist[421];
                 goto compare;
-              case 1536:
+              case 1480:
                 resword = &wordlist[422];
                 goto compare;
-              case 1541:
+              case 1482:
                 resword = &wordlist[423];
                 goto compare;
-              case 1548:
+              case 1492:
                 resword = &wordlist[424];
                 goto compare;
-              case 1549:
+              case 1493:
                 resword = &wordlist[425];
                 goto compare;
-              case 1550:
+              case 1496:
                 resword = &wordlist[426];
                 goto compare;
-              case 1552:
+              case 1501:
                 resword = &wordlist[427];
                 goto compare;
-              case 1553:
+              case 1503:
                 resword = &wordlist[428];
                 goto compare;
-              case 1556:
+              case 1506:
                 resword = &wordlist[429];
                 goto compare;
-              case 1562:
+              case 1512:
                 resword = &wordlist[430];
                 goto compare;
-              case 1568:
+              case 1515:
                 resword = &wordlist[431];
                 goto compare;
-              case 1569:
+              case 1516:
                 resword = &wordlist[432];
                 goto compare;
-              case 1571:
+              case 1518:
                 resword = &wordlist[433];
                 goto compare;
-              case 1572:
+              case 1519:
                 resword = &wordlist[434];
                 goto compare;
-              case 1578:
+              case 1520:
                 resword = &wordlist[435];
                 goto compare;
-              case 1582:
+              case 1522:
                 resword = &wordlist[436];
                 goto compare;
-              case 1583:
+              case 1523:
                 resword = &wordlist[437];
                 goto compare;
-              case 1586:
+              case 1524:
                 resword = &wordlist[438];
                 goto compare;
-              case 1587:
+              case 1528:
                 resword = &wordlist[439];
                 goto compare;
-              case 1588:
+              case 1531:
                 resword = &wordlist[440];
                 goto compare;
-              case 1589:
+              case 1533:
                 resword = &wordlist[441];
                 goto compare;
-              case 1596:
+              case 1534:
                 resword = &wordlist[442];
                 goto compare;
-              case 1601:
+              case 1535:
                 resword = &wordlist[443];
                 goto compare;
-              case 1602:
+              case 1536:
                 resword = &wordlist[444];
                 goto compare;
-              case 1606:
+              case 1538:
                 resword = &wordlist[445];
                 goto compare;
-              case 1607:
+              case 1541:
                 resword = &wordlist[446];
                 goto compare;
-              case 1613:
+              case 1542:
                 resword = &wordlist[447];
                 goto compare;
-              case 1617:
+              case 1555:
                 resword = &wordlist[448];
                 goto compare;
-              case 1618:
+              case 1557:
                 resword = &wordlist[449];
                 goto compare;
-              case 1628:
+              case 1559:
                 resword = &wordlist[450];
                 goto compare;
-              case 1637:
+              case 1565:
                 resword = &wordlist[451];
                 goto compare;
-              case 1638:
+              case 1569:
                 resword = &wordlist[452];
                 goto compare;
-              case 1644:
+              case 1570:
                 resword = &wordlist[453];
                 goto compare;
-              case 1646:
+              case 1571:
                 resword = &wordlist[454];
                 goto compare;
-              case 1649:
+              case 1572:
                 resword = &wordlist[455];
                 goto compare;
-              case 1651:
+              case 1585:
                 resword = &wordlist[456];
                 goto compare;
-              case 1652:
+              case 1586:
                 resword = &wordlist[457];
                 goto compare;
-              case 1653:
+              case 1587:
                 resword = &wordlist[458];
                 goto compare;
-              case 1654:
+              case 1596:
                 resword = &wordlist[459];
                 goto compare;
-              case 1655:
+              case 1597:
                 resword = &wordlist[460];
                 goto compare;
-              case 1656:
+              case 1601:
                 resword = &wordlist[461];
                 goto compare;
-              case 1657:
+              case 1602:
                 resword = &wordlist[462];
                 goto compare;
-              case 1665:
+              case 1605:
                 resword = &wordlist[463];
                 goto compare;
-              case 1670:
+              case 1606:
                 resword = &wordlist[464];
                 goto compare;
-              case 1677:
+              case 1608:
                 resword = &wordlist[465];
                 goto compare;
-              case 1681:
+              case 1610:
                 resword = &wordlist[466];
                 goto compare;
-              case 1682:
+              case 1612:
                 resword = &wordlist[467];
                 goto compare;
-              case 1683:
+              case 1614:
                 resword = &wordlist[468];
                 goto compare;
-              case 1684:
+              case 1616:
                 resword = &wordlist[469];
                 goto compare;
-              case 1686:
+              case 1624:
                 resword = &wordlist[470];
                 goto compare;
-              case 1698:
+              case 1630:
                 resword = &wordlist[471];
                 goto compare;
-              case 1699:
+              case 1633:
                 resword = &wordlist[472];
                 goto compare;
-              case 1700:
+              case 1636:
                 resword = &wordlist[473];
                 goto compare;
-              case 1701:
+              case 1637:
                 resword = &wordlist[474];
                 goto compare;
-              case 1703:
+              case 1638:
                 resword = &wordlist[475];
                 goto compare;
-              case 1704:
+              case 1639:
                 resword = &wordlist[476];
                 goto compare;
-              case 1705:
+              case 1640:
                 resword = &wordlist[477];
                 goto compare;
-              case 1706:
+              case 1647:
                 resword = &wordlist[478];
                 goto compare;
-              case 1713:
+              case 1648:
                 resword = &wordlist[479];
                 goto compare;
-              case 1720:
+              case 1649:
                 resword = &wordlist[480];
                 goto compare;
-              case 1725:
+              case 1650:
                 resword = &wordlist[481];
                 goto compare;
-              case 1729:
+              case 1651:
                 resword = &wordlist[482];
                 goto compare;
-              case 1731:
+              case 1653:
                 resword = &wordlist[483];
                 goto compare;
-              case 1733:
+              case 1654:
                 resword = &wordlist[484];
                 goto compare;
-              case 1734:
+              case 1656:
                 resword = &wordlist[485];
                 goto compare;
-              case 1735:
+              case 1657:
                 resword = &wordlist[486];
                 goto compare;
-              case 1736:
+              case 1664:
                 resword = &wordlist[487];
                 goto compare;
-              case 1738:
+              case 1668:
                 resword = &wordlist[488];
                 goto compare;
-              case 1739:
+              case 1673:
                 resword = &wordlist[489];
                 goto compare;
-              case 1743:
+              case 1674:
                 resword = &wordlist[490];
                 goto compare;
-              case 1746:
+              case 1676:
                 resword = &wordlist[491];
                 goto compare;
-              case 1747:
+              case 1677:
                 resword = &wordlist[492];
                 goto compare;
-              case 1756:
+              case 1678:
                 resword = &wordlist[493];
                 goto compare;
-              case 1758:
+              case 1679:
                 resword = &wordlist[494];
                 goto compare;
-              case 1762:
+              case 1680:
                 resword = &wordlist[495];
                 goto compare;
-              case 1763:
+              case 1684:
                 resword = &wordlist[496];
                 goto compare;
-              case 1764:
+              case 1689:
                 resword = &wordlist[497];
                 goto compare;
-              case 1767:
+              case 1692:
                 resword = &wordlist[498];
                 goto compare;
-              case 1768:
+              case 1696:
                 resword = &wordlist[499];
                 goto compare;
-              case 1772:
+              case 1701:
                 resword = &wordlist[500];
                 goto compare;
-              case 1780:
+              case 1710:
                 resword = &wordlist[501];
                 goto compare;
-              case 1781:
+              case 1717:
                 resword = &wordlist[502];
                 goto compare;
-              case 1792:
+              case 1721:
                 resword = &wordlist[503];
                 goto compare;
-              case 1800:
+              case 1722:
                 resword = &wordlist[504];
                 goto compare;
-              case 1807:
+              case 1723:
                 resword = &wordlist[505];
                 goto compare;
-              case 1810:
+              case 1728:
                 resword = &wordlist[506];
                 goto compare;
-              case 1812:
+              case 1732:
                 resword = &wordlist[507];
                 goto compare;
-              case 1820:
+              case 1734:
                 resword = &wordlist[508];
                 goto compare;
-              case 1824:
+              case 1738:
                 resword = &wordlist[509];
                 goto compare;
-              case 1828:
+              case 1745:
                 resword = &wordlist[510];
                 goto compare;
-              case 1829:
+              case 1749:
                 resword = &wordlist[511];
                 goto compare;
-              case 1831:
+              case 1760:
                 resword = &wordlist[512];
                 goto compare;
-              case 1832:
+              case 1761:
                 resword = &wordlist[513];
                 goto compare;
-              case 1833:
+              case 1770:
                 resword = &wordlist[514];
                 goto compare;
-              case 1840:
+              case 1775:
                 resword = &wordlist[515];
                 goto compare;
-              case 1843:
+              case 1780:
                 resword = &wordlist[516];
                 goto compare;
-              case 1844:
+              case 1784:
                 resword = &wordlist[517];
                 goto compare;
-              case 1846:
+              case 1795:
                 resword = &wordlist[518];
                 goto compare;
-              case 1849:
+              case 1796:
                 resword = &wordlist[519];
                 goto compare;
-              case 1851:
+              case 1809:
                 resword = &wordlist[520];
                 goto compare;
-              case 1852:
+              case 1810:
                 resword = &wordlist[521];
                 goto compare;
-              case 1859:
+              case 1811:
                 resword = &wordlist[522];
                 goto compare;
-              case 1860:
+              case 1815:
                 resword = &wordlist[523];
                 goto compare;
-              case 1864:
+              case 1816:
                 resword = &wordlist[524];
                 goto compare;
-              case 1883:
+              case 1817:
                 resword = &wordlist[525];
                 goto compare;
-              case 1885:
+              case 1822:
                 resword = &wordlist[526];
                 goto compare;
-              case 1887:
+              case 1825:
                 resword = &wordlist[527];
                 goto compare;
-              case 1888:
+              case 1826:
                 resword = &wordlist[528];
                 goto compare;
-              case 1895:
+              case 1827:
                 resword = &wordlist[529];
                 goto compare;
-              case 1902:
+              case 1830:
                 resword = &wordlist[530];
                 goto compare;
-              case 1907:
+              case 1834:
                 resword = &wordlist[531];
                 goto compare;
-              case 1909:
+              case 1846:
                 resword = &wordlist[532];
                 goto compare;
-              case 1914:
+              case 1854:
                 resword = &wordlist[533];
                 goto compare;
-              case 1915:
+              case 1862:
                 resword = &wordlist[534];
                 goto compare;
-              case 1923:
+              case 1867:
                 resword = &wordlist[535];
                 goto compare;
-              case 1924:
+              case 1872:
                 resword = &wordlist[536];
                 goto compare;
-              case 1928:
+              case 1878:
                 resword = &wordlist[537];
                 goto compare;
-              case 1932:
+              case 1883:
                 resword = &wordlist[538];
                 goto compare;
-              case 1939:
+              case 1885:
                 resword = &wordlist[539];
                 goto compare;
-              case 1953:
+              case 1890:
                 resword = &wordlist[540];
                 goto compare;
-              case 1956:
+              case 1895:
                 resword = &wordlist[541];
                 goto compare;
-              case 1960:
+              case 1898:
                 resword = &wordlist[542];
                 goto compare;
-              case 1963:
+              case 1900:
                 resword = &wordlist[543];
                 goto compare;
-              case 1971:
+              case 1902:
                 resword = &wordlist[544];
                 goto compare;
-              case 1975:
+              case 1904:
                 resword = &wordlist[545];
                 goto compare;
-              case 1976:
+              case 1905:
                 resword = &wordlist[546];
                 goto compare;
-              case 1980:
+              case 1907:
                 resword = &wordlist[547];
                 goto compare;
-              case 1985:
+              case 1908:
                 resword = &wordlist[548];
                 goto compare;
-              case 1987:
+              case 1912:
                 resword = &wordlist[549];
                 goto compare;
-              case 1988:
+              case 1913:
                 resword = &wordlist[550];
                 goto compare;
-              case 1990:
+              case 1916:
                 resword = &wordlist[551];
                 goto compare;
-              case 1998:
+              case 1918:
                 resword = &wordlist[552];
                 goto compare;
-              case 1999:
+              case 1921:
                 resword = &wordlist[553];
                 goto compare;
-              case 2000:
+              case 1923:
                 resword = &wordlist[554];
                 goto compare;
-              case 2016:
+              case 1930:
                 resword = &wordlist[555];
                 goto compare;
-              case 2027:
+              case 1931:
                 resword = &wordlist[556];
                 goto compare;
-              case 2030:
+              case 1935:
                 resword = &wordlist[557];
                 goto compare;
-              case 2032:
+              case 1936:
                 resword = &wordlist[558];
                 goto compare;
-              case 2034:
+              case 1938:
                 resword = &wordlist[559];
                 goto compare;
-              case 2036:
+              case 1939:
                 resword = &wordlist[560];
                 goto compare;
-              case 2037:
+              case 1940:
                 resword = &wordlist[561];
                 goto compare;
-              case 2049:
+              case 1941:
                 resword = &wordlist[562];
                 goto compare;
-              case 2057:
+              case 1942:
                 resword = &wordlist[563];
                 goto compare;
-              case 2058:
+              case 1943:
                 resword = &wordlist[564];
                 goto compare;
-              case 2060:
+              case 1944:
                 resword = &wordlist[565];
                 goto compare;
-              case 2063:
+              case 1945:
                 resword = &wordlist[566];
                 goto compare;
-              case 2066:
+              case 1953:
                 resword = &wordlist[567];
                 goto compare;
-              case 2069:
+              case 1955:
                 resword = &wordlist[568];
                 goto compare;
-              case 2071:
+              case 1957:
                 resword = &wordlist[569];
                 goto compare;
-              case 2074:
+              case 1960:
                 resword = &wordlist[570];
                 goto compare;
-              case 2075:
+              case 1961:
                 resword = &wordlist[571];
                 goto compare;
-              case 2081:
+              case 1962:
                 resword = &wordlist[572];
                 goto compare;
-              case 2086:
+              case 1963:
                 resword = &wordlist[573];
                 goto compare;
-              case 2088:
+              case 1966:
                 resword = &wordlist[574];
                 goto compare;
-              case 2089:
+              case 1977:
                 resword = &wordlist[575];
                 goto compare;
-              case 2090:
+              case 1980:
                 resword = &wordlist[576];
                 goto compare;
-              case 2092:
+              case 1981:
                 resword = &wordlist[577];
                 goto compare;
-              case 2095:
+              case 1985:
                 resword = &wordlist[578];
                 goto compare;
-              case 2100:
+              case 1987:
                 resword = &wordlist[579];
                 goto compare;
-              case 2103:
+              case 1988:
                 resword = &wordlist[580];
                 goto compare;
-              case 2105:
+              case 1992:
                 resword = &wordlist[581];
                 goto compare;
-              case 2107:
+              case 1998:
                 resword = &wordlist[582];
                 goto compare;
-              case 2111:
+              case 2008:
                 resword = &wordlist[583];
                 goto compare;
-              case 2112:
+              case 2020:
                 resword = &wordlist[584];
                 goto compare;
-              case 2116:
+              case 2028:
                 resword = &wordlist[585];
                 goto compare;
-              case 2127:
+              case 2038:
                 resword = &wordlist[586];
                 goto compare;
-              case 2128:
+              case 2044:
                 resword = &wordlist[587];
                 goto compare;
-              case 2129:
+              case 2049:
                 resword = &wordlist[588];
                 goto compare;
-              case 2135:
+              case 2050:
                 resword = &wordlist[589];
                 goto compare;
-              case 2137:
+              case 2053:
                 resword = &wordlist[590];
                 goto compare;
-              case 2138:
+              case 2057:
                 resword = &wordlist[591];
                 goto compare;
-              case 2139:
+              case 2060:
                 resword = &wordlist[592];
                 goto compare;
-              case 2141:
+              case 2061:
                 resword = &wordlist[593];
                 goto compare;
-              case 2143:
+              case 2067:
                 resword = &wordlist[594];
                 goto compare;
-              case 2153:
+              case 2068:
                 resword = &wordlist[595];
                 goto compare;
-              case 2154:
+              case 2073:
                 resword = &wordlist[596];
                 goto compare;
-              case 2165:
+              case 2078:
                 resword = &wordlist[597];
                 goto compare;
-              case 2169:
+              case 2082:
                 resword = &wordlist[598];
                 goto compare;
-              case 2172:
+              case 2090:
                 resword = &wordlist[599];
                 goto compare;
-              case 2186:
+              case 2093:
                 resword = &wordlist[600];
                 goto compare;
-              case 2189:
+              case 2105:
                 resword = &wordlist[601];
                 goto compare;
-              case 2190:
+              case 2106:
                 resword = &wordlist[602];
                 goto compare;
-              case 2192:
+              case 2109:
                 resword = &wordlist[603];
                 goto compare;
-              case 2194:
+              case 2110:
                 resword = &wordlist[604];
                 goto compare;
-              case 2200:
+              case 2117:
                 resword = &wordlist[605];
                 goto compare;
-              case 2202:
+              case 2123:
                 resword = &wordlist[606];
                 goto compare;
-              case 2204:
+              case 2126:
                 resword = &wordlist[607];
                 goto compare;
-              case 2214:
+              case 2129:
                 resword = &wordlist[608];
                 goto compare;
-              case 2217:
+              case 2130:
                 resword = &wordlist[609];
                 goto compare;
-              case 2222:
+              case 2134:
                 resword = &wordlist[610];
                 goto compare;
-              case 2234:
+              case 2138:
                 resword = &wordlist[611];
                 goto compare;
-              case 2242:
+              case 2139:
                 resword = &wordlist[612];
                 goto compare;
-              case 2245:
+              case 2150:
                 resword = &wordlist[613];
                 goto compare;
-              case 2246:
+              case 2151:
                 resword = &wordlist[614];
                 goto compare;
-              case 2258:
+              case 2168:
                 resword = &wordlist[615];
                 goto compare;
-              case 2272:
+              case 2174:
                 resword = &wordlist[616];
                 goto compare;
-              case 2275:
+              case 2177:
                 resword = &wordlist[617];
                 goto compare;
-              case 2285:
+              case 2186:
                 resword = &wordlist[618];
                 goto compare;
-              case 2287:
+              case 2187:
                 resword = &wordlist[619];
                 goto compare;
-              case 2289:
+              case 2189:
                 resword = &wordlist[620];
                 goto compare;
-              case 2290:
+              case 2190:
                 resword = &wordlist[621];
                 goto compare;
-              case 2293:
+              case 2197:
                 resword = &wordlist[622];
                 goto compare;
-              case 2300:
+              case 2199:
                 resword = &wordlist[623];
                 goto compare;
-              case 2302:
+              case 2201:
                 resword = &wordlist[624];
                 goto compare;
-              case 2304:
+              case 2215:
                 resword = &wordlist[625];
                 goto compare;
-              case 2305:
+              case 2218:
                 resword = &wordlist[626];
                 goto compare;
-              case 2314:
+              case 2219:
                 resword = &wordlist[627];
                 goto compare;
-              case 2315:
+              case 2220:
                 resword = &wordlist[628];
                 goto compare;
-              case 2316:
+              case 2229:
                 resword = &wordlist[629];
                 goto compare;
-              case 2318:
+              case 2233:
                 resword = &wordlist[630];
                 goto compare;
-              case 2319:
+              case 2234:
                 resword = &wordlist[631];
                 goto compare;
-              case 2323:
+              case 2235:
                 resword = &wordlist[632];
                 goto compare;
-              case 2324:
+              case 2239:
                 resword = &wordlist[633];
                 goto compare;
-              case 2326:
+              case 2254:
                 resword = &wordlist[634];
                 goto compare;
-              case 2329:
+              case 2259:
                 resword = &wordlist[635];
                 goto compare;
-              case 2330:
+              case 2267:
                 resword = &wordlist[636];
                 goto compare;
-              case 2331:
+              case 2270:
                 resword = &wordlist[637];
                 goto compare;
-              case 2333:
+              case 2277:
                 resword = &wordlist[638];
                 goto compare;
-              case 2341:
+              case 2278:
                 resword = &wordlist[639];
                 goto compare;
-              case 2344:
+              case 2279:
                 resword = &wordlist[640];
                 goto compare;
-              case 2346:
+              case 2280:
                 resword = &wordlist[641];
                 goto compare;
-              case 2350:
+              case 2282:
                 resword = &wordlist[642];
                 goto compare;
-              case 2357:
+              case 2284:
                 resword = &wordlist[643];
                 goto compare;
-              case 2364:
+              case 2288:
                 resword = &wordlist[644];
                 goto compare;
-              case 2367:
+              case 2292:
                 resword = &wordlist[645];
                 goto compare;
-              case 2368:
+              case 2294:
                 resword = &wordlist[646];
                 goto compare;
-              case 2370:
+              case 2296:
                 resword = &wordlist[647];
                 goto compare;
-              case 2372:
+              case 2297:
                 resword = &wordlist[648];
                 goto compare;
-              case 2373:
+              case 2302:
                 resword = &wordlist[649];
                 goto compare;
-              case 2374:
+              case 2304:
                 resword = &wordlist[650];
                 goto compare;
-              case 2375:
+              case 2306:
                 resword = &wordlist[651];
                 goto compare;
-              case 2384:
+              case 2307:
                 resword = &wordlist[652];
                 goto compare;
-              case 2387:
+              case 2313:
                 resword = &wordlist[653];
                 goto compare;
-              case 2388:
+              case 2315:
                 resword = &wordlist[654];
                 goto compare;
-              case 2394:
+              case 2321:
                 resword = &wordlist[655];
                 goto compare;
-              case 2396:
+              case 2331:
                 resword = &wordlist[656];
                 goto compare;
-              case 2397:
+              case 2334:
                 resword = &wordlist[657];
                 goto compare;
-              case 2403:
+              case 2339:
                 resword = &wordlist[658];
                 goto compare;
-              case 2407:
+              case 2343:
                 resword = &wordlist[659];
                 goto compare;
-              case 2408:
+              case 2352:
                 resword = &wordlist[660];
                 goto compare;
-              case 2411:
+              case 2365:
                 resword = &wordlist[661];
                 goto compare;
-              case 2415:
+              case 2366:
                 resword = &wordlist[662];
                 goto compare;
-              case 2418:
+              case 2379:
                 resword = &wordlist[663];
                 goto compare;
-              case 2437:
+              case 2381:
                 resword = &wordlist[664];
                 goto compare;
-              case 2455:
+              case 2385:
                 resword = &wordlist[665];
                 goto compare;
-              case 2458:
+              case 2386:
                 resword = &wordlist[666];
                 goto compare;
-              case 2459:
+              case 2395:
                 resword = &wordlist[667];
                 goto compare;
-              case 2460:
+              case 2401:
                 resword = &wordlist[668];
                 goto compare;
-              case 2462:
+              case 2402:
                 resword = &wordlist[669];
                 goto compare;
-              case 2463:
+              case 2403:
                 resword = &wordlist[670];
                 goto compare;
-              case 2474:
+              case 2404:
                 resword = &wordlist[671];
                 goto compare;
-              case 2481:
+              case 2413:
                 resword = &wordlist[672];
                 goto compare;
-              case 2486:
+              case 2419:
                 resword = &wordlist[673];
                 goto compare;
-              case 2487:
+              case 2433:
                 resword = &wordlist[674];
                 goto compare;
-              case 2488:
+              case 2436:
                 resword = &wordlist[675];
                 goto compare;
-              case 2489:
+              case 2437:
                 resword = &wordlist[676];
                 goto compare;
-              case 2490:
+              case 2440:
                 resword = &wordlist[677];
                 goto compare;
-              case 2491:
+              case 2448:
                 resword = &wordlist[678];
                 goto compare;
-              case 2496:
+              case 2449:
                 resword = &wordlist[679];
                 goto compare;
-              case 2498:
+              case 2450:
                 resword = &wordlist[680];
                 goto compare;
-              case 2502:
+              case 2451:
                 resword = &wordlist[681];
                 goto compare;
-              case 2507:
+              case 2454:
                 resword = &wordlist[682];
                 goto compare;
-              case 2509:
+              case 2456:
                 resword = &wordlist[683];
                 goto compare;
-              case 2515:
+              case 2462:
                 resword = &wordlist[684];
                 goto compare;
-              case 2518:
+              case 2463:
                 resword = &wordlist[685];
                 goto compare;
-              case 2525:
+              case 2469:
                 resword = &wordlist[686];
                 goto compare;
-              case 2527:
+              case 2471:
                 resword = &wordlist[687];
                 goto compare;
-              case 2528:
+              case 2474:
                 resword = &wordlist[688];
                 goto compare;
-              case 2529:
+              case 2482:
                 resword = &wordlist[689];
                 goto compare;
-              case 2530:
+              case 2483:
                 resword = &wordlist[690];
                 goto compare;
-              case 2537:
+              case 2495:
                 resword = &wordlist[691];
                 goto compare;
-              case 2540:
+              case 2496:
                 resword = &wordlist[692];
                 goto compare;
-              case 2543:
+              case 2498:
                 resword = &wordlist[693];
                 goto compare;
-              case 2545:
+              case 2499:
                 resword = &wordlist[694];
                 goto compare;
-              case 2548:
+              case 2510:
                 resword = &wordlist[695];
                 goto compare;
-              case 2566:
+              case 2514:
                 resword = &wordlist[696];
                 goto compare;
-              case 2572:
+              case 2516:
                 resword = &wordlist[697];
                 goto compare;
-              case 2575:
+              case 2517:
                 resword = &wordlist[698];
                 goto compare;
-              case 2579:
+              case 2518:
                 resword = &wordlist[699];
                 goto compare;
-              case 2581:
+              case 2519:
                 resword = &wordlist[700];
                 goto compare;
-              case 2589:
+              case 2520:
                 resword = &wordlist[701];
                 goto compare;
-              case 2603:
+              case 2523:
                 resword = &wordlist[702];
                 goto compare;
-              case 2608:
+              case 2532:
                 resword = &wordlist[703];
                 goto compare;
-              case 2618:
+              case 2546:
                 resword = &wordlist[704];
                 goto compare;
-              case 2625:
+              case 2550:
                 resword = &wordlist[705];
                 goto compare;
-              case 2628:
+              case 2551:
                 resword = &wordlist[706];
                 goto compare;
-              case 2629:
+              case 2552:
                 resword = &wordlist[707];
                 goto compare;
-              case 2631:
+              case 2553:
                 resword = &wordlist[708];
                 goto compare;
-              case 2644:
+              case 2558:
                 resword = &wordlist[709];
                 goto compare;
-              case 2652:
+              case 2562:
                 resword = &wordlist[710];
                 goto compare;
-              case 2656:
+              case 2563:
                 resword = &wordlist[711];
                 goto compare;
-              case 2661:
+              case 2565:
                 resword = &wordlist[712];
                 goto compare;
-              case 2662:
+              case 2567:
                 resword = &wordlist[713];
                 goto compare;
-              case 2663:
+              case 2568:
                 resword = &wordlist[714];
                 goto compare;
-              case 2665:
+              case 2569:
                 resword = &wordlist[715];
                 goto compare;
-              case 2679:
+              case 2570:
                 resword = &wordlist[716];
                 goto compare;
-              case 2689:
+              case 2581:
                 resword = &wordlist[717];
                 goto compare;
-              case 2692:
+              case 2586:
                 resword = &wordlist[718];
                 goto compare;
-              case 2694:
+              case 2592:
                 resword = &wordlist[719];
                 goto compare;
-              case 2695:
+              case 2601:
                 resword = &wordlist[720];
                 goto compare;
-              case 2696:
+              case 2604:
                 resword = &wordlist[721];
                 goto compare;
-              case 2698:
+              case 2605:
                 resword = &wordlist[722];
                 goto compare;
-              case 2699:
+              case 2623:
                 resword = &wordlist[723];
                 goto compare;
-              case 2707:
+              case 2624:
                 resword = &wordlist[724];
                 goto compare;
-              case 2710:
+              case 2628:
                 resword = &wordlist[725];
                 goto compare;
-              case 2717:
+              case 2636:
                 resword = &wordlist[726];
                 goto compare;
-              case 2718:
+              case 2644:
                 resword = &wordlist[727];
                 goto compare;
-              case 2722:
+              case 2647:
                 resword = &wordlist[728];
                 goto compare;
-              case 2724:
+              case 2648:
                 resword = &wordlist[729];
                 goto compare;
-              case 2727:
+              case 2649:
                 resword = &wordlist[730];
                 goto compare;
-              case 2730:
+              case 2650:
                 resword = &wordlist[731];
                 goto compare;
-              case 2732:
+              case 2652:
                 resword = &wordlist[732];
                 goto compare;
-              case 2745:
+              case 2659:
                 resword = &wordlist[733];
                 goto compare;
-              case 2750:
+              case 2660:
                 resword = &wordlist[734];
                 goto compare;
-              case 2763:
+              case 2665:
                 resword = &wordlist[735];
                 goto compare;
-              case 2767:
+              case 2666:
                 resword = &wordlist[736];
                 goto compare;
-              case 2770:
+              case 2669:
                 resword = &wordlist[737];
                 goto compare;
-              case 2778:
+              case 2673:
                 resword = &wordlist[738];
                 goto compare;
-              case 2781:
+              case 2674:
                 resword = &wordlist[739];
                 goto compare;
-              case 2784:
+              case 2691:
                 resword = &wordlist[740];
                 goto compare;
-              case 2786:
+              case 2695:
                 resword = &wordlist[741];
                 goto compare;
-              case 2787:
+              case 2700:
                 resword = &wordlist[742];
                 goto compare;
-              case 2788:
+              case 2719:
                 resword = &wordlist[743];
                 goto compare;
-              case 2791:
+              case 2723:
                 resword = &wordlist[744];
                 goto compare;
-              case 2792:
+              case 2761:
                 resword = &wordlist[745];
                 goto compare;
-              case 2796:
+              case 2765:
                 resword = &wordlist[746];
                 goto compare;
-              case 2809:
+              case 2766:
                 resword = &wordlist[747];
                 goto compare;
-              case 2810:
+              case 2769:
                 resword = &wordlist[748];
                 goto compare;
-              case 2812:
+              case 2771:
                 resword = &wordlist[749];
                 goto compare;
-              case 2813:
+              case 2773:
                 resword = &wordlist[750];
                 goto compare;
-              case 2816:
+              case 2781:
                 resword = &wordlist[751];
                 goto compare;
-              case 2818:
+              case 2782:
                 resword = &wordlist[752];
                 goto compare;
-              case 2824:
+              case 2786:
                 resword = &wordlist[753];
                 goto compare;
-              case 2827:
+              case 2789:
                 resword = &wordlist[754];
                 goto compare;
-              case 2838:
+              case 2798:
                 resword = &wordlist[755];
                 goto compare;
-              case 2841:
+              case 2799:
                 resword = &wordlist[756];
                 goto compare;
-              case 2843:
+              case 2806:
                 resword = &wordlist[757];
                 goto compare;
-              case 2847:
+              case 2816:
                 resword = &wordlist[758];
                 goto compare;
-              case 2848:
+              case 2823:
                 resword = &wordlist[759];
                 goto compare;
-              case 2867:
+              case 2833:
                 resword = &wordlist[760];
                 goto compare;
-              case 2869:
+              case 2840:
                 resword = &wordlist[761];
                 goto compare;
-              case 2876:
+              case 2841:
                 resword = &wordlist[762];
                 goto compare;
-              case 2885:
+              case 2858:
                 resword = &wordlist[763];
                 goto compare;
-              case 2895:
+              case 2862:
                 resword = &wordlist[764];
                 goto compare;
-              case 2898:
+              case 2879:
                 resword = &wordlist[765];
                 goto compare;
-              case 2900:
+              case 2883:
                 resword = &wordlist[766];
                 goto compare;
-              case 2902:
+              case 2886:
                 resword = &wordlist[767];
                 goto compare;
-              case 2917:
+              case 2888:
                 resword = &wordlist[768];
                 goto compare;
-              case 2931:
+              case 2890:
                 resword = &wordlist[769];
                 goto compare;
-              case 2933:
+              case 2891:
                 resword = &wordlist[770];
                 goto compare;
-              case 2957:
+              case 2894:
                 resword = &wordlist[771];
                 goto compare;
-              case 2974:
+              case 2898:
                 resword = &wordlist[772];
                 goto compare;
-              case 2990:
+              case 2900:
                 resword = &wordlist[773];
                 goto compare;
-              case 2995:
+              case 2903:
                 resword = &wordlist[774];
                 goto compare;
-              case 3006:
+              case 2908:
                 resword = &wordlist[775];
                 goto compare;
-              case 3012:
+              case 2915:
                 resword = &wordlist[776];
                 goto compare;
-              case 3024:
+              case 2918:
                 resword = &wordlist[777];
                 goto compare;
-              case 3027:
+              case 2932:
                 resword = &wordlist[778];
                 goto compare;
-              case 3076:
+              case 2938:
                 resword = &wordlist[779];
                 goto compare;
-              case 3077:
+              case 2941:
                 resword = &wordlist[780];
                 goto compare;
-              case 3084:
+              case 2948:
                 resword = &wordlist[781];
                 goto compare;
-              case 3123:
+              case 2949:
                 resword = &wordlist[782];
                 goto compare;
-              case 3124:
+              case 2954:
                 resword = &wordlist[783];
                 goto compare;
-              case 3127:
+              case 2961:
                 resword = &wordlist[784];
                 goto compare;
-              case 3144:
+              case 2966:
                 resword = &wordlist[785];
                 goto compare;
-              case 3157:
+              case 3002:
                 resword = &wordlist[786];
                 goto compare;
-              case 3168:
+              case 3018:
                 resword = &wordlist[787];
                 goto compare;
-              case 3169:
+              case 3022:
                 resword = &wordlist[788];
                 goto compare;
-              case 3172:
+              case 3039:
                 resword = &wordlist[789];
                 goto compare;
-              case 3202:
+              case 3046:
                 resword = &wordlist[790];
                 goto compare;
-              case 3203:
+              case 3059:
                 resword = &wordlist[791];
                 goto compare;
-              case 3213:
+              case 3062:
                 resword = &wordlist[792];
                 goto compare;
-              case 3224:
+              case 3082:
                 resword = &wordlist[793];
                 goto compare;
-              case 3226:
+              case 3086:
                 resword = &wordlist[794];
                 goto compare;
-              case 3242:
+              case 3098:
                 resword = &wordlist[795];
                 goto compare;
-              case 3249:
+              case 3128:
                 resword = &wordlist[796];
                 goto compare;
-              case 3252:
+              case 3130:
                 resword = &wordlist[797];
                 goto compare;
-              case 3258:
+              case 3133:
                 resword = &wordlist[798];
                 goto compare;
-              case 3263:
+              case 3134:
                 resword = &wordlist[799];
                 goto compare;
-              case 3276:
+              case 3143:
                 resword = &wordlist[800];
                 goto compare;
-              case 3279:
+              case 3161:
                 resword = &wordlist[801];
                 goto compare;
-              case 3283:
+              case 3200:
                 resword = &wordlist[802];
                 goto compare;
-              case 3307:
+              case 3212:
                 resword = &wordlist[803];
                 goto compare;
-              case 3315:
+              case 3238:
                 resword = &wordlist[804];
                 goto compare;
-              case 3344:
+              case 3249:
                 resword = &wordlist[805];
                 goto compare;
-              case 3356:
+              case 3265:
                 resword = &wordlist[806];
                 goto compare;
-              case 3384:
+              case 3276:
                 resword = &wordlist[807];
                 goto compare;
-              case 3412:
+              case 3316:
                 resword = &wordlist[808];
                 goto compare;
-              case 3427:
+              case 3327:
                 resword = &wordlist[809];
                 goto compare;
-              case 3485:
+              case 3348:
                 resword = &wordlist[810];
                 goto compare;
-              case 3486:
+              case 3351:
                 resword = &wordlist[811];
                 goto compare;
-              case 3488:
+              case 3357:
                 resword = &wordlist[812];
                 goto compare;
-              case 3573:
+              case 3367:
                 resword = &wordlist[813];
                 goto compare;
-              case 3583:
+              case 3370:
                 resword = &wordlist[814];
                 goto compare;
-              case 3599:
+              case 3400:
                 resword = &wordlist[815];
                 goto compare;
-              case 3602:
+              case 3407:
                 resword = &wordlist[816];
                 goto compare;
-              case 3635:
+              case 3437:
                 resword = &wordlist[817];
                 goto compare;
-              case 3642:
+              case 3470:
                 resword = &wordlist[818];
                 goto compare;
-              case 3652:
+              case 3473:
                 resword = &wordlist[819];
                 goto compare;
-              case 3656:
+              case 3478:
                 resword = &wordlist[820];
                 goto compare;
-              case 3689:
+              case 3521:
                 resword = &wordlist[821];
                 goto compare;
-              case 3754:
+              case 3537:
                 resword = &wordlist[822];
                 goto compare;
-              case 3783:
+              case 3555:
                 resword = &wordlist[823];
                 goto compare;
-              case 3871:
+              case 3587:
                 resword = &wordlist[824];
                 goto compare;
-              case 3874:
+              case 3596:
                 resword = &wordlist[825];
                 goto compare;
-              case 3875:
+              case 3645:
                 resword = &wordlist[826];
                 goto compare;
-              case 3924:
+              case 3657:
                 resword = &wordlist[827];
                 goto compare;
-              case 3929:
+              case 3669:
                 resword = &wordlist[828];
                 goto compare;
-              case 3932:
+              case 3693:
                 resword = &wordlist[829];
                 goto compare;
-              case 3958:
+              case 3710:
                 resword = &wordlist[830];
                 goto compare;
-              case 3977:
+              case 3714:
                 resword = &wordlist[831];
                 goto compare;
-              case 4019:
+              case 3767:
                 resword = &wordlist[832];
                 goto compare;
-              case 4036:
+              case 3815:
                 resword = &wordlist[833];
                 goto compare;
-              case 4147:
+              case 3848:
                 resword = &wordlist[834];
                 goto compare;
-              case 4161:
+              case 3885:
                 resword = &wordlist[835];
                 goto compare;
-              case 4226:
+              case 3934:
                 resword = &wordlist[836];
                 goto compare;
-              case 4304:
+              case 3953:
                 resword = &wordlist[837];
                 goto compare;
-              case 4445:
+              case 4029:
                 resword = &wordlist[838];
                 goto compare;
-              case 4449:
+              case 4067:
                 resword = &wordlist[839];
                 goto compare;
-              case 4511:
+              case 4092:
                 resword = &wordlist[840];
                 goto compare;
-              case 4597:
+              case 4129:
                 resword = &wordlist[841];
                 goto compare;
-              case 4713:
+              case 4162:
                 resword = &wordlist[842];
                 goto compare;
-              case 4917:
+              case 4231:
                 resword = &wordlist[843];
                 goto compare;
-              case 4936:
+              case 4268:
                 resword = &wordlist[844];
                 goto compare;
-              case 4983:
+              case 4331:
                 resword = &wordlist[845];
                 goto compare;
-              case 5185:
+              case 4368:
                 resword = &wordlist[846];
                 goto compare;
-              case 5267:
+              case 4401:
                 resword = &wordlist[847];
                 goto compare;
-              case 5408:
+              case 4445:
                 resword = &wordlist[848];
                 goto compare;
-              case 5535:
+              case 4482:
                 resword = &wordlist[849];
                 goto compare;
-              case 5739:
+              case 4507:
                 resword = &wordlist[850];
                 goto compare;
-              case 5758:
+              case 4515:
                 resword = &wordlist[851];
                 goto compare;
-              case 6007:
+              case 4540:
                 resword = &wordlist[852];
                 goto compare;
-              case 6230:
+              case 4746:
                 resword = &wordlist[853];
+                goto compare;
+              case 4779:
+                resword = &wordlist[854];
+                goto compare;
+              case 4860:
+                resword = &wordlist[855];
+                goto compare;
+              case 4893:
+                resword = &wordlist[856];
                 goto compare;
             }
           return 0;

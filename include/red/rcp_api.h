@@ -1,6 +1,6 @@
 /********************************************************************************
- * This file is part of the RCP SDK Release 6.50.23
- * Copyright (C) 2009-2017 Red.com, Inc.  All rights reserved.
+ * This file is part of the RCP SDK Release 6.51.2
+ * Copyright (C) 2009-2018 RED.COM, LLC.  All rights reserved.
  *
  * For technical support please email rcpsdk@red.com.
  *
@@ -11,19 +11,19 @@
  * "Binary Code" means machine-readable Source Code in binary form.
  * 
  * "Approved Recipients" means only those recipients of the Source Code who have
- * entered into the RCP SDK License Agreement with Red.com, Inc. All
+ * entered into the RCP SDK License Agreement with RED.COM, LLC. All
  * other recipients are not authorized to possess, modify, use, or distribute the
  * Source Code.
  *
- * Red.com, Inc. hereby grants Approved Recipients the rights to modify this
+ * RED.COM, LLC hereby grants Approved Recipients the rights to modify this
  * Source Code, create derivative works based on this Source Code, and distribute
  * the modified/derivative works only as Binary Code in its binary form. Approved
  * Recipients may not distribute the Source Code or any modification or derivative
  * work of the Source Code. Redistributions of Binary Code must reproduce this
  * copyright notice, this list of conditions, and the following disclaimer in the
- * documentation or other materials provided with the distribution. Red.com, Inc.
+ * documentation or other materials provided with the distribution. RED.COM, LLC
  * may not be used to endorse or promote Binary Code redistributions without
- * specific prior written consent from Red.com, Inc. 
+ * specific prior written consent from RED.COM, LLC. 
  *
  * The only exception to the above licensing requirements is any recipient may use,
  * copy, modify, and distribute in any format the strlcat.c and strlcpy.c software
@@ -34,7 +34,7 @@
  * THE ACCOMPANYING SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
- * IN NO EVENT SHALL THE RED.COM, INC., ANY OTHER COPYRIGHT HOLDERS, OR ANYONE
+ * IN NO EVENT SHALL THE RED.COM, LLC, ANY OTHER COPYRIGHT HOLDERS, OR ANYONE
  * DISTRIBUTING THE SOFTWARE BE LIABLE FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER
  * IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -58,6 +58,11 @@
 #define ALLOWED_WPA_PW_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -=[];',./!@#$%^&*()_+{}:<>?\"\\`|"
 #define ALLOWED_LENS_NAME_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -=[];',./!@#$%^&*()_+{}:<>?"
 #define ALLOWED_LENS_SERIAL_CHARS "0123456789"
+
+#define BATTERY_INVALID_VALUE           (-1)
+#define BATTERY_RUNTIME_WARNING_MINUTES (10)
+#define BATTERY_RUNTIME_LOW_MINUTES     (5)
+#define BATTERY_RUNTIME_MAX_MINUTES     (600)
 
 /* RCP: CSPACE */
 typedef enum {
@@ -571,7 +576,9 @@ typedef enum
     KEY_ACTION_EVF3_CYCLE_MODE = 196,
     KEY_ACTION_TOGGLE_OVERLAYS_EVF3 = 197,
     KEY_ACTION_APERTURE_FINE_ADJUSTMENT_OPEN = 198,
-    KEY_ACTION_APERTURE_FINE_ADJUSTMENT_CLOSE = 199
+    KEY_ACTION_APERTURE_FINE_ADJUSTMENT_CLOSE = 199,
+    KEY_ACTION_SENSOR_SENSITIVITY_TOGGLE = 200,
+    KEY_ACTION_COUNT
 } key_action_t;
 
 typedef enum
@@ -1169,113 +1176,112 @@ typedef enum {
      * table in hw_cap_if.cpp
      * */
 
-    HW_CAP_COLOR_SENSOR,
-    HW_CAP_WIFI,
-    HW_CAP_FIZ,
-    HW_CAP_GIG_ETHERNET,
-    HW_CAP_TETHERING,
-    HW_CAP_SIDE_UI,
-    HW_CAP_ND_CONTROL,
-    HW_CAP_3D_LUT,
-    HW_CAP_MON_BRAIN_LCD_EVF,
-    HW_CAP_SW,
-    HW_CAP_MON_BRAIN_HDMI,
-    HW_CAP_MON_BRAIN_HDSDI,
-    HW_CAP_MON_REAR_LCD_EVF,
-    HW_CAP_WIRELESS_HAND_CONTROLLER,
-    HW_CAP_MON_REAR_HDSDI_1,
-    HW_CAP_MON_REAR_HDSDI_2,
-    HW_CAP_CONTROL_UART,
-    HW_CAP_REDMOTE_COMM,
-    HW_CAP_PRORES,
-    HW_CAP_HEADPHONE,
-    HW_CAP_AUDIO_OUT,
-    HW_CAP_MONITOR_WITH_AUDIO,
-    HW_CAP_AUDIO_PHANTOM_POWER,
-    HW_CAP_AUDIO_LIMITER,
-    HW_CAP_TIMECODE_IN,
-    HW_CAP_TIMECODE_OUT,
-    HW_CAP_GENLOCK,
-    HW_CAP_GPI,
-    HW_CAP_GPO,
-    HW_CAP_SYNC_IN,
-    HW_CAP_SYNC_OUT,
-    HW_CAP_GPI_SYNC_IN_MUXED,
-    HW_CAP_GPO_SYNC_OUT_MUXED,
-    HW_CAP_PRO_IO_GPI_A,
-    HW_CAP_PRO_IO_GPI_B,
-    HW_CAP_PRO_IO_SW_1,
-    HW_CAP_PRO_IO_SW_2,
-    HW_CAP_LCD_EVF_2_HDMI_MUX,
-    HW_CAP_SIDE_HANDLE,
-    HW_CAP_POWER_OUT_PRO_IO_GPIO,
-    HW_CAP_POWER_OUT_PRO_IO_PWR,
-    HW_CAP_POWER_OUT_PRO_IO_AUX,
-    HW_CAP_POWER_OUT_PLUS_ONE_PWR,
-    HW_CAP_POWER_OUT_BAT_AUX,
-    HW_CAP_POWER_OUT_BAT_AUX_WITH_ENABLE,
-    HW_CAP_POWER_OUT_JETPACK_USB,
-    HW_CAP_MULTI_MONITOR_FEEDS,
-    HW_CAP_MON_BRAIN_LCD_EVF_MULTI_FEEDS,
-    HW_CAP_MON_BRAIN_HDMI_MULTI_FEEDS,
-    HW_CAP_MON_BRAIN_HDSDI_MULTI_FEEDS,
-    HW_CAP_MON_REAR_LCD_EVF_MULTI_FEEDS,
-    HW_CAP_MON_REAR_HDSDI_1_MULTI_FEEDS,
-    HW_CAP_MON_REAR_HDSDI_2_MULTI_FEEDS,
-    HW_CAP_SSD_TALLY_LIGHT,
-    HW_CAP_STROBE,
-    HW_CAP_MULTI_MONITOR_FEED_0,
-    HW_CAP_MULTI_MONITOR_FEED_1,
-    HW_CAP_MULTI_MONITOR_FEED_1_AND_3D_LUT,
-    HW_CAP_POWER_OUT_REAR_PTAP,
-    HW_CAP_CONTROL_UART_2,
-    HW_CAP_POWER_OUT_REAR_AUX,
-    HW_CAP_POWER_OUT_TIMECODE,
-    HW_CAP_SW_2,
-    HW_CAP_AUDIO_MODE_NO_UI_CONTROL_12,
-    HW_CAP_AUDIO_MODE_UI_CONTROL_12,
-    HW_CAP_AUDIO_MODE_UI_CONTROL_34,
-    HW_CAP_WEAPON_SIDE_HANDLE,
-    HW_CAP_MON_LCD3_EVF3,
-    HW_CAP_MON_LCD3_EVF3_MULTI_FEEDS,
-    HW_CAP_AUDIO_CAM_MIC_12,
-    HW_CAP_AUDIO_REAR_ANALOG_12,
-    HW_CAP_AUDIO_REAR_DIGITAL_12,
-    HW_CAP_AUDIO_REAR_DIGITAL_34,
-    HW_CAP_THIRD_PARTY_OLPFS,
-    HW_CAP_PL_POWER,
-    HW_CAP_PL_DETECT,
-    HW_CAP_GENLOCK_MUXED,
-    HW_CAP_AUDIO_MODE_NO_UI_CONTROL_34,
-    HW_CAP_TOP_MODULE_RECORD_BUTTON,
-    HW_CAP_SIDE_MODULE_FOCUS_WHEEL,
-    HW_CAP_SIDE_MODULE_KEYS,
-    HW_CAP_SIDE_MODULE_RECORD,
-    HW_CAP_SIDE_MODULE_NAVIGATION,
-    HW_CAP_INTERNAL_AMBIENT,
-    HW_CAP_COLOR_SCIENCE_IPP2,
-    HW_CAP_PRESTON_FIZ,
-    HW_CAP_SIDE_UI_LEFT,
-    HW_CAP_SIDE_UI_RIGHT,
-    HW_CAP_MON_REAR_UHDSDI_1,
-    HW_CAP_MON_REAR_UHDSDI_2,
-    HW_CAP_RETURN_FEED,
-    HW_CAP_MON_BRAIN_LCD_EVF_RETURN_FEED,
-    HW_CAP_MON_BRAIN_HDMI_RETURN_FEED,
-    HW_CAP_MON_BRAIN_HDSDI_RETURN_FEED,
-    HW_CAP_MON_REAR_LCD_EVF_RETURN_FEED,
-    HW_CAP_MON_REAR_HDSDI_1_RETURN_FEED,
-    HW_CAP_MON_REAR_HDSDI_2_RETURN_FEED,
-    HW_CAP_MON_LCD3_EVF3_RETURN_FEED,
-    HW_CAP_MON_REAR_UHDSDI_1_2_SHARED,
-    HW_CAP_FRAME_PROCESSING,
-    HW_CAP_ANAMORPHIC,
-    HW_CAP_LOOKAROUND,
-    HW_CAP_ALLOW_ISO_CALIBRATION1,
-    HW_CAP_DROP_FRAME_TIMECODE,
-    HW_CAP_PRIVATE_0,
-    HW_CAP_SENSOR_FLIP,
-    HW_CAP_PRIVATE_1,
+    HW_CAP_COLOR_SENSOR = 0,
+    HW_CAP_WIFI = 1,
+    HW_CAP_FIZ = 2,
+    HW_CAP_GIG_ETHERNET = 3,
+    HW_CAP_TETHERING = 4,
+    HW_CAP_SIDE_UI = 5,
+    HW_CAP_ND_CONTROL = 6,
+    HW_CAP_3D_LUT = 7,
+    HW_CAP_MON_BRAIN_LCD_EVF = 8,
+    HW_CAP_SW = 9,
+    HW_CAP_MON_BRAIN_HDMI = 10,
+    HW_CAP_MON_BRAIN_HDSDI = 11,
+    HW_CAP_MON_REAR_LCD_EVF = 12,
+    HW_CAP_WIRELESS_HAND_CONTROLLER = 13,
+    HW_CAP_MON_REAR_HDSDI_1 = 14,
+    HW_CAP_MON_REAR_HDSDI_2 = 15,
+    HW_CAP_CONTROL_UART = 16,
+    HW_CAP_REDMOTE_COMM = 17,
+    HW_CAP_PRORES = 18,
+    HW_CAP_HEADPHONE = 19,
+    HW_CAP_AUDIO_OUT = 20,
+    HW_CAP_MONITOR_WITH_AUDIO = 21,
+    HW_CAP_AUDIO_PHANTOM_POWER = 22,
+    HW_CAP_AUDIO_LIMITER = 23,
+    HW_CAP_TIMECODE_IN = 24,
+    HW_CAP_TIMECODE_OUT = 25,
+    HW_CAP_GENLOCK = 26,
+    HW_CAP_GPI = 27,
+    HW_CAP_GPO = 28,
+    HW_CAP_SYNC_IN = 29,
+    HW_CAP_SYNC_OUT = 30,
+    HW_CAP_GPI_SYNC_IN_MUXED = 31,
+    HW_CAP_GPO_SYNC_OUT_MUXED = 32,
+    HW_CAP_PRO_IO_GPI_A = 33,
+    HW_CAP_PRO_IO_GPI_B = 34,
+    HW_CAP_PRO_IO_SW_1 = 35,
+    HW_CAP_PRO_IO_SW_2 = 36,
+    HW_CAP_LCD_EVF_2_HDMI_MUX = 37,
+    HW_CAP_SIDE_HANDLE = 38,
+    HW_CAP_POWER_OUT_PRO_IO_GPIO = 39,
+    HW_CAP_POWER_OUT_PRO_IO_PWR = 40,
+    HW_CAP_POWER_OUT_PRO_IO_AUX = 41,
+    HW_CAP_POWER_OUT_PLUS_ONE_PWR = 42,
+    HW_CAP_POWER_OUT_BAT_AUX = 43,
+    HW_CAP_POWER_OUT_BAT_AUX_WITH_ENABLE = 44,
+    HW_CAP_POWER_OUT_JETPACK_USB = 45,
+    HW_CAP_MULTI_MONITOR_FEEDS = 46,
+    HW_CAP_MON_BRAIN_LCD_EVF_MULTI_FEEDS = 47,
+    HW_CAP_MON_BRAIN_HDMI_MULTI_FEEDS = 48,
+    HW_CAP_MON_BRAIN_HDSDI_MULTI_FEEDS = 49,
+    HW_CAP_MON_REAR_LCD_EVF_MULTI_FEEDS = 50,
+    HW_CAP_MON_REAR_HDSDI_1_MULTI_FEEDS = 51,
+    HW_CAP_MON_REAR_HDSDI_2_MULTI_FEEDS = 52,
+    HW_CAP_SSD_TALLY_LIGHT = 53,
+    HW_CAP_STROBE = 54,
+    HW_CAP_MULTI_MONITOR_FEED_0 = 55,
+    HW_CAP_MULTI_MONITOR_FEED_1 = 56,
+    HW_CAP_MULTI_MONITOR_FEED_1_AND_3D_LUT = 57,
+    HW_CAP_POWER_OUT_REAR_PTAP = 58,
+    HW_CAP_CONTROL_UART_2 = 59,
+    HW_CAP_POWER_OUT_REAR_AUX = 60,
+    HW_CAP_POWER_OUT_TIMECODE = 61,
+    HW_CAP_SW_2 = 62,
+    HW_CAP_AUDIO_MODE_NO_UI_CONTROL_12 = 63,
+    HW_CAP_AUDIO_MODE_UI_CONTROL_12 = 64,
+    HW_CAP_AUDIO_MODE_UI_CONTROL_34 = 65,
+    HW_CAP_WEAPON_SIDE_HANDLE = 66,
+    HW_CAP_MON_LCD3_EVF3 = 67,
+    HW_CAP_MON_LCD3_EVF3_MULTI_FEEDS = 68,
+    HW_CAP_AUDIO_CAM_MIC_12 = 69,
+    HW_CAP_AUDIO_REAR_ANALOG_12 = 70,
+    HW_CAP_AUDIO_REAR_DIGITAL_12 = 71,
+    HW_CAP_AUDIO_REAR_DIGITAL_34 = 72,
+    HW_CAP_THIRD_PARTY_OLPFS = 73,
+    HW_CAP_PL_POWER = 74,
+    HW_CAP_PL_DETECT = 75,
+    HW_CAP_GENLOCK_MUXED = 76,
+    HW_CAP_AUDIO_MODE_NO_UI_CONTROL_34 = 77,
+    HW_CAP_TOP_MODULE_RECORD_BUTTON = 78,
+    HW_CAP_SIDE_MODULE_FOCUS_WHEEL = 79,
+    HW_CAP_SIDE_MODULE_KEYS = 80,
+    HW_CAP_SIDE_MODULE_RECORD = 81,
+    HW_CAP_SIDE_MODULE_NAVIGATION = 82,
+    HW_CAP_INTERNAL_AMBIENT = 83,
+    HW_CAP_COLOR_SCIENCE_IPP2 = 84,
+    HW_CAP_PRESTON_FIZ = 85,
+    HW_CAP_SIDE_UI_LEFT = 86,
+    HW_CAP_SIDE_UI_RIGHT = 87,
+    HW_CAP_MON_REAR_UHDSDI_1 = 88,
+    HW_CAP_MON_REAR_UHDSDI_2 = 89,
+    HW_CAP_RETURN_FEED = 90,
+    HW_CAP_MON_BRAIN_LCD_EVF_RETURN_FEED = 91,
+    HW_CAP_MON_BRAIN_HDMI_RETURN_FEED = 92,
+    HW_CAP_MON_BRAIN_HDSDI_RETURN_FEED = 93,
+    HW_CAP_MON_REAR_LCD_EVF_RETURN_FEED = 94,
+    HW_CAP_MON_REAR_HDSDI_1_RETURN_FEED = 95,
+    HW_CAP_MON_REAR_HDSDI_2_RETURN_FEED = 96,
+    HW_CAP_MON_LCD3_EVF3_RETURN_FEED = 97,
+    HW_CAP_MON_REAR_UHDSDI_1_2_SHARED = 98,
+    HW_CAP_FRAME_PROCESSING = 99,
+    HW_CAP_ANAMORPHIC = 100,
+    HW_CAP_LOOKAROUND = 101,
+    HW_CAP_ALLOW_ISO_CALIBRATION1 = 102,
+    HW_CAP_DROP_FRAME_TIMECODE = 103,
+    HW_CAP_SENSOR_FLIP = 105,
+    HW_CAP_SENSOR_SENSITIVITY = 107,
     HW_CAP_COUNT
 } hw_cap_t;
 
@@ -1334,7 +1340,8 @@ typedef enum
     RFTP_ERROR_NOT_ENOUGH_SPACE,                /* File receiver doesn't have enough space */
     RFTP_ERROR_UNABLE_TO_CREATE_FILE,           /* Other file creation errors */
     RFTP_ERROR_TETHERED_TRANSFER_IN_PROGRESS,   /* A tethered transfer is already in progress (when retrieving another file using tethering) */
-    RFTP_ERROR_INTERNAL                         /* Internal error  */
+    RFTP_ERROR_INTERNAL,                        /* Internal error  */
+    RFTP_ERROR_TRANSFERS_PAUSED                 /* A tethered transfer is requested while transfers are paused */
 } rftp_error_t;
 
 typedef enum
@@ -1666,6 +1673,12 @@ typedef enum
     ROLL_OFF_COUNT
 } roll_off_t;
 
+typedef enum
+{
+    SENSOR_SENSITIVITY_LOW_LIGHT,
+    SENSOR_SENSITIVITY_STANDARD
+} sensor_sensitivity_t;
+
 #endif
 /********** End file: rcp_types_public.h ****************************************/
 
@@ -1741,14 +1754,10 @@ typedef int32_t c_list_num_t;
 typedef void * (* c_list_malloc_t) (size_t);
 typedef void (* c_list_free_t) (void *);
 
-#define C_LIST_NUM_STRINGS_TO_COMPRESS 33
-
 #ifdef __cplusplus
 extern "C"
 {
 #endif
-
-extern const char * c_list_strings_to_compress[C_LIST_NUM_STRINGS_TO_COMPRESS];
 
 typedef enum {
     C_LIST_SUCCESS,                    /**< No error */
@@ -2415,8 +2424,22 @@ int c_list_compare(const c_list_t * c_list_1, const c_list_t * c_list_2);
  *
  * @page CHANGELOG Changelog
  *
+ * @section VERSION_6_51_2 Version 6.51.2
+ * - Added parameters:
+ *   - @ref RCP_PARAM_SENSOR_SENSITIVITY
+ *
+ * @section VERSION_6_51_0 Version 6.51.0
+ * - Added parameters:
+ *   - @ref RCP_PARAM_QT_DROPPED_FRAMES
+ *   - @ref RCP_PARAM_MXF_DROPPED_FRAMES
+ *   - @ref RCP_PARAM_R3D_DROPPED_FRAMES
+ *
+ * @section VERSION_6_50_24 Version 6.50.24
+ * - Added is_paused field to rcp_cur_rftp_status_cb_data_t
+ *
+ *
  * @section VERSION_6_50_23 Version 6.50.23
- * - Added paramters:
+ * - Added parameters:
  *   - @ref RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS
  *   - @ref RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS
  *
@@ -2473,7 +2496,6 @@ int c_list_compare(const c_list_t * c_list_1, const c_list_t * c_list_2);
  *   - @ref RCP_PARAM_MONITOR_CURVE_REAR_EVF
  *   - @ref RCP_PARAM_MONITOR_CURVE_LCD3
  *   - @ref RCP_PARAM_MONITOR_CURVE_EVF3
- *   - @ref RCP_PARAM_RECORD_R3D_METADATA_CURVE
  *   - @ref RCP_PARAM_FLIP_MIRROR_FEED_0
  *   - @ref RCP_PARAM_FLIP_MIRROR_FEED_1
  *
@@ -3385,7 +3407,7 @@ typedef enum
     RCP_PARAM_AUDIO_CH2_VOL,                          /**< CH2VOL: added in Parameter Set Version 5.0 */
     RCP_PARAM_AUDIO_CH3_VOL,                          /**< CH3VOL: added in Parameter Set Version 5.0 */
     RCP_PARAM_AUDIO_CH4_VOL,                          /**< CH4VOL: added in Parameter Set Version 5.0 */
-    RCP_PARAM_DROPPED_FRAMES,                         /**< DRPFRMS: added in Parameter Set Version 5.0 */
+    RCP_PARAM_R3D_DROPPED_FRAMES,                     /**< DRPFRMS: added in Parameter Set Version 5.0 */
     RCP_PARAM_MONITOR_MODE_LCD,                       /**< LCDM: added in Parameter Set Version 5.0 */
     RCP_PARAM_MONITOR_MODE_HDMI,                      /**< HDMIM: added in Parameter Set Version 5.0 */
     RCP_PARAM_MONITOR_MODE_HDSDI,                     /**< HDSDIM: added in Parameter Set Version 5.0 */
@@ -4353,6 +4375,10 @@ typedef enum
     RCP_PARAM_RECORD_PROXY_BAKED_IN_SETTINGS,         /**< VCBAKED: added in Parameter Set Version 6.50 */
     RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS,     /**< VCBAKMIN: added in Parameter Set Version 6.50 */
     RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS,     /**< VCBAKMAX: added in Parameter Set Version 6.50 */
+    RCP_PARAM_SENSOR_SENSITIVITY,                     /**< SENSTVTY: added in Parameter Set Version 6.50 */ 
+    RCP_PARAM_QT_DROPPED_FRAMES,                      /**< QTDRPFRM: added in Parameter Set Version 6.51 */
+    RCP_PARAM_MXF_DROPPED_FRAMES,                     /**< MXFDRPFM: added in Parameter Set Version 6.51 */
+    RCP_PARAM_DROPPED_FRAMES,                         /**< Composite of @ref RCP_PARAM_R3D_DROPPED_FRAMES, @ref RCP_PARAM_QT_DROPPED_FRAMES and @ref RCP_PARAM_MXF_DROPPED_FRAMES, added in Parameter Set Version 6.51 */
 
     RCP_PARAM_COUNT
 } rcp_param_t;
@@ -4759,6 +4785,7 @@ typedef struct
     int32_t percent_complete;                   /**< Transfer completion percentage. */
     const char * directory_list_string;         /**< Raw string representation of the directory listing for a specific directory (needs to be converted to a cList or equivalent). */
     const char * md5sum;                        /**< MD5 hex string of file being retrieved from the camera. Only applicable on tethered retrieve transfers. */
+    int is_paused;                              /**< If true, data flow is paused for this transfer. */
 } rcp_cur_rftp_status_cb_data_t;
 
 typedef struct
