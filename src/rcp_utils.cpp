@@ -43,14 +43,14 @@ uint32_t rcp_timestamp()
   return diff.total_milliseconds();
 }
 
-void rcp_log(rcp_log_t severity,
-             const rcp_camera_connection_t *con,
-             const char *msg)
-{
-  (void)severity;
-  (void)con;
-  printf("%s", msg);
-}
+// void rcp_log(rcp_log_t severity,
+//             const rcp_camera_connection_t *con,
+//             const char *msg)
+//{
+//  (void)severity;
+//  (void)con;
+//  printf("%s", msg);
+//}
 
 void rcp_mutex_lock(rcp_mutex_t id)
 {
