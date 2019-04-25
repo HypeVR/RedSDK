@@ -1,5 +1,5 @@
 /********************************************************************************
- * This file is part of the RCP SDK Release 6.50.23
+ * This file is part of the RCP SDK Release 6.61.0
  *
  * For technical support please email rcpsdk@red.com.
  *
@@ -27,7 +27,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "red/stringl.h"
+#include "stringl/stringl.h"
 #ifdef STRINGL_USE_LOGGER
 #include "utils/diagnostic/log/log.h"
 #endif
@@ -37,64 +37,63 @@
  * will be copied.  Always NUL terminates (unless siz == 0).
  * Returns strlen(src); if retval >= siz, truncation occurred.
  */
-size_t strlcpy(char* dst, const char* src, size_t siz)
+size_t strlcpy(char * dst, const char * src, size_t siz)
 {
-  size_t retval;
-  char* d       = dst;
-  const char* s = src;
-  size_t n      = siz;
+    size_t retval;
+    char * d = dst;
+    const char * s = src;
+    size_t n = siz;
 
-  if (!dst)
-  {
-#ifdef STRINGL_USE_LOGGER
-    log_error("strlcpy called with NULL for destination\n");
-#endif
-    return 0;
-  }
-
-  if (!src)
-  {
-#ifdef STRINGL_USE_LOGGER
-    log_error("strlcpy called with NULL for source\n");
-#endif
-    if (siz > 0)
+    if (!dst)
     {
-      *d = '\0';
+#ifdef STRINGL_USE_LOGGER
+        log_error("strlcpy called with NULL for destination\n");
+#endif
+        return 0;
     }
 
-    return 0;
-  }
-
-  /* Copy as many bytes as will fit */
-  if (n != 0)
-  {
-    while (--n != 0)
+    if (!src)
     {
-      if ((*d++ = *s++) == '\0') break;
-    }
-  }
-
-  /* Not enough room in dst, add NUL and traverse rest of src */
-  if (n == 0)
-  {
-    if (siz != 0) *d = '\0'; /* NUL-terminate dst */
-    while (*s++)
-      ;
-  }
-
-  retval = (s - src - 1); /* count does not include NUL */
-
-  if (retval >= siz)
-  {
 #ifdef STRINGL_USE_LOGGER
-    log_warning(
-        "truncation occurred in strlcpy; dest size %u; source string: %s\n",
-        siz,
-        src);
+        log_error("strlcpy called with NULL for source\n");
 #endif
-  }
+        if (siz > 0)
+        {
+            *d = '\0';
+        }
 
-  return retval;
+        return 0;
+    }
+
+    /* Copy as many bytes as will fit */
+    if (n != 0)
+    {
+        while (--n != 0)
+        {
+            if ((*d++ = *s++) == '\0')
+                break;
+        }
+    }
+
+    /* Not enough room in dst, add NUL and traverse rest of src */
+    if (n == 0)
+    {
+        if (siz != 0)
+            *d = '\0';      /* NUL-terminate dst */
+        while (*s++)
+            ;
+    }
+
+    retval = (s - src - 1); /* count does not include NUL */
+
+    if (retval >= siz)
+    {
+#ifdef STRINGL_USE_LOGGER
+        log_warning("truncation occurred in strlcpy; dest size %u; source string: %s\n", siz, src);
+#endif
+    }
+
+    return retval;
 }
 
 #endif

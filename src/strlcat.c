@@ -1,5 +1,5 @@
 /********************************************************************************
- * This file is part of the RCP SDK Release 6.50.23
+ * This file is part of the RCP SDK Release 6.61.0
  *
  * For technical support please email rcpsdk@red.com.
  *
@@ -27,7 +27,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "red/stringl.h"
+#include "stringl/stringl.h"
 #ifdef STRINGL_USE_LOGGER
 #include "utils/diagnostic/log/log.h"
 #endif
@@ -39,59 +39,59 @@
  * Returns strlen(src) + MIN(siz, strlen(initial dst)).
  * If retval >= siz, truncation occurred.
  */
-size_t strlcat(char* dst, const char* src, size_t siz)
+size_t
+strlcat(char * dst, const char * src, size_t siz)
 {
-  size_t retval;
-  char* d       = dst;
-  const char* s = src;
-  size_t n      = siz;
-  size_t dlen;
+    size_t retval;
+    char * d = dst;
+    const char * s = src;
+    size_t n = siz;
+    size_t dlen;
 
-  if (!dst)
-  {
-#ifdef STRINGL_USE_LOGGER
-    log_error("strlcat called with NULL for destination\n");
-#endif
-    return 0;
-  }
-
-  /* Find the end of dst and adjust bytes left but don't go past end */
-  while (n-- != 0 && *d != '\0') d++;
-  dlen = d - dst;
-  n    = siz - dlen;
-
-  if (!src)
-  {
-#ifdef STRINGL_USE_LOGGER
-    log_error("strlcat called with NULL for source\n");
-#endif
-    return dlen;
-  }
-
-  if (n == 0) return dlen + strlen(s);
-  while (*s != '\0')
-  {
-    if (n != 1)
+    if (!dst)
     {
-      *d++ = *s;
-      n--;
-    }
-    s++;
-  }
-  *d = '\0';
-
-  retval = (dlen + (s - src)); /* count does not include NUL */
-
-  if (retval >= siz)
-  {
 #ifdef STRINGL_USE_LOGGER
-    log_warning(
-        "truncation occured in strlcat; dest size %u; source string: %s\n",
-        siz,
-        src);
+        log_error("strlcat called with NULL for destination\n");
 #endif
-  }
-  return retval;
+        return 0;
+    }
+
+    /* Find the end of dst and adjust bytes left but don't go past end */
+    while (n-- != 0 && *d != '\0')
+        d++;
+    dlen = d - dst;
+    n = siz - dlen;
+
+    if (!src)
+    {
+#ifdef STRINGL_USE_LOGGER
+        log_error("strlcat called with NULL for source\n");
+#endif
+        return dlen;
+    }
+
+    if (n == 0)
+        return dlen + strlen(s);
+    while (*s != '\0')
+    {
+        if (n != 1)
+        {
+            *d++ = *s;
+            n--;
+        }
+        s++;
+    }
+    *d = '\0';
+
+    retval = (dlen + (s - src));    /* count does not include NUL */
+
+    if (retval >= siz)
+    {
+#ifdef STRINGL_USE_LOGGER
+        log_warning("truncation occured in strlcat; dest size %u; source string: %s\n", siz, src);
+#endif
+    }
+    return retval;
 }
 
 #endif

@@ -1,6 +1,6 @@
 /********************************************************************************
- * This file is part of the RCP SDK Release 6.50.23
- * Copyright (C) 2009-2017 Red.com, Inc.  All rights reserved.
+ * This file is part of the RCP SDK Release 6.61.0
+ * Copyright (C) 2009-2018 RED.COM, LLC.  All rights reserved.
  *
  * For technical support please email rcpsdk@red.com.
  *
@@ -11,19 +11,19 @@
  * "Binary Code" means machine-readable Source Code in binary form.
  * 
  * "Approved Recipients" means only those recipients of the Source Code who have
- * entered into the RCP SDK License Agreement with Red.com, Inc. All
+ * entered into the RCP SDK License Agreement with RED.COM, LLC. All
  * other recipients are not authorized to possess, modify, use, or distribute the
  * Source Code.
  *
- * Red.com, Inc. hereby grants Approved Recipients the rights to modify this
+ * RED.COM, LLC hereby grants Approved Recipients the rights to modify this
  * Source Code, create derivative works based on this Source Code, and distribute
  * the modified/derivative works only as Binary Code in its binary form. Approved
  * Recipients may not distribute the Source Code or any modification or derivative
  * work of the Source Code. Redistributions of Binary Code must reproduce this
  * copyright notice, this list of conditions, and the following disclaimer in the
- * documentation or other materials provided with the distribution. Red.com, Inc.
+ * documentation or other materials provided with the distribution. RED.COM, LLC
  * may not be used to endorse or promote Binary Code redistributions without
- * specific prior written consent from Red.com, Inc. 
+ * specific prior written consent from RED.COM, LLC. 
  *
  * The only exception to the above licensing requirements is any recipient may use,
  * copy, modify, and distribute in any format the strlcat.c and strlcpy.c software
@@ -34,7 +34,7 @@
  * THE ACCOMPANYING SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
- * IN NO EVENT SHALL THE RED.COM, INC., ANY OTHER COPYRIGHT HOLDERS, OR ANYONE
+ * IN NO EVENT SHALL THE RED.COM, LLC, ANY OTHER COPYRIGHT HOLDERS, OR ANYONE
  * DISTRIBUTING THE SOFTWARE BE LIABLE FOR ANY DAMAGES OR OTHER LIABILITY, WHETHER
  * IN CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
@@ -495,7 +495,6 @@
 #define RCP_BEVFOV_MSG_LIST_PTR "BEVFOV"
 #define RCP_BEVFRF_MSG_INT "BEVFRF"
 #define RCP_BEVFTL_MSG_INT "BEVFTL"
-#define RCP_BEVFVF_MSG_INT "BEVFVF"
 #define RCP_BHDMIDM_MSG_INT "BHDMIDM"
 #define RCP_BHDMIFM_MSG_INT "BHDMIFM"
 #define RCP_BHDMIFO_MSG_INT "BHDMIFO"
@@ -504,7 +503,6 @@
 #define RCP_BHDMIOV_MSG_LIST_PTR "BHDMIOV"
 #define RCP_BHDMIRF_MSG_INT "BHDMIRF"
 #define RCP_BHDMITL_MSG_INT "BHDMITL"
-#define RCP_BHDMIVF_MSG_INT "BHDMIVF"
 #define RCP_BHDSDIDM_MSG_INT "BHDSDIDM"
 #define RCP_BHDSDIEN_MSG_INT "BHDSDIEN"
 #define RCP_BHDSDIFM_MSG_INT "BHDSDIFM"
@@ -513,7 +511,6 @@
 #define RCP_BHDSDIOV_MSG_LIST_PTR "BHDSDIOV"
 #define RCP_BHDSDIRF_MSG_INT "BHDSDIRF"
 #define RCP_BHDSDITL_MSG_INT "BHDSDITL"
-#define RCP_BHDSDIVF_MSG_INT "BHDSDIVF"
 #define RCP_BLCDBR_MSG_INT "BLCDBR"
 #define RCP_BLCDBR_MSG_LIST_PTR "BLCDBR"
 #define RCP_BLCDDM_MSG_INT "BLCDDM"
@@ -526,7 +523,6 @@
 #define RCP_BLCDOV_MSG_LIST_PTR "BLCDOV"
 #define RCP_BLCDRF_MSG_INT "BLCDRF"
 #define RCP_BLCDTL_MSG_INT "BLCDTL"
-#define RCP_BLCDVF_MSG_INT "BLCDVF"
 #define RCP_BSDILUT_MSG_STR_PTR "BSDILUT"
 #define RCP_DPEVF_MSG_INT "DPEVF"
 #define RCP_DPEVF_MSG_LIST_PTR "DPEVF"
@@ -566,7 +562,6 @@
 #define RCP_EVF3OV_MSG_LIST_PTR "EVF3OV"
 #define RCP_EVF3RF_MSG_INT "EVF3RF"
 #define RCP_EVF3TL_MSG_INT "EVF3TL"
-#define RCP_EVF3VF_MSG_INT "EVF3VF"
 #define RCP_EVFF_MSG_INT "EVFF"
 #define RCP_EVFF_MSG_LIST_PTR "EVFF"
 #define RCP_EVFG_MSG_INT "EVFG"
@@ -608,7 +603,6 @@
 #define RCP_LCD3OV_MSG_LIST_PTR "LCD3OV"
 #define RCP_LCD3RF_MSG_INT "LCD3RF"
 #define RCP_LCD3TL_MSG_INT "LCD3TL"
-#define RCP_LCD3VF_MSG_INT "LCD3VF"
 #define RCP_LCDF_MSG_INT "LCDF"
 #define RCP_LCDF_MSG_LIST_PTR "LCDF"
 #define RCP_LCDG_MSG_INT "LCDG"
@@ -657,19 +651,16 @@
 #define RCP_PLCDOV_MSG_LIST_PTR "PLCDOV"
 #define RCP_PLCDRF_MSG_INT "PLCDRF"
 #define RCP_PLCDTL_MSG_INT "PLCDTL"
-#define RCP_PLCDVF_MSG_INT "PLCDVF"
 #define RCP_PSDI1DM_MSG_INT "PSDI1DM"
 #define RCP_PSDI1FM_MSG_INT "PSDI1FM"
 #define RCP_PSDI1FO_MSG_INT "PSDI1FO"
 #define RCP_PSDI1RF_MSG_INT "PSDI1RF"
 #define RCP_PSDI1TL_MSG_INT "PSDI1TL"
-#define RCP_PSDI1VF_MSG_INT "PSDI1VF"
 #define RCP_PSDI2DM_MSG_INT "PSDI2DM"
 #define RCP_PSDI2FM_MSG_INT "PSDI2FM"
 #define RCP_PSDI2FO_MSG_INT "PSDI2FO"
 #define RCP_PSDI2RF_MSG_INT "PSDI2RF"
 #define RCP_PSDI2TL_MSG_INT "PSDI2TL"
-#define RCP_PSDI2VF_MSG_INT "PSDI2VF"
 #define RCP_REVFBR_MSG_INT "REVFBR"
 #define RCP_REVFBR_MSG_LIST_PTR "REVFBR"
 #define RCP_REVFDM_MSG_INT "REVFDM"
@@ -686,7 +677,6 @@
 #define RCP_REVFOV_MSG_LIST_PTR "REVFOV"
 #define RCP_REVFRF_MSG_INT "REVFRF"
 #define RCP_REVFTL_MSG_INT "REVFTL"
-#define RCP_REVFVF_MSG_INT "REVFVF"
 #define RCP_RLCDFM2_MSG_INT "RLCDFM2"
 #define RCP_RLCDFMSP_MSG_INT "RLCDFMSP"
 #define RCP_RLCDLUT_MSG_STR_PTR "RLCDLUT"
@@ -710,6 +700,8 @@
 #define RCP_CGCOLOR_MSG_LIST_PTR "CGCOLOR"
 #define RCP_CGGUIDE_MSG_INT "CGGUIDE"
 #define RCP_CGGUIDE_MSG_LIST_PTR "CGGUIDE"
+#define RCP_CGMARK_MSG_INT "CGMARK"
+#define RCP_CGMARK_MSG_LIST_PTR "CGMARK"
 #define RCP_CGOPAC_MSG_INT "CGOPAC"
 #define RCP_CGOPAC_MSG_LIST_PTR "CGOPAC"
 #define RCP_F0ABSH_MSG_INT "F0ABSH"
@@ -783,6 +775,8 @@
 #define RCP_GIOCSEC_MSG_LIST_PTR "GIOCSEC"
 #define RCP_GIOZONE_MSG_LIST_PTR "GIOZONE"
 #define RCP_HORIZON_MSG_INT "HORIZON"
+#define RCP_PEAKLVL_MSG_UINT "PEAKLVL"
+#define RCP_PEAKLVL_MSG_LIST_PTR "PEAKLVL"
 #define RCP_SHCOLOR_MSG_INT "SHCOLOR"
 #define RCP_SHCOLOR_MSG_LIST_PTR "SHCOLOR"
 #define RCP_SHGUIDE_MSG_INT "SHGUIDE"
@@ -1000,6 +994,8 @@
 #define RCP_VMCODECR_MSG_LIST_PTR "VMCODECR"
 #define RCP_VMCODECT_MSG_INT "VMCODECT"
 #define RCP_VRISPDMD_MSG_INT "VRISPDMD"
+#define RCP_DAHDMI_MSG_INT "DAHDMI"
+#define RCP_REDINFO_MSG_STR_PTR "REDINFO"
 #define RCP_SUILAH_MSG_INT "SUILAH"
 #define RCP_SUILAH_MSG_LIST_PTR "SUILAH"
 #define RCP_SUILAHTO_MSG_INT "SUILAHTO"
@@ -1026,6 +1022,7 @@
 #define RCP_PWRSAVE_MSG_INT "PWRSAVE"
 #define RCP_RECORD_MSG_INT "RECORD"
 #define RCP_SHUTDOWN "SHUTDOWN"
+#define RCP_SHUTDWNC "SHUTDWNC"
 #define RCP_TSRVSTAT_MSG_INT "TSRVSTAT"
 #define RCP_AUDIOVU_MSG_AUDIO_VU_DATA "AUDIOVU"
 #define RCP_BCLIP_MSG_INT "BCLIP"
@@ -1149,6 +1146,8 @@
 #define RCP_EVF3FM2_MSG_INT "EVF3FM2"
 #define RCP_EVF3FMSP_MSG_INT "EVF3FMSP"
 #define RCP_EVFTALLY_MSG_INT "EVFTALLY"
+#define RCP_EVOLTHDC_MSG_INT "EVOLTHDC"
+#define RCP_EVOLTHSH_MSG_INT "EVOLTHSH"
 #define RCP_FANPCTF_MSG_INT "FANPCTF"
 #define RCP_FANPCTT_MSG_INT "FANPCTT"
 #define RCP_FANTRGTT_MSG_INT "FANTRGTT"
@@ -1228,9 +1227,11 @@
 #define RCP_MTMST0_MSG_INT "MTMST0"
 #define RCP_MTMST1_MSG_INT "MTMST1"
 #define RCP_MTMST2_MSG_INT "MTMST2"
+#define RCP_MXFDRPFM_MSG_INT "MXFDRPFM"
 #define RCP_MXFST_MSG_INT "MXFST"
 #define RCP_MXFSTD_MSG_STR_PTR "MXFSTD"
 #define RCP_NOTIFY_MSG_NOTIFICATION_PTR "NOTIFY"
+#define RCP_NOTIFYF_MSG_NOTIFICATION_RESPONSE_PTR "NOTIFYF"
 #define RCP_NOTIFYR_MSG_NOTIFICATION_RESPONSE_PTR "NOTIFYR"
 #define RCP_NWSTAT_MSG_INT "NWSTAT"
 #define RCP_OLPF_MSG_INT "OLPF"
@@ -1275,6 +1276,8 @@
 #define RCP_PWILIST_MSG_LIST_PTR "PWILIST"
 #define RCP_PWIPRST_MSG_INDEXED_INT "PWIPRST"
 #define RCP_PWISRCI_MSG_INT "PWISRCI"
+#define RCP_PWITYPE_MSG_INDEXED_INT "PWITYPE"
+#define RCP_PWIVBT_MSG_INDEXED_INT "PWIVBT"
 #define RCP_PWIVOLT_MSG_INDEXED_INT "PWIVOLT"
 #define RCP_PWOIAMPS_MSG_INDEXED_INT "PWOIAMPS"
 #define RCP_PWOIEN_MSG_INDEXED_INT "PWOIEN"
@@ -1284,6 +1287,7 @@
 #define RCP_PWRBATL_MSG_INT "PWRBATL"
 #define RCP_PWRSRC_MSG_INT "PWRSRC"
 #define RCP_PWRSRC_MSG_LIST_PTR "PWRSRC"
+#define RCP_QTDRPFRM_MSG_INT "QTDRPFRM"
 #define RCP_QTST_MSG_INT "QTST"
 #define RCP_QTSTD_MSG_STR_PTR "QTSTD"
 #define RCP_R3DST_MSG_INT "R3DST"
@@ -1303,6 +1307,7 @@
 #define RCP_RFTPDATA_MSG_RFTP_DATA "RFTPDATA"
 #define RCP_RFTPDELE_MSG_RFTP_DELETE "RFTPDELE"
 #define RCP_RFTPLIST_MSG_RFTP_LIST "RFTPLIST"
+#define RCP_RFTPPAUS_MSG_RFTP_PAUSE_STATE "RFTPPAUS"
 #define RCP_RFTPRETR_MSG_RFTP_RETRIEVE "RFTPRETR"
 #define RCP_RFTPSTOR_MSG_RFTP_STORE "RFTPSTOR"
 #define RCP_RIGSTATE_MSG_INT "RIGSTATE"
@@ -1319,6 +1324,8 @@
 #define RCP_RMUNPAIR_MSG_STR_PTR "RMUNPAIR"
 #define RCP_RMUPG "RMUPG"
 #define RCP_SAVELOG "SAVELOG"
+#define RCP_SENSTVTY_MSG_INT "SENSTVTY"
+#define RCP_SENSTVTY_MSG_LIST_PTR "SENSTVTY"
 #define RCP_SERPROT2_MSG_INT "SERPROT2"
 #define RCP_SERPROT2_MSG_LIST_PTR "SERPROT2"
 #define RCP_SERPROTO_MSG_INT "SERPROTO"
@@ -1355,6 +1362,8 @@
 #define RCP_UILOCK_MSG_INT "UILOCK"
 #define RCP_USER_MSG_USER_DATA "USER"
 #define RCP_USERKEY_MSG_KEY_MAPPING "USERKEY"
+#define RCP_VOLTHSDC_MSG_INT "VOLTHSDC"
+#define RCP_VOLTHSH_MSG_INT "VOLTHSH"
 #define RCP_WLANAHEN_MSG_INT "WLANAHEN"
 #define RCP_WLANAHEN_MSG_LIST_PTR "WLANAHEN"
 #define RCP_WLANAHID_MSG_STR_PTR "WLANAHID"

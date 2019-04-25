@@ -1,5 +1,5 @@
 /********************************************************************************
- * This file is part of the RCP SDK Release 6.51.2
+ * This file is part of the RCP SDK Release 6.61.0
  * Copyright (C) 2009-2018 RED.COM, LLC.  All rights reserved.
  *
  * For technical support please email rcpsdk@red.com.
@@ -230,7 +230,9 @@ typedef enum {
     FALSE_COLOR_MODE_VIDEO,
     FALSE_COLOR_MODE_FOCUS,
     FALSE_COLOR_MODE_EDGE,
-    FALSE_COLOR_MODE_GIO_SCOPE
+    FALSE_COLOR_MODE_GIO_SCOPE,
+    FALSE_COLOR_MODE_PEAKING,
+    FALSE_COLOR_MODE_COUNT
 } false_color_mode_t;
 
 /* RCP: PWRSRC */
@@ -330,7 +332,8 @@ typedef enum {
 /* RCP: BATTMODE */
 typedef enum {
     BATTERY_DISPLAY_MODE_PERCENT,
-    BATTERY_DISPLAY_MODE_TOTAL_TIME
+    BATTERY_DISPLAY_MODE_TOTAL_TIME,
+    BATTERY_DISPLAY_MODE_VOLTAGE
 } battery_display_mode_t;
 
 /* RCP: RAWMODE */
@@ -547,7 +550,7 @@ typedef enum
     KEY_ACTION_APERTURE_PRIORITY_ENABLE_TOGGLE = 167,
     KEY_ACTION_ALGO_TRIGGER = 168,
     KEY_ACTION_GIO_SCOPE_TOGGLE = 169,
-    /* free - 170 */
+    KEY_ACTION_PEAKING_TOGGLE = 170,
     /* free - 171 */
     KEY_ACTION_CAMERA_MODE_TOGGLE = 172,
     KEY_ACTION_SH_KEY_1 = 173,
@@ -663,14 +666,17 @@ typedef enum
     AF_MODE_CONTINUOUS,
     AF_MODE_TOUCH_TRACK,
     AF_MODE_RACK,
-    AF_MODE_FAST
+    AF_MODE_FAST,
+    AF_MODE_COUNT
 } af_mode_t;
+
 
 /* RCP: AFZONE */
 typedef enum
 {
     AF_FOCUSZONE_CENTER,
-    AF_FOCUSZONE_SPOT
+    AF_FOCUSZONE_SPOT,
+    AF_FOCUSZONE_COUNT
 } af_focuszone_t;
 
 /* RCP: FSMODE */
@@ -680,6 +686,7 @@ typedef enum {
     FAN_MODE_CONTROL_LOOP = 6,                          /* Adaptive Mode */
     FAN_MODE_LOW_NOISE_PREVIEW_RECORD,                  /* Quiet Mode */
     FAN_MODE_ADAPTIVE_PREVIEW_LOW_NOISE_RECORD = 9      /* Adaptive Preview Quiet Record Mode */
+
 } fan_mode_t;
 
 /* RCP: AEMODE */
@@ -946,16 +953,16 @@ typedef enum
 
 /* RCP: SERPROTO */
 typedef enum {
-    UART_PROTOCOL_NONE,
-    UART_PROTOCOL_ET,
-    UART_PROTOCOL_TA,
-    UART_PROTOCOL_DEPRECIATED_1,
-    UART_PROTOCOL_SERIAL_SHELL,
-    UART_PROTOCOL_RCP,
-    UART_PROTOCOL_RCP_3D_METADATA,
-    UART_PROTOCOL_RCP_CAM_TO_CAM,
-    UART_PROTOCOL_COOKE_I,
-    UART_PROTOCOL_PRESTON
+    UART_PROTOCOL_NONE = 0,
+    UART_PROTOCOL_ET = 1,
+    UART_PROTOCOL_TA = 2,
+    UART_PROTOCOL_DEPRECIATED_1 = 3,
+    UART_PROTOCOL_SERIAL_SHELL = 4,
+    UART_PROTOCOL_RCP = 5,
+    UART_PROTOCOL_RCP_3D_METADATA = 6,
+    UART_PROTOCOL_RCP_CAM_TO_CAM = 7,
+    UART_PROTOCOL_COOKE_I = 8,
+    UART_PROTOCOL_PRESTON = 9
 } uart_protocol_t;
 
 /* RCP: HDMIR, HDSDIR, PHDSDI1R, PHDSDI2R */
@@ -1010,7 +1017,8 @@ typedef enum {
 /* RCP: AWBMODE */
 typedef enum {
     AWB_MODE_OFF,
-    AWB_MODE_SINGLESHOT
+    AWB_MODE_SINGLESHOT,
+    AWB_MODE_COUNT
 } awb_mode_t;
 
 /* RCP: TARGET */
@@ -1172,10 +1180,6 @@ typedef enum {
 } codec_resolution_t;
 
 typedef enum {
-    /* When adding HW capabilities to this enum, remember to also add it to the hw_cap_name[]
-     * table in hw_cap_if.cpp
-     * */
-
     HW_CAP_COLOR_SENSOR = 0,
     HW_CAP_WIFI = 1,
     HW_CAP_FIZ = 2,
@@ -1282,6 +1286,12 @@ typedef enum {
     HW_CAP_DROP_FRAME_TIMECODE = 103,
     HW_CAP_SENSOR_FLIP = 105,
     HW_CAP_SENSOR_SENSITIVITY = 107,
+    HW_CAP_SENSOR_SYNC = 108,
+    HW_CAP_AUDIO_IN_GAIN_CONTROL_12 = 109,
+    HW_CAP_AUDIO_IN_GAIN_CONTROL_34 = 110,
+    HW_CAP_BRAIN_FUNCTION_KEY_4 = 112,
+
+
     HW_CAP_COUNT
 } hw_cap_t;
 
@@ -1469,6 +1479,7 @@ typedef enum
 {
     HDMI_VENDOR_NONE = 0,
     HDMI_VENDOR_ATOMOS,
+    HDMI_VENDOR_TERADEK,
     HDMI_VENDOR_COUNT
 } hdmi_vendor_t;
 
@@ -1483,9 +1494,11 @@ typedef enum
 typedef enum
 {
     POWER_OUT_PROPERTY_UNSUPPORTED = 0,
-    POWER_OUT_PROPERTY_ENABLE = 1,
-    POWER_OUT_PROPERTY_CURRENT = 2,
-    POWER_OUT_PROPERTY_STATUS = 4,
+    POWER_OUT_PROPERTY_ENABLE      = (1 << 0),
+    POWER_OUT_PROPERTY_CURRENT     = (1 << 1),
+    POWER_OUT_PROPERTY_STATUS      = (1 << 2),
+    POWER_OUT_PROPERTY_DEFAULT_OFF = (1 << 3),
+    POWER_OUT_PROPERTY_NO_UI       = (1 << 4),
 
     POWER_OUT_PROPERTY_RESET = POWER_OUT_PROPERTY_ENABLE | POWER_OUT_PROPERTY_STATUS
 } power_out_property_t;
@@ -1526,6 +1539,8 @@ typedef struct
     camera_capture_mode_t camera_mode;
     char sensor_fps_str[20];
     tc_drop_frame_display_t drop_frame_display_mode;
+    char thumbnail_path[256];
+    char display_clip_name[10];
 } extended_clipinfo_t;
 
 typedef enum
@@ -1614,6 +1629,8 @@ typedef enum
     DISPLAY_PRESET_USER,
     DISPLAY_PRESET_RWGRGB_LOG3G10,
     DISPLAY_PRESET_RLF_TO_3DLUT,
+    DISPLAY_PRESET_MAIN_HLG,
+    DISPLAY_PRESET_RWGRGB_HLG,
     DISPLAY_PRESET_COUNT
 } display_preset_t;
 
@@ -1678,6 +1695,30 @@ typedef enum
     SENSOR_SENSITIVITY_LOW_LIGHT,
     SENSOR_SENSITIVITY_STANDARD
 } sensor_sensitivity_t;
+
+/* RCP: CGMARK */
+typedef enum
+{
+    GUIDE_MARKER_TYPE_CROSS_HAIR,
+    GUIDE_MARKER_TYPE_SMALL_DOT,
+    GUIDE_MARKER_TYPE_MEDIUM_DOT,
+    GUIDE_MARKER_TYPE_COUNT
+} guide_marker_type_t;
+
+typedef enum
+{
+    POWER_IN_TYPE_DC = 0,
+    POWER_IN_TYPE_BAT = 1,
+    POWER_IN_TYPE_BRICK = 2,
+    POWER_IN_TYPE_REDVOLT = 3,
+    POWER_IN_TYPE_REDVOLT_XL = 4,
+    POWER_IN_TYPE_GOLD_MOUNT = 5,
+    POWER_IN_TYPE_V_MOUNT = 6,
+    POWER_IN_TYPE_DXLHSM_DC = 7,
+    POWER_IN_TYPE_DXLHSM_BAT = 8,
+    POWER_IN_TYPE_DC_WIDE_VOLTAGE = 9,
+    POWER_IN_TYPE_COUNT
+} power_in_type_t;
 
 #endif
 /********** End file: rcp_types_public.h ****************************************/
@@ -2424,6 +2465,24 @@ int c_list_compare(const c_list_t * c_list_1, const c_list_t * c_list_2);
  *
  * @page CHANGELOG Changelog
  *
+ * * @section VERSION_6_61_0 Version 6.61
+ * - Added parameters:
+ *   - @ref RCP_PARAM_VOLTAGE_THRESHOLD_DC_IN
+ *   - @ref RCP_PARAM_ENABLE_VOLTAGE_THRESHOLD_DC_IN
+ *   - @ref RCP_PARAM_POWER_IN_TYPE_0 - @RCP_PARAM_POWER_IN_TYPE_LAST
+ *   - @ref RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_0 - @RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_LAST
+ * - Deprecated parameters:
+ *   - @ref RCP_PARAM_VOLTAGE_BELOW_THRESHOLD
+ *
+ * @section VERSION_6_60_0 Version 6.60
+ * - Added parameters:
+ *   - @ref RCP_PARAM_CENTER_GUIDE_MARKER_TYPE
+ *   - @ref RCP_PARAM_SHUTDOWN_NOTIFICATION
+ *   - @ref RCP_PARAM_PEAKING_LEVEL
+ *   - @ref RCP_PARAM_VOLTAGE_THRESHOLD
+ *   - @ref RCP_PARAM_ENABLE_VOLTAGE_THRESHOLD
+ *   - @ref RCP_PARAM_VOLTAGE_BELOW_THRESHOLD
+ *
  * @section VERSION_6_51_2 Version 6.51.2
  * - Added parameters:
  *   - @ref RCP_PARAM_SENSOR_SENSITIVITY
@@ -2437,11 +2496,13 @@ int c_list_compare(const c_list_t * c_list_1, const c_list_t * c_list_2);
  * @section VERSION_6_50_24 Version 6.50.24
  * - Added is_paused field to rcp_cur_rftp_status_cb_data_t
  *
+ * - Added parameters:
  *
  * @section VERSION_6_50_23 Version 6.50.23
  * - Added parameters:
  *   - @ref RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS
  *   - @ref RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS
+ *   - @ref RCP_PARAM_POWER_CURRENT_SOURCE_INDEX
  *
  * @section VERSION_6_50_22 Version 6.50.22
  * - Added parameters:
@@ -3358,7 +3419,7 @@ typedef enum
     RCP_PARAM_FLUT,                                   /**< FLUT: added in Parameter Set Version 5.0 */
     RCP_PARAM_EXPOSURE_ADJUST,                        /**< FLUT: added in Parameter Set Version 5.0 */
     RCP_PARAM_SHADOW,                                 /**< SHADOW: added in Parameter Set Version 5.0 */
-    RCP_PARAM_FOCUS_DIST,                             /**< FOCUS: added in Parameter Set Version 5.0 */
+    RCP_PARAM_FOCUS_DIST,                             /**< Composite of: 'FOCUS', @ref RCP_PARAM_FOCUS_DIST_NEAR, @ref RCP_PARAM_FOCUS_DIST_FAR, and @ref RCP_PARAM_FOCUS_DIST_DISPLAY_MODE, added in Parameter Set Version 5.0 */
     RCP_PARAM_FOCUS_DIST_NEAR,                        /**< FOCUSN: added in Parameter Set Version 5.0 */
     RCP_PARAM_FOCUS_DIST_FAR,                         /**< FOCUSF: added in Parameter Set Version 5.0 */
     RCP_PARAM_FOCUS_DIST_DISPLAY_MODE,                /**< LENSFDMD: see @ref focus_distance_mode_t, added in Parameter Set Version 5.0 */
@@ -3639,6 +3700,7 @@ typedef enum
     RCP_PARAM_TITLE_GUIDE_OPACITY,                    /**< F2OPAC: added in Parameter Set Version 6.0 */
     RCP_PARAM_TITLE_GUIDE_RELATIVE,                   /**< F2RELF0: added in Parameter Set Version 6.0 */
     RCP_PARAM_CENTER_GUIDE_GUIDE,                     /**< CGGUIDE: added in Parameter Set Version 6.0 */
+    RCP_PARAM_CENTER_GUIDE_MARKER_TYPE,               /**< CGMARK: added in Parameter Set Version 6.60 */
     RCP_PARAM_CENTER_GUIDE_COLOR,                     /**< CGCOLOR: added in Parameter Set Version 6.0 */
     RCP_PARAM_CENTER_GUIDE_OPACITY,                   /**< CGOPAC: added in Parameter Set Version 6.0 */
     RCP_PARAM_GRID_GUIDE_GUIDE,                       /**< GGGUIDE: added in Parameter Set Version 6.0 */
@@ -4219,6 +4281,29 @@ typedef enum
     RCP_PARAM_POWER_IN_PRESENT_8,                     /**< PWIPRST: added in Parameter Set Version 6.50 */
     RCP_PARAM_POWER_IN_PRESENT_9,                     /**< PWIPRST: added in Parameter Set Version 6.50 */
     RCP_PARAM_POWER_IN_PRESENT_LAST = RCP_PARAM_POWER_IN_PRESENT_9,
+    RCP_PARAM_POWER_IN_TYPE_0,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_1,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_2,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_3,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_4,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_5,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_6,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_7,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_8,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_9,                        /**< PWITYPE: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_TYPE_LAST = RCP_PARAM_POWER_IN_TYPE_9,
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_0,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_1,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_2,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_3,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_4,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_5,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_6,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_7,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_8,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_9,     /**< PWIVBT: added in Parameter Set Version 6.61 */
+    RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_LAST = RCP_PARAM_POWER_IN_VOLTAGE_BELOW_THRESHOLD_9,
+
 
     /* Indexed Power Out Messages
      * Note: if adding more placeholders make sure to update the *_LAST
@@ -4362,6 +4447,7 @@ typedef enum
     RCP_PARAM_AUTO_FOCUS_PEAK,                        /**< AUTOPEAK: added in Parameter Set Version 6.50 */
     RCP_PARAM_TIMECODE_DROP_FRAME_DISPLAY_MODE,       /**< TCDFMODE: see @ref tc_drop_frame_display_t, added in Parameter Set Version 6.50 */
     RCP_PARAM_ISO_CAL2_ENABLED,                       /**< ISOCAL2: added in Parameter Set Version 6.50 */
+    RCP_PARAM_SHUTDOWN_NOTIFICATION,                  /**< SHUTDWNC: added in Parameter Set Version 6.60 */
     RCP_PARAM_MONITOR_LUT_LCD,                        /**< BLCDLUT: added in Parameter Set Version 6.50 */
     RCP_PARAM_MONITOR_LUT_EVF,                        /**< BEVFLUT: added in Parameter Set Version 6.50 */
     RCP_PARAM_MONITOR_LUT_HDMI,                       /**< BHDMILUT: added in Parameter Set Version 6.50 */
@@ -4375,13 +4461,32 @@ typedef enum
     RCP_PARAM_RECORD_PROXY_BAKED_IN_SETTINGS,         /**< VCBAKED: added in Parameter Set Version 6.50 */
     RCP_PARAM_MIN_RECORD_PROXY_BAKED_IN_SETTINGS,     /**< VCBAKMIN: added in Parameter Set Version 6.50 */
     RCP_PARAM_MAX_RECORD_PROXY_BAKED_IN_SETTINGS,     /**< VCBAKMAX: added in Parameter Set Version 6.50 */
-    RCP_PARAM_SENSOR_SENSITIVITY,                     /**< SENSTVTY: added in Parameter Set Version 6.50 */ 
+    RCP_PARAM_SENSOR_SENSITIVITY,                     /**< SENSTVTY: added in Parameter Set Version 6.50 */     
     RCP_PARAM_QT_DROPPED_FRAMES,                      /**< QTDRPFRM: added in Parameter Set Version 6.51 */
     RCP_PARAM_MXF_DROPPED_FRAMES,                     /**< MXFDRPFM: added in Parameter Set Version 6.51 */
     RCP_PARAM_DROPPED_FRAMES,                         /**< Composite of @ref RCP_PARAM_R3D_DROPPED_FRAMES, @ref RCP_PARAM_QT_DROPPED_FRAMES and @ref RCP_PARAM_MXF_DROPPED_FRAMES, added in Parameter Set Version 6.51 */
+    RCP_PARAM_PEAKING_LEVEL,                          /**< PEAKLVL: added in Parameter Set Version 6.60  */     
+    RCP_PARAM_VOLTAGE_THRESHOLD,                      /**< VOLTHSH: added in Parameter Set Version 6.60 */
+    RCP_PARAM_ENABLE_VOLTAGE_THRESHOLD,               /**< EVOLTHSH: added in Parameter Set Version 6.60 */
+    RCP_PARAM_VOLTAGE_BELOW_THRESHOLD,                /**< VLTBLWTH: added in Parameter Set Version 6.60 */
+    RCP_PARAM_POWER_CURRENT_SOURCE_INDEX,             /**< PWISRCI: added in Parameter Set Version 6.50 */
+    RCP_PARAM_VOLTAGE_THRESHOLD_DC_IN,                /**< VOLTHSDC: added in Parameter Set Version 6.61 */
+    RCP_PARAM_ENABLE_VOLTAGE_THRESHOLD_DC_IN,         /**< EVOLTHDC: added in Parameter Set Version 6.61 */
 
     RCP_PARAM_COUNT
 } rcp_param_t;
+
+typedef struct
+{
+    unsigned int major : 16;
+    unsigned int minor : 16;
+} rcp_version_t;
+
+typedef struct
+{
+    rcp_version_t first;
+    rcp_version_t last;
+} rcp_version_range_t;
 
 typedef struct
 {
@@ -4455,8 +4560,7 @@ typedef enum
 
 typedef struct
 {
-    uint16_t parameter_set_version_major;   /**< For internal use */
-    uint16_t parameter_set_version_minor;   /**< For internal use */
+    rcp_version_range_t version_range;      /**< For internal use */
     int32_t min;                            /**< Minimum allowed value */
     int32_t max;                            /**< Maximum allowed value */
     int32_t divider;                        /**< Divide the current value by @ref divider to get floating point representation */
@@ -4498,8 +4602,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t parameter_set_version_major;   /**< For internal use */
-    uint16_t parameter_set_version_minor;   /**< For internal use */
+    rcp_version_range_t version_range;      /**< For internal use */
     uint32_t min;                           /**< Minimum allowed value */
     uint32_t max;                           /**< Maximum allowed value */
     uint32_t divider;                       /**< Divide the current value by @ref divider to get floating point representation */
@@ -4574,8 +4677,7 @@ typedef struct
 
 typedef struct
 {
-    uint16_t parameter_set_version_major;   /**< For internal use */
-    uint16_t parameter_set_version_minor;   /**< For internal use */
+    rcp_version_range_t version_range;      /**< For internal use */
     size_t min_len;                         /**< Minimum number of characters allowed in string */
     size_t max_len;                         /**< Maximum number of characters allowed in string */
     int is_password;                        /**< If true, show this field as a password */
