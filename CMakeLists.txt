@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 project(REDSDK)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall -O3")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O3")
-
 add_library(${PROJECT_NAME} STATIC
     src/base64.c
     src/c_list.c
@@ -19,8 +16,10 @@ add_library(${PROJECT_NAME} STATIC
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-                          $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-                          $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/rcp_parser>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include/decorated_string>
+            $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
 if(MSVC)
   target_link_libraries(${PROJECT_NAME} PUBLIC
     optimized $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/lib/R3DSDK-2017MD.lib>
