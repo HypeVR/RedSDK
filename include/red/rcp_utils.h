@@ -3,7 +3,9 @@
 #ifndef INCLUDE_RED_RCP_UTILS_H_
 #define INCLUDE_RED_RCP_UTILS_H_
 
-#include <boost/thread.hpp>
+//#include <boost/thread.hpp>
+#include <mutex>
+#include <thread>
 
 #include "red/rcp_api.h"
 
@@ -12,8 +14,11 @@ extern "C"
 {
 #endif
 
-  boost::recursive_mutex rcpConnectionMutex;
-  boost::recursive_mutex rcpDiscoveryMutex;
+  std::recursive_mutex rcpConnectionMutex;
+  std::recursive_mutex rcpDiscoveryMutex;
+
+  // boost::recursive_mutex rcpConnectionMutex;
+  // boost::recursive_mutex rcpDiscoveryMutex;
 
   void *rcp_malloc(size_t bytes);
 

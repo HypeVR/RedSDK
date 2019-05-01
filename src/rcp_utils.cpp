@@ -1,6 +1,7 @@
 // Copyright 2017 Arunabh Sharma
 
-#include <boost/date_time.hpp>
+#include <chrono>
+// #include <boost/date_time.hpp>
 
 #include "red/rcp_api.h"
 #include "red/rcp_utils.h"
@@ -30,17 +31,21 @@ int rcp_rand()
 uint32_t rcp_timestamp()
 {
   static bool shouldCalcStart = true;
-  static boost::posix_time::ptime start;
+  // static boost::posix_time::ptime start;
+  static std::chrono::steady_clock::time_point start;
   if (shouldCalcStart)
   {
-    start           = boost::posix_time::microsec_clock::local_time();
+    // start           = boost::posix_time::microsec_clock::local_time();
+    start           = std::chrono::steady_clock::now();
     shouldCalcStart = false;
   }
-
-  boost::posix_time::ptime now =
-      boost::posix_time::microsec_clock::local_time();
-  boost::posix_time::time_duration diff = now - start;
-  return diff.total_milliseconds();
+  static std::chrono::steady_clock::time_point now =
+      std::chrono::steady_clock::now();
+  // boost::posix_time::ptime now =
+  //     boost::posix_time::microsec_clock::local_time();
+  // boost::posix_time::time_duration diff = now - start;
+  std::chrono::duration<double, std::milli> diff = now - start;
+  return static_cast<uint32_t>(diff.count());
 }
 
 // void rcp_log(rcp_log_t severity,
