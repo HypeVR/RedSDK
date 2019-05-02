@@ -77,16 +77,16 @@ if(MSVC)
   install(FILES ${CMAKE_SOURCE_DIR}/lib/R3DSDK-2017MDd.lib
           DESTINATION lib
           CONFIGURATIONS Debug)
-  install(FILES ${CMAKE_SOURCE_DIR}/bin/REDCuda-x64.dll DESTINATION bin)
-  install(FILES ${CMAKE_SOURCE_DIR}/bin/REDDecoder-x64.dll DESTINATION bin)
-  install(FILES ${CMAKE_SOURCE_DIR}/bin/REDOpenCL-x64.dll DESTINATION bin)
+  # install(FILES ${CMAKE_SOURCE_DIR}/bin/REDCuda-x64.dll DESTINATION bin)
+  # install(FILES ${CMAKE_SOURCE_DIR}/bin/REDDecoder-x64.dll DESTINATION bin)
+  # install(FILES ${CMAKE_SOURCE_DIR}/bin/REDOpenCL-x64.dll DESTINATION bin)
   install(FILES ${CMAKE_SOURCE_DIR}/bin/REDR3D-x64.dll DESTINATION bin)
 
 else()
   install(FILES ${CMAKE_SOURCE_DIR}/lib/libR3DSDKPIC-cpp11.a DESTINATION lib)
-  install(FILES ${CMAKE_SOURCE_DIR}/bin/REDCuda-x64.so DESTINATION lib)
-  install(FILES ${CMAKE_SOURCE_DIR}/bin/REDDecoder-x64.so DESTINATION lib)
-  install(FILES ${CMAKE_SOURCE_DIR}/bin/REDOpenCL-x64.so DESTINATION lib)
+  # install(FILES ${CMAKE_SOURCE_DIR}/bin/REDCuda-x64.so DESTINATION lib)
+  # install(FILES ${CMAKE_SOURCE_DIR}/bin/REDDecoder-x64.so DESTINATION lib)
+  # install(FILES ${CMAKE_SOURCE_DIR}/bin/REDOpenCL-x64.so DESTINATION lib)
   install(FILES ${CMAKE_SOURCE_DIR}/bin/REDR3D-x64.so DESTINATION lib)
 
 endif()
