@@ -79,7 +79,7 @@ if(MSVC)
           CONFIGURATIONS Debug)
   install(FILES ${CMAKE_SOURCE_DIR}/bin/REDCuda-x64.dll DESTINATION bin)
   install(FILES ${CMAKE_SOURCE_DIR}/bin/REDDecoder-x64.dll DESTINATION bin)
-  install(FILES ${CMAKE_SOURCE_DIR}/bin/REDOpenCL-x64 DESTINATION bin)
+  install(FILES ${CMAKE_SOURCE_DIR}/bin/REDOpenCL-x64.dll DESTINATION bin)
   install(FILES ${CMAKE_SOURCE_DIR}/bin/REDR3D-x64.dll DESTINATION bin)
 
 else()
