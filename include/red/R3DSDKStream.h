@@ -1,8 +1,8 @@
-/* R3D SDK library version 7.0 header file. Do *NOT* use this
+/* R3D SDK library version 7.1 header file. Do *NOT* use this
    header file with any other version of the R3D SDK library!
    
    This header file and everything else included with the R3D
-   SDK is Copyright (c) 2008-2017 RED Digital Cinema. All
+   SDK is Copyright (c) 2008-2019 RED Digital Cinema. All
    rights reserved. Redistribution of this header is prohibited!
    
    The SDK is thread-safe for the most part, but it may
@@ -68,8 +68,9 @@ private:
 	void * reserved;
 };
 
-// class to stream the incoming data to an R3D clip. A new instance should be created
-// for each individual clip so the state can be properly tracked and clips correctly closed.
+// Class to stream the incoming data to an R3D clip. A new instance should be created
+// for each individual clip so the state can be properly tracked and clips correctly
+// closed. Can be used standalone or in combination with the DecodeStream class.
 class R3DStream
 {
 public:
@@ -77,10 +78,36 @@ public:
 	R3DStream(const char * outputPath, unsigned int cameraReelId, unsigned int cameraClipId);
 	~R3DStream();
 
+	// call to close current clip and create a new one mid-stream. This is useful to split
+	// the stream up in to multiple clips without having gaps in-between them. Returns false
+	// if supplied parameters are invalid or current clip could not be closed.
+	bool SetOutputClip(unsigned int cameraReelId, unsigned int cameraClipId);
+
 	// call from processing thread if ProcessRdpPacket() returned true
 	// returns CSFrameAdded if a block is complete, otherwise returns CSDone or error code
 	CreateStatus WritePacketData(const void * packet, size_t packetLength, Metadata * metadataToFill = NULL);
 	CreateStatus WritePacketData(const void * packet, size_t packetLength, bool & isDroppedFrame, Metadata * metadataToFill = NULL);
+
+private:
+	void * reserved;
+};
+
+// Class to decode the incoming data for preview. Decoding must happen on a separate thread
+// so incoming data from the camera can still be processed. Can be used standalone or in
+// combination with the R3DStream class.
+class DecodeStream
+{
+public:
+	DecodeStream();
+	~DecodeStream();
+
+	// call from processing thread if ProcessRdpPacket() returned true
+	// returns CSFrameAdded if a block is complete, otherwise returns CSDone or error code
+	CreateStatus ProcessPacketData(const void * packet, size_t packetLength, bool & isDroppedFrame);
+
+	// call this from a separate decode thread when ProcessPacketData() returns CSFrameAdded.
+	// Use lower resolution decodes to speed up the decode and allow for smoother preview.
+	DecodeStatus DecodeLastReceivedFrame(const VideoDecodeJob & decodeJob);
 
 private:
 	void * reserved;

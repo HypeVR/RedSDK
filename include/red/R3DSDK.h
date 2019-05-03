@@ -1,8 +1,8 @@
-/* R3D SDK library version 7.0 header file. Do *NOT* use this
+/* R3D SDK library version 7.1 header file. Do *NOT* use this
    header file with any other version of the R3D SDK library!
    
    This header file and everything else included with the R3D
-   SDK is Copyright (c) 2008-2017 RED Digital Cinema. All
+   SDK is Copyright (c) 2008-2019 RED Digital Cinema. All
    rights reserved. Redistribution of this header is prohibited!
    
    The SDK is thread-safe for the most part, but it may
@@ -15,10 +15,7 @@
 #include <string>
 
 #include "R3DSDKDefinitions.h"
-
 #include "R3DSDKMetadata.h"
-
-#include "R3DSDKRocket.h"
 
 namespace R3DSDK {
 
@@ -27,6 +24,7 @@ namespace R3DSDK {
 #define OPTION_RED_CUDA			0x01
 #define OPTION_RED_OPENCL		0x02
 #define OPTION_RED_DECODER		0x04	// do not combine with CUDA or OPENCL flags
+#define OPTION_RED_METAL        0x08	// macOS only
     
 // This must be called one time before calling any other functions or
 // constructing any classes. Do not call this for each single thread.
@@ -326,7 +324,7 @@ public:
 	// and the amount of metadata present can change from frame to frame.
 	// Supply a pointer to externalHasChanged to see if any of the external
 	// metadata has changed from the previous frame recorded.
-	DecodeStatus GetFrameMetadata(Metadata & metadataToFill, size_t videoFrameNo, Metadata * externalMetadataToFill, bool * externalDifferent) const;
+	DecodeStatus GetFrameMetadata(Metadata & metadataToFill, size_t videoFrameNo, Metadata * externalMetadataToFill, bool * externalHasChanged) const;
 
 	// Functions to retrieve clip (first frame) metadata through the metadata database
 	size_t MetadataCount() const;								// number of metadate items in the store
@@ -407,9 +405,6 @@ public:
 };
 
 // Class for asynchronously decompressing a frame for further processing on the GPU.
-// This class works together with GPU extension for the R3D SDK which can be
-// downloaded separately. Future updates to the SDK will allow full software
-// decodes to be completely asynchronous as well.
 class AsyncDecoder
 {
 public:
@@ -439,12 +434,59 @@ public:
 	static size_t GetSizeBufferNeeded(const AsyncDecompressJob & job);
 
 	// Decompress a frame in to the supplied OutputBuffer for further
-	// processing on the GPU through the GPU extension to the R3D SDK
+	// processing on the GPU.
 	DecodeStatus DecodeForGpuSdk(AsyncDecompressJob & job);
 
 private:
+	// no copying & assignment
+	AsyncDecoder(const AsyncDecoder &) throw();
+	AsyncDecoder & operator= (const AsyncDecoder &) throw();
+	
 	void * reserved;
 };
+
+// Class for asynchronously processing a frame for later decompression
+// and image processing on a CUDA GPU (Windows & Linux only).
+class GpuDecoder
+{
+public:
+	GpuDecoder();
+	~GpuDecoder();
+
+	// Open the asynchronous decoder.
+	void Open();
+
+	// Close asynchronous decoder and clean up any threads & memory in use
+	void Close();
+
+	// Determines if the current clip is supported for GPU decompression.
+	// All clips except for ones recorded on RED ONE are supported on Windows
+	// and Linux. This call will fail on macOS.
+	static DecodeStatus DecodeSupportedForClip(const Clip & clip);
+
+	// Returns the size OutputBufferSize needs to be in the AsyncDecompressJob
+	// so the appropriate size input buffer can be allocated before calling
+	// the DecodeForGpuSdk() function. The following must be set on input:
+	//  1) job.Clip must point to an open Clip and cannot be NULL
+	//  2) job.Mode must be set appropriately
+	// returns 0 if these input parameters are invalid or no clip is loaded
+	static size_t GetSizeBufferNeeded(const AsyncDecompressJob & job);
+
+	// Prepare a frame for decompression & further processing on the GPU.
+	DecodeStatus DecodeForGpuSdk(AsyncDecompressJob & job);
+
+private:
+	// no copying & assignment
+	GpuDecoder(const GpuDecoder &) throw();
+	GpuDecoder & operator= (const GpuDecoder &) throw();
+
+	void * m;
+};
+
+// Retrieve path SDK will try to load RMD file from for specified R3D file.
+// This will return the same path as Clip::GetRmdPath() after clip has been loaded.
+// This will not check for RMD file existence, just like Clip::GetRmdPath().
+std::string ExpectedRmdPath(const char * pathToFile);
 
 // Load Creative 3D LUT (.cube only!) for use in IPP2 decoding. Load search sequence:
 // 	1) if filename only, try to load from clipPath if present

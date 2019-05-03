@@ -1,8 +1,8 @@
-/* R3D SDK library version 7.0 header file. Do *NOT* use this
+/* R3D SDK library version 7.1 header file. Do *NOT* use this
    header file with any other version of the R3D SDK library!
    
    This header file and everything else included with the R3D
-   SDK is Copyright (c) 2008-2017 RED Digital Cinema. All
+   SDK is Copyright (c) 2008-2019 RED Digital Cinema. All
    rights reserved. Redistribution of this header is prohibited!
 */
 

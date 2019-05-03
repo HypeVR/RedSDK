@@ -1,8 +1,8 @@
-/* R3D SDK library version 7.0 header file. Do *NOT* use this
+/* R3D SDK library version 7.1 header file. Do *NOT* use this
    header file with any other version of the R3D SDK library!
    
    This header file and everything else included with the R3D
-   SDK is Copyright (c) 2008-2017 RED Digital Cinema. All
+   SDK is Copyright (c) 2008-2019 RED Digital Cinema. All
    rights reserved. Redistribution of this header is prohibited!
    
    The SDK is thread-safe for the most part, but it may
@@ -61,9 +61,10 @@ static const char RMD_CAMERA_FIRMWARE_REVISION[] =		"camera_firmware_revision";
 static const char RMD_CAMERA_FIRMWARE_VERSION[] =		"camera_firmware_version";
 static const char RMD_CAMERA_ID[] =						"camera_id";					// Camera ID as set in camera
 static const char RMD_CAMERA_MODEL[] =					"camera_model";					// "RED ONE", "EPIC-M", "EPIC-X", "SCARLET-X", "WEAPON", "RAVEN" etc.
-static const char RMD_CAMERA_MODEL_ID[] =				"camera_model_id";				// 1 = RED ONE, 2 = SCARLET 2/3" 8x FIXED ZOOM, 3 = SCARLET-X, 4 = EPIC-M,
-																						// 5 = EPIC-X, 6 = EPIC-X MONOCHROME, 7 = EPIC-M MONOCHROME, 8 = WEAPON CF, 9 = WEAPON MG,
-																						// 10 = WEAPON FORGED, 11 = RAVEN, 12 = SCARLET-W
+static const char RMD_CAMERA_MODEL_ID[] =				"camera_model_id";				//  1 = RED ONE,            2 = SCARLET 2/3" 8x FIXED ZOOM,   3 = SCARLET-X,
+																						//  4 = EPIC-M,             5 = EPIC-X,                       6 = EPIC-X MONOCHROME,
+																						//  7 = EPIC-M MONOCHROME,  8 = WEAPON CF,                    9 = WEAPON MG,
+																						// 10 = WEAPON FORGED,     11 = RAVEN,                       12 = SCARLET-W
 static const char RMD_CAMERA_NETWORK_NAME[] =			"camera_network_name";
 static const char RMD_CAMERA_PIN[] =					"camera_pin";					// Camera's PIN (serial number)
 static const char RMD_CAMERA_ROTATION_X[] =				"camera_rotation_x";			// tilt in deg/s
@@ -74,6 +75,7 @@ static const char RMD_CLIP_ASPECT_DENOMINATOR[] =		"clip_aspect_ratio_denominato
 static const char RMD_CLIP_ASPECT_NUMERATOR[] =			"clip_aspect_ratio_numerator";
 static const char RMD_CLIP_DEFAULT_COLOR_VERSION[] =	"clip_default_color_version";	// Clip default ColorVersion. Will be ColorVersion2 (Legacy), or ColorVersion3 (IPP2) if set in camera.
 static const char RMD_CLIP_ID[] =						"clip_id";						// Clip ID as set in camera
+static const char RMD_CLIP_UUID[] =						"clip_uuid";					// Text representation of Clip::Uuid(). No guarantee this follows the ITU-T Rec. X.667 / ISO/IEC 9834-8:2005 standards.
 static const char RMD_CONTRAST[] =						"contrast";						// Also available through the image processing settings structure
 static const char RMD_CREATIVE_LUT[] =					"creative_lut";					// IPP2 only, filename of creative 3D LUT sidecar as set in camera (if set)
 static const char RMD_DIGITAL_GAIN_BLUE[] =				"digital_gain_blue";			// Also available through the image processing settings structure
@@ -95,6 +97,7 @@ static const char RMD_FRAME_GUIDE_WIDTH[] =				"frame_guide_width";			// float, 
 static const char RMD_FRAME_GUIDE_HEIGHT[] =			"frame_guide_height";			// float, 0.0 - 1.0, multiply by image height
 static const char RMD_FRAME_ABSOLUTE_TIMECODE[] =		"frame_absolute_timecode";		// Absolute/TOD timecode for use with per-frame APIs
 static const char RMD_FRAME_EDGE_TIMECODE[] =			"frame_edge_timecode";			// Edge/Run-record timecode for use with per-frame APIs
+static const char RMD_FRAME_TIMESTAMP[] =				"frame_timestamp";				// in microseconds. 64-bit unsigned int stored as a string.
 static const char RMD_FRAMERATE[] =						"framerate";					// Calculated from RMD_FRAMERATE_NUMERATOR / RMD_FRAMERATE_DENOMINATOR
 static const char RMD_FRAMERATE_DENOMINATOR[] =			"framerate_denominator";		// Guaranteed to exist (also true for RMD_FRAMERATE above)
 static const char RMD_FRAMERATE_NUMERATOR[] =			"framerate_numerator";			// Guaranteed to exist
@@ -138,10 +141,13 @@ static const char RMD_REEL_ID_FULL[] =					"reel_id_full";					// REDCINE-X PRO 
 static const char RMD_REEL_ID_8_CHAR[] =				"reel_id_8_character";			// REDCINE-X PRO style Reel ID 8 Character for EDL's
 static const char RMD_RESOLUTION_FORMAT_NAME[] =		"resolution_format_name";		// Name for the clip format (resolution)
 static const char RMD_SATURATION[] =					"saturation";					// Also available through the image processing settings structure
-static const char RMD_SENSOR_ID[] =						"sensor_id";					// 0 = MYSTERIUM 4.5K S35, 1 = MYSTERIUM-X 4.5K/5K S35, 2 = MYSTERIUM-X 3K 2/3",
-																						// 3 = MYSTERIUM-X 5K S35 MONOCHROME, 4 = DRAGON 6K S35, 5 = DRAGON 6K S35 MONOCHROME,
-																						// 6 = HELIUM 8K S35, 7 = DRAGON 8K VV, 8 = DRAGON 4.5K S35, 9 = DRAGON 5K S35
-																						// 10 = HELIUM 8K S35 MONOCHROME
+static const char RMD_SENSOR_ID[] =						"sensor_id";					//  0 = MYSTERIUM 4.5K S35,        1 = MYSTERIUM-X 4.5K/5K S35,
+																						//  2 = MYSTERIUM-X 3K 2/3",       3 = MYSTERIUM-X 5K S35 MONOCHROME,
+																						//  4 = DRAGON 6K S35,             5 = DRAGON 6K S35 MONOCHROME,
+																						//  6 = HELIUM 8K S35,             7 = DRAGON 8K VV,
+																						//  8 = DRAGON 4.5K S35,           9 = DRAGON 5K S35,
+																						// 10 = HELIUM 8K S35 MONOCHROME, 11 = MONSTRO 8K VV,
+																						// 12 = MONSTRO 8K VV MONOCHROME, 13 = GEMINI 5K S35
 static const char RMD_SENSOR_NAME[] =					"sensor_name";					// "MYSTERIUM 4.5K S35", "MYSTERIUM-X 5K S35", "DRAGON 6K S35", "HELIUM 8K S35", etc.
 static const char RMD_SENSOR_OLPF_INTERCHANGEABLE[] =	"sensor_olpf_interchangeable";	// 0 = no, 1 = yes
 static const char RMD_SENSOR_OLPF_NAME[] =				"sensor_olpf_name";				// if camera has interchangeable sensor OLPF, this will contain the name of the OLPF installed

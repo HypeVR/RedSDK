@@ -1,8 +1,8 @@
-/* R3D SDK library version 7.0 header file. Do *NOT* use this
+/* R3D SDK library version 7.1 header file. Do *NOT* use this
    header file with any other version of the R3D SDK library!
    
    This header file and everything else included with the R3D
-   SDK is Copyright (c) 2008-2017 RED Digital Cinema. All
+   SDK is Copyright (c) 2008-2019 RED Digital Cinema. All
    rights reserved. Redistribution of this header is prohibited!
    
    The SDK is thread-safe for the most part, but it may
@@ -18,21 +18,31 @@ enum InitializeStatus
 {
 	ISInitializeOK = 0,
 	ISLibraryNotLoaded = 1,
+	
 	ISR3DSDKLibraryNotFound = 2,
 	ISRedCudaLibraryNotFound = 3,
 	ISRedOpenCLLibraryNotFound = 4,
 	ISR3DDecoderLibraryNotFound = 5,
+	ISRedMetalLibraryNotFound = 17,
+	
 	ISLibraryVersionMismatch = 6,
+	
 	ISInvalidR3DSDKLibrary = 7,
 	ISInvalidRedCudaLibrary = 8,
 	ISInvalidRedOpenCLLibrary = 9,
 	ISInvalidR3DDecoderLibrary = 10,
+	ISInvalidRedMetalLibrary = 18,
+	
 	ISRedCudaLibraryInitializeFailed = 11,
 	ISRedOpenCLLibraryInitializeFailed = 12,
 	ISR3DDecoderLibraryInitializeFailed = 13,
 	ISR3DSDKLibraryInitializeFailed = 14,
+	ISRedMetalLibraryInitializeFailed = 19,
+	
 	ISInvalidPath = 15,
-	ISInternalError = 16
+	ISInternalError = 16,
+
+	ISMetalNotAvailable = 20
 };
     
 // Clip load status
@@ -299,6 +309,14 @@ enum ImageDenoise
 	ImageDenoiseMaximum = 6
 };
 
+enum FlashingPixelAdjust
+{
+	FlashingPixelAdjustOff = 0,
+	FlashingPixelAdjustMild = 0x46504D44,
+	FlashingPixelAdjustMedium = 0x46504D4D,
+	FlashingPixelAdjustStrong = 0x46505347
+};
+
 // Which color version to use with the image processing settings.
 // Default is ColorVersion3, which is the new IPP2 color science.
 enum ColorVersion
@@ -334,6 +352,8 @@ struct ImageProcessingSettings
 private:
 	unsigned int reserved1;
 	unsigned int reserved2;
+	bool reserved3;
+	bool reserved4;
 
 public:
 	// *********************************************************************
@@ -378,22 +398,32 @@ public:
 	// 0.50, 0.50, 0.75, 0.75, 1.0, 1.0).
 	float					UserCurve[10];				// Luma user curve.
 
-	// Following setting is only used for full & half res premium decode
-	// for Dragon footage. THIS SETTING IS IGNORED WHEN DECODING THROUGH
-	// RED ROCKET(-X) OR FOOTAGE IS NOT DRAGON!!
-	bool					DEB;						// Dragon Enhanced Blacks
-
-	// Following setting is only used for full res premium decode
-	// THIS SETTING IS IGNORED WHEN DECODING THROUGH RED ROCKET OR COLORVERSION3!
+	// Following setting is only used for full res premium decode.
+	// THIS SETTING IS IGNORED WHEN DECODING THROUGH RED ROCKET(-X) OR COLORVERSION3!
 	ImageDetail				Detail;
 	
-	// Following is only used for full & half res premium decodes
-	// THIS SETTING IS IGNORED WHEN DECODING THROUGH RED ROCKET OR COLORVERSION3!
+	// Following is only used for full & half res premium decode.
+	// THIS SETTING IS IGNORED WHEN DECODING THROUGH RED ROCKET(-X) OR COLORVERSION3!
 	ImageOLPFCompensation	OLPFCompensation;
 
-	// Following setting is only used for the full res premium decode
-	// THIS SETTING IS IGNORED WHEN DECODING THROUGH RED ROCKET!
+	// Following setting is only used for full res premium decode.
+	// THIS SETTING IS IGNORED WHEN DECODING THROUGH RED ROCKET(-X)!
 	ImageDenoise			Denoise;
+
+	// Following setting is only used for full & half res premium decode.
+	// THIS SETTING IS IGNORED WHEN DECODING THROUGH RED ROCKET(-X).
+	union
+	{
+		// Dragon Enhanced Blacks -- Legacy pipe and Dragon or newer sensors only.
+		bool				DEB;
+
+		// IPP2 only -- DISABLES Denoise.
+		bool				ChromaNoiseReduction;
+	};
+
+	// Following setting is only used for full & half res premium decode.
+	// THIS SETTING IS IGNORED WHEN DECODING THROUGH RED ROCKET(-X)!
+	FlashingPixelAdjust		FlashingPixelAdjustment;
 
 	// *********************************************************************
 	// Following settings are only available for ColorVersion2 which was
@@ -447,7 +477,8 @@ public:
 	SlopeOffsetPower		CdlGreen;
 	SlopeOffsetPower		CdlBlue;
 
-	CreativeLutHandle		CreativeLut;					// NULL if disabled or not set
+	CreativeLutHandle		CreativeLut;					// NULL if disabled/not set. Value is unique per process and cannot
+															// be saved and then re-used later. Use CreateOrUpdateRmd() for that.
 	bool					CreativeLutEnabled;				// defaults to FALSE. Only used if a CreativeLut is set.
 
 	ToneMap					OutputToneMap;
@@ -511,7 +542,6 @@ enum VideoPixelType
 	PixelType_8Bit_BGR_Interleaved		= 0x42475238,	// Interleaved BGR 8-bit
 
 	PixelType_HalfFloat_RGB_Interleaved = 0x52424846,	// 16-bit half-float decoding. These ImageProcessingSettings fields are ignored:
-														//		- Version (will always be set to ColorVersion2)
 														//		- GammaCurve (will always be linear)
 														//		- Contrast
 														//		- Brightness
@@ -601,6 +631,7 @@ struct VideoDecodeJob
 private:
 	unsigned int reserved1;
 	unsigned int reserved2;
+	void * reserved3;
 
 public:
 	// Resolution/speed to decode the image at. This will also 

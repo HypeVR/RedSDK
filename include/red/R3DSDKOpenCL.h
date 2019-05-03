@@ -1,8 +1,8 @@
-/* R3D SDK library version 7.0 header file. Do *NOT* use this
+/* R3D SDK library version 7.1 header file. Do *NOT* use this
    header file with any other version of the R3D SDK library!
    
    This header file and everything else included with the R3D
-   SDK is Copyright (c) 2008-2017 RED Digital Cinema. All
+   SDK is Copyright (c) 2008-2019 RED Digital Cinema. All
    rights reserved. Redistribution of this header is prohibited!
 */
 
@@ -248,11 +248,11 @@ public:
                                           size_t                  /* image_height */,
                                           size_t                  /* image_row_pitch */,
                                           void *                  /* host_ptr */,
-                                          cl_int *                /* errcode_ret */);//OCL 1.1 Deprecated
+                                          cl_int *                /* errcode_ret */);
     
     cl_int (CL_API_CALL *clSetMemObjectDestructorCallback)(  cl_mem /* memobj */,
                                                            void (CL_CALLBACK * /*pfn_notify*/)( cl_mem /* memobj */, void* /*user_data*/),
-                                                           void * /*user_data */ );// OCL 1.1
+                                                           void * /*user_data */ );
     
     cl_mem (CL_API_CALL *clCreateSubBuffer)(cl_mem /* buffer */,
                                             cl_mem_flags /* flags */,
@@ -275,7 +275,7 @@ public:
 											size_t                  /* image_row_pitch */,
 											size_t                  /* image_slice_pitch */,
 											void *                  /* host_ptr */,
-											cl_int *                /* errcode_ret */);//OCL 1.1 Deprecated
+											cl_int *                /* errcode_ret */);
 };
 
 
